@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "tailwindcss";
+/* App.css */
+.navbar-link {
+  transition: all 0.2s ease;
+}
+
+.navbar-link:hover {
+  color: #facc15; /* amarillo Tailwind */
+ /* background-color: #1e40af; /* azul oscuro Tailwind */
+}
