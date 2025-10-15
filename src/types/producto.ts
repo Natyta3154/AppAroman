@@ -3,7 +3,7 @@
 
 // src/types/producto.ts
 
-import type { Oferta } from "../hooks/useproductos";
+import type { Oferta } from "./Ofertas";
 
 export interface OfertaSimple {
   idOferta?: number;
@@ -41,7 +41,7 @@ export interface Producto {
   categoriaNombre: string;
   mensaje: string | null;
   fragancias: string[];
-  atributos: string[];
+ atributos: { nombre: string; valor: string }[];
   ofertas: Oferta[];
   precioFinal: number; // ✅ campo calculado
   destacado?: boolean;

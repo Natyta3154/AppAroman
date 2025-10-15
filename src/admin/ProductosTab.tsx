@@ -49,7 +49,7 @@ export default function ProductosTab() {
     setNombre(producto.nombre);
     setPrecio(producto.precio);
     setStock(producto.stock);
-    setOferta(producto.oferta);
+    setOferta(producto.ofertas);
     setModalOpen(true);
   };
 

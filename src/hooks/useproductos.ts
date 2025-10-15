@@ -1,80 +1,87 @@
 // src/hooks/useProductos.ts
-import { useState, useEffect, type ReactNode } from "react";
+import { useState, useEffect } from "react";
+import type { Producto } from "../types/producto";
 
-export interface Oferta {
-  idOferta: number;
-  valorDescuento: number;
-  tipoDescuento: "PORCENTAJE" | "MONTO";
-  fechaInicio: string;
-  fechaFin: string;
-  estado: boolean;
-  precio: number;
-}
 
-export interface Producto {
-  quantity: number;
-  precioConDescuento(precioConDescuento: any): import("react").ReactNode;
-  precioOriginal: ReactNode;
-  id: number;
-  nombre: string;
-  descripcion: string;
-  precio: number;
-  precioMayorista: number;
-  totalIngresado: number;
-  stock: number;
-  imagenUrl: string;
-  activo: boolean;
-  categoriaNombre: string;
-  mensaje: string | null;
-  fragancias: string[];
-  atributos: string[];
-  ofertas: Oferta[];
-  precioFinal: number; // nuevo campo calculado
-  destacado?: boolean;  
-}
+
 
 export const useProductos = () => {
   const [productos, setProductos] = useState<Producto[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
-    const fetchProductos = async () => {
-      try {
-        const res = await fetch("http://localhost:8080/productos/listado");
-        const data: Producto[] = await res.json();
+  // ✅ Función reutilizable para cargar productos paginados
+  const fetchProductos = async (newPage = 0) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(
+        `http://localhost:8080/productos/resumen?page=${newPage}&size=12`
+      );
 
-        // Calculamos el precio final considerando ofertas activas
-        const productosConOferta = data.map((p) => {
-          let precioFinal = p.precio;
+      if (!res.ok) throw new Error("Error al obtener productos");
 
-          // Filtramos ofertas activas y dentro de la fecha actual
-          const hoy = new Date();
-          const ofertaActiva = p.ofertas.find((o) => {
-            const inicio = new Date(o.fechaInicio);
-            const fin = new Date(o.fechaFin);
-            return o.estado && hoy >= inicio && hoy <= fin;
-          });
+      const data = await res.json();
 
-          if (ofertaActiva) {
-            precioFinal = ofertaActiva.precio; // precio con descuento
-          }
+      // ✅ Manejo para cuando el backend devuelve un Page<>
+      const nuevosProductos: Producto[] = data.content || data;
 
-          return {
-            ...p,
-            precioFinal,
-          };
+      // ✅ Calcular precio final según ofertas activas
+      const hoy = new Date();
+      const productosConOferta = nuevosProductos.map((p) => {
+        let precioFinal = p.precio;
+
+        const ofertaActiva = p.ofertas?.find((o) => {
+          const inicio = new Date(o.fechaInicio ?? new Date());
+          const fin = new Date(o.fechaFin ?? new Date());
+          return o.estado && hoy >= inicio && hoy <= fin;
         });
 
-        setProductos(productosConOferta);
-      } catch (error) {
-        console.error("Error al cargar productos:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+        if (ofertaActiva) {
+          if (ofertaActiva.tipoDescuento === "PORCENTAJE") {
+            precioFinal = p.precio - (p.precio * (ofertaActiva.valorDescuento ?? 0)) / 100;
+          } else if (ofertaActiva.tipoDescuento === "MONTO") {
+            precioFinal = p.precio - (ofertaActiva.valorDescuento ?? 0);
+          }
+        }
 
-    fetchProductos();
+        return { ...p, precioFinal };
+      });
+
+      // ✅ Si es la primera página, reemplaza. Si no, concatena.
+      setProductos((prev) =>
+        newPage === 0 ? productosConOferta : [...prev, ...productosConOferta]
+      );
+
+      // ✅ Controlar si hay más productos
+      if (data.last || productosConOferta.length === 0) {
+        setHasMore(false);
+      } else {
+        setHasMore(true);
+      }
+
+      setPage(newPage);
+    } catch (err: any) {
+      console.error("Error al cargar productos:", err);
+      setError("No se pudieron cargar los productos.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ✅ Carga inicial
+  useEffect(() => {
+    fetchProductos(0);
   }, []);
 
-  return { productos, loading };
+  return {
+    productos,
+    loading,
+    error,
+    page,
+    hasMore,
+    fetchProductos,
+  };
 };

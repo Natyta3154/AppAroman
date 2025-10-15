@@ -4,6 +4,9 @@ import type { Usuario } from "../types/usuario";
 import { usuarioService } from "../services/usuarioService";
 import type { ReactNode } from "react";
 
+
+
+
 type AuthContextType = {
   user: Usuario | null;
   loading: boolean;

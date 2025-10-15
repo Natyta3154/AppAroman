@@ -1,30 +1,41 @@
-// src/services/productosService.ts
 import type { Producto } from "../types/producto";
 
-let productos: Producto[] = [
-  { id: 1, nombre: "Camiseta", precio: 25, stock: 10, ofertas: true, descuento: 20 },
-  { id: 2, nombre: "Pantalón", precio: 40, stock: 5, ofertas: false, descuento: 0 },
-];
+const API_URL = "http://localhost:8080/productos";
 
 export const productosService = {
   getAll: async (): Promise<Producto[]> => {
-    return new Promise(resolve => setTimeout(() => resolve([...productos]), 300));
-  },
-
-  remove: async (id: number): Promise<void> => {
-    productos = productos.filter(p => p.id !== id);
-    return new Promise(resolve => setTimeout(resolve, 200));
+    const res = await fetch(API_URL, { credentials: "include" });
+    if (!res.ok) throw new Error("Error al obtener productos");
+    return res.json();
   },
 
   create: async (producto: Omit<Producto, "id">): Promise<Producto> => {
-    const newProduct = { ...producto, id: Math.max(...productos.map(p => p.id)) + 1 };
-    productos.push(newProduct);
-    return new Promise(resolve => setTimeout(() => resolve(newProduct), 200));
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(producto),
+      credentials: "include",
+    });
+    if (!res.ok) throw new Error("Error al crear producto");
+    return res.json();
   },
 
   update: async (id: number, producto: Partial<Producto>): Promise<Producto> => {
-    productos = productos.map(p => (p.id === id ? { ...p, ...producto } : p));
-    const updated = productos.find(p => p.id === id)!;
-    return new Promise(resolve => setTimeout(() => resolve(updated), 200));
+    const res = await fetch(`${API_URL}/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(producto),
+      credentials: "include",
+    });
+    if (!res.ok) throw new Error("Error al actualizar producto");
+    return res.json();
+  },
+
+  remove: async (id: number): Promise<void> => {
+    const res = await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    if (!res.ok) throw new Error("Error al eliminar producto");
   },
 };

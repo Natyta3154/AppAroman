@@ -2,25 +2,28 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usuarioService } from "../services/usuarioService";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
+
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     try {
-      const data = await usuarioService.login(email, password);
+      const data = await login(email, password);
       console.log("Respuesta del backend:", data); // 🔹 usamos el service
-      const usuario = data.usuario;
 
-      if (usuario.rol === "ADMIN") navigate("/admin");
-      else navigate("/productos");
+      if (data.rol === "ADMIN") navigate("/admin");
+      else navigate("/");
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Error en la conexión con el servidor");

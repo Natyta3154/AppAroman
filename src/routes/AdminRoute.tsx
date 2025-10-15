@@ -17,8 +17,9 @@ export function AdminRoute({ children }: AdminRouteProps) {
   }
 
   if (!user || user.rol !== "ADMIN") {
+    // Si no hay usuario o no es admin, redirigimos al login
     return <Navigate to="/login" replace />;
   }
-
+  // Si el usuario es admin, renderizamos los hijos (AdminPage)
   return <>{children}</>;
 }

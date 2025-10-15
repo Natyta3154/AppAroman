@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "../src/Layout";
+import Layout from "./Layout";
 import Home from "./pages/Home";
 import Productos from "./pages/Productos";
 import Ofertas from "./pages/Ofertas";
@@ -11,10 +11,11 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminPage from "./admin/AdminPage";
 //import { AuthProvider } from "./contex/AuthContext";
-import { AuthProvider } from "../src/hooks/useAuth";
+import { AuthProvider } from "./hooks/useAuth";
 import { AdminRoute } from "./routes/AdminRoute";
 import ShoppingCarts from "./conponents/CarritoUI/CarritoUI";
 import { CarritoProvider } from "./contex/CarritoContext.tsx";
+import ProductoDetalle from "./pages/ProductoDetalle";
 
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
       <CarritoProvider>
         <AuthProvider>
           <Layout>
-            
+
             <Routes>
               <Route
                 path="/"
@@ -34,7 +35,7 @@ function App() {
                   </>
                 }
               />
-
+            {/* Rutas protegidas solo se renderizará AdminPage si AdminRoute permite el acceso.  */}
               <Route
                 path="/admin"
                 element={
@@ -45,6 +46,7 @@ function App() {
               />
 
               <Route path="/productos" element={<Productos />} />
+              <Route path="/productos/:id" element={<ProductoDetalle />} />
               <Route path="/ofertas" element={<Ofertas />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/quienes-somos" element={<QuienesSomos />} />
@@ -52,8 +54,8 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/carrito" element={<ShoppingCarts />} />
               <Route path="/register" element={<Register />} />
-            
-              
+
+
 
 
             </Routes>
