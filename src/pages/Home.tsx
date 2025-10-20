@@ -45,65 +45,69 @@ export default function Home() {
       </div>
 
       {/* Productos Destacados */}
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 bg-white rounded-2xl shadow-lg mt-16 mb-24 text-center">
-        <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 mb-4">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-beige-50 to-white rounded-3xl mt-16 mb-24 text-center bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a]
+">
+        <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 mb-6">
           Productos Destacados
         </h2>
-        <p className="text-lg text-gray-700 mb-6 max-w-3xl mx-auto">
-          Estos son nuestros productos más populares y recomendados para ti. Cada uno ha
-          sido seleccionado cuidadosamente por su calidad y valor, garantizando una
-          experiencia de compra excepcional.
+        <p className="text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
+          Nuestros productos más elegidos y cuidadosamente seleccionados para ofrecerte calidad y estilo.
         </p>
 
-        {errorDestacados && (
-          <p className="text-red-500 mb-4">{errorDestacados}</p>
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          {destacados.map((producto) => (
+            <div
+              key={producto.id}
+              className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
+            >
+              {/* Badge elegante */}
+              <span className="absolute top-4 left-4 bg-gradient-to-r from-purple-400 to-pink-500 text-white font-semibold text-xs px-3 py-1 rounded-full uppercase animate-pulse shadow-md">
+                Destacado
+              </span>
 
-        {loadingDestacados ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(4)].map((_, i) => (
-              <div
-                key={i}
-                className="group relative bg-white rounded-lg p-4 shadow animate-pulse h-64"
-              >
-                <div className="w-full h-40 bg-gray-200 rounded-md mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {destacados.map((producto: { id: Key | null | undefined; imagenUrl: string | undefined; nombre: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; descripcion?: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; precioFinal: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }) => (
-              <div
-                key={producto.id}
-                className="group relative bg-white rounded-lg p-4 shadow hover:shadow-lg transition"
-              >
+              {/* Imagen con overlay elegante */}
+              <div className="relative overflow-hidden rounded-2xl">
                 <img
                   src={producto.imagenUrl}
-                  alt={String(producto.nombre || '')}
-                  className="aspect-square w-full rounded-md object-cover group-hover:opacity-75"
+                  alt={String(producto.nombre)}
+                  className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-
-                <div className="mt-4 flex justify-between items-center">
-                  <div>
-                    <h3 className="text-sm text-gray-700">
-                      <Link
-                        to={`/productos/${producto.id}`}
-                        className="hover:text-indigo-600"
-                      >
-                        {producto.nombre}
-                      </Link>
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-500">{producto.descripcion}</p>
-                  </div>
-                  <p className="text-sm font-medium text-gray-900">{producto.precioFinal}</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4 rounded-2xl">
+                  <Link
+                    to={`/productos/${producto.id}`}
+                    className="bg-purple-600 text-white font-semibold px-5 py-2 rounded-full hover:bg-purple-700 transition-transform duration-300 transform hover:-translate-y-1 shadow-lg"
+                  >
+                    Ver producto
+                  </Link>
                 </div>
+
               </div>
-            ))}
-          </div>
-        )}
+
+              {/* Contenido */}
+              <div className="mt-5 px-4 pb-4 flex justify-between items-start ">
+                <div className="text-left">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    <Link
+                      to={`/productos/${producto.id}`}
+                      className="hover:text-purple-600 transition-colors duration-300"
+                    >
+                      {producto.nombre}
+                    </Link>
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500 line-clamp-2">
+                    {producto.descripcion}
+                  </p>
+                </div>
+                <p className="text-lg font-bold text-purple-600">{producto.precioFinal}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
+
+
+
+
     </div>
   );
 }

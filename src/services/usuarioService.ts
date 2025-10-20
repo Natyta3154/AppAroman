@@ -1,11 +1,11 @@
 import type { Usuario } from "../types/usuario";
 
-const API_URL = "http://localhost:8080/usuarios"; // prefijo consistente con tu backend
+const API_BASE = import.meta.env.VITE_API_URL;
 
 export const usuarioService = {
   // Login -> backend devuelve { usuario: {...} } según tu controlador
   async login(email: string, password: string): Promise<{ usuario: Usuario } | any> {
-    const res = await fetch(`${API_URL}/login`, {
+    const res = await fetch(`${API_BASE}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -21,7 +21,7 @@ export const usuarioService = {
   },
 
   async logout(): Promise<void> {
-    await fetch(`${API_URL}/logout`, {
+    await fetch(`${API_BASE}/logout`, {
       method: "POST",
       credentials: "include",
     });
@@ -29,7 +29,7 @@ export const usuarioService = {
 
   // Perfil -> tu backend /usuarios/perfil devuelve { usuario: {...} }
   async getCurrentUser(): Promise<{ usuario: Usuario } | Usuario> {
-    const res = await fetch(`${API_URL}/perfil`, {
+    const res = await fetch(`${API_BASE}/usuarios/perfil`, {
       credentials: "include",
     });
 
@@ -39,13 +39,13 @@ export const usuarioService = {
 
   // CRUD / admin
   async getAll(): Promise<Usuario[]> {
-    const res = await fetch(`${API_URL}/listaDeUser`, { credentials: "include" });
+    const res = await fetch(`${API_BASE}/usuarios/listaDeUser`, { credentials: "include" });
     if (!res.ok) throw new Error("Error al obtener usuarios");
     return res.json();
   },
 
   async create(usuario: Omit<Usuario, "id">): Promise<Usuario> {
-    const res = await fetch(API_URL, {
+    const res = await fetch(`${API_BASE}/usuarios`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(usuario),
@@ -56,7 +56,7 @@ export const usuarioService = {
   },
 
   async update(id: number, usuario: Partial<Usuario>): Promise<Usuario> {
-    const res = await fetch(`${API_URL}/${id}`, {
+    const res = await fetch(`${API_BASE}/usuarios/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(usuario),
@@ -67,7 +67,7 @@ export const usuarioService = {
   },
 
   async remove(id: number): Promise<void> {
-    const res = await fetch(`${API_URL}/${id}`, {
+    const res = await fetch(`${API_BASE}/usuarios/${id}`, {
       method: "DELETE",
       credentials: "include",
     });

@@ -7,65 +7,50 @@ import Blog from "./pages/Blog";
 import QuienesSomos from "./pages/QuienesSomos";
 import Contacto from "./pages/Contacto";
 import Login from "./pages/Login";
-//import Carrito from "./pages/Carrito";
 import Register from "./pages/Register";
 import AdminPage from "./admin/AdminPage";
-//import { AuthProvider } from "./contex/AuthContext";
-import { AuthProvider } from "./hooks/useAuth";
 import { AdminRoute } from "./routes/AdminRoute";
-import ShoppingCarts from "./conponents/CarritoUI/CarritoUI";
+import ShoppingCarts from "./conponents/CarritoUI/CarritoUI.tsx";
 import { CarritoProvider } from "./contex/CarritoContext.tsx";
 import ProductoDetalle from "./pages/ProductoDetalle";
-
 
 function App() {
   return (
     <BrowserRouter>
       <CarritoProvider>
-        <AuthProvider>
-          <Layout>
-
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <>
-                    <Home />
-                    <Blog />
-                  </>
-                }
-              />
-            {/* Rutas protegidas solo se renderizará AdminPage si AdminRoute permite el acceso.  */}
-              <Route
-                path="/admin"
-                element={
-                  <AdminRoute>
-                    <AdminPage />
-                  </AdminRoute>
-                }
-              />
-
-              <Route path="/productos" element={<Productos />} />
-              <Route path="/productos/:id" element={<ProductoDetalle />} />
-              <Route path="/ofertas" element={<Ofertas />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/quienes-somos" element={<QuienesSomos />} />
-              <Route path="/contacto" element={<Contacto />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/carrito" element={<ShoppingCarts />} />
-              <Route path="/register" element={<Register />} />
-
-
-
-
-            </Routes>
-          </Layout>
-        </AuthProvider>
+        <Layout>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <Home />
+                  <Blog />
+                </>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminPage />
+                </AdminRoute>
+              }
+            />
+            <Route path="/productos" element={<Productos />} />
+            <Route path="/productos/:id" element={<ProductoDetalle />} />
+            <Route path="/ofertas" element={<Ofertas />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/quienes-somos" element={<QuienesSomos />} />
+            <Route path="/contacto" element={<Contacto />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/carrito" element={<ShoppingCarts />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </Layout>
       </CarritoProvider>
     </BrowserRouter>
   );
 }
 
 export default App;
-
-

@@ -3,6 +3,9 @@
 import { motion } from "framer-motion";
 import { ShoppingCart, Trash2, Tag, Truck, Percent } from "lucide-react";
 import { useCarrito } from "../../contex/CarritoContext.tsx";
+import { usePagoMercadoPago } from "../../hooks/usePagoMercadoPago";
+import { useAuth } from "../../hooks/useAuth";
+
 
 /**
  * 🛒 Componente: CarritoUI
@@ -19,6 +22,12 @@ import { useCarrito } from "../../contex/CarritoContext.tsx";
 export default function CarritoUI() {
   // Obtenemos los valores y funciones desde el contexto del carrito
   const { carrito, incrementar, decrementar, eliminarProducto, total } = useCarrito();
+  // Hook personalizado para manejar el pago con MercadoPago
+  const { handlePagar } = usePagoMercadoPago();
+
+  // Obtenemos el estado de autenticación del usuario
+  const { loading } = useAuth();
+
 
   /**
    * 🧩 Si el carrito está vacío, se muestra una vista alternativa:
@@ -65,11 +74,12 @@ export default function CarritoUI() {
    * Se divide en dos secciones:
    * 1. Lista de productos (columna izquierda)
    * 2. Resumen del pedido (columna derecha)
-   */ 
+   */
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-200 py-20 bg-[url('/public/img-hero.jpg')] bg-cover bg-center bg-no-repeat bg-fixed bg-blend-overlay">
-      <div className="max-w-6xl mx-auto grid lg:grid-cols-3 gap-10">
-        
+    <main className="h-screen flex items-center justify-center bg-gradient-to-b from-gray-100 via-white to-gray-200 bg-[url('/public/img-hero.jpg')] bg-cover bg-center bg-no-repeat overflow-hidden">
+      <div className="max-w-6xl w-full grid lg:grid-cols-3 gap-10 p-8 bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl">
+
+
         {/* 🧺 SECCIÓN: Lista de productos del carrito */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -175,19 +185,19 @@ export default function CarritoUI() {
               <span className="text-gray-900 font-semibold">$0.00</span>
             </li>
 
-            <li className="flex justify-between">
+            {/*<li className="flex justify-between">
               <span className="flex items-center gap-2">
                 <Truck className="w-4 h-4 text-yellow-600" /> Envío
               </span>
               <span className="text-gray-900 font-semibold">$2.00</span>
-            </li>
+            </li>*/}
 
-            <li className="flex justify-between">
+            {/*<li className="flex justify-between">
               <span>Impuestos</span>
               <span className="text-gray-900 font-semibold">
                 ${(total * 0.025).toFixed(2)}
               </span>
-            </li>
+            </li>*/}
 
             {/* Total final */}
             <li className="flex justify-between text-gray-900 text-lg font-bold border-t border-gray-200 pt-4">
@@ -200,12 +210,15 @@ export default function CarritoUI() {
           <div className="mt-8 space-y-3">
             {/* Botón principal */}
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
-              className="w-full bg-yellow-600 text-white py-3 rounded-xl font-semibold shadow-md hover:bg-yellow-500 transition-all"
-            >
-              Finalizar compra
-            </motion.button>
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.97 }}
+  className="w-full bg-yellow-600 text-white py-3 rounded-xl font-semibold shadow-md hover:bg-yellow-500 transition-all"
+  onClick={handlePagar}
+>
+  {loading ? "Cargando..." : "Finalizar compra"}
+</motion.button>
+
+
 
             {/* Botón para seguir comprando */}
             <a
@@ -216,7 +229,7 @@ export default function CarritoUI() {
             </a>
           </div>
 
-          {/* 🎟️ Campo de código promocional */}
+          {/* 🎟️ Campo de código promocional 
           <div className="mt-8">
             <p className="text-sm font-medium text-gray-800 mb-2">
               ¿Tenés un código de descuento?
@@ -231,10 +244,10 @@ export default function CarritoUI() {
                 Aplicar
               </button>
             </div>
-          </div>
+          </div>*/}
         </motion.div>
       </div>
-  
+
     </main>
   );
 }

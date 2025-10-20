@@ -2,6 +2,9 @@
 import { useEffect, useState } from "react";
 import type { ProductoDestacadoSimple } from "../types/productoDestacado";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+
 export const useDestacados = () => {
   const [destacados, setDestacados] = useState<ProductoDestacadoSimple[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -13,7 +16,7 @@ export const useDestacados = () => {
         setLoading(true);
         setError(null);
 
-        const response = await fetch("/productos/destacados"); // tu endpoint
+        const response = await fetch(`${API_URL}/api/productos/destacados`); // tu endpoint
         if (!response.ok) throw new Error("Error al cargar productos destacados");
 
         const data: ProductoDestacadoSimple[] = await response.json();

@@ -2,86 +2,91 @@
 import { useState, useEffect } from "react";
 import type { Producto } from "../types/producto";
 
+// Tomamos la URL base de la API desde las variables de entorno
+const API_URL = import.meta.env.VITE_API_URL;
 
-
-
+/**
+ * Hook personalizado para manejar la carga, paginación y estado de los productos.
+ *
+ * @returns Un objeto con los productos, estado de carga, errores, página actual,
+ *          bandera de más productos disponibles y función para recargar productos.
+ */
 export const useProductos = () => {
-  const [productos, setProductos] = useState<Producto[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
+  // =========================
+  // Estados internos del hook
+  // =========================
 
-  // ✅ Función reutilizable para cargar productos paginados
+  const [productos, setProductos] = useState<Producto[]>([]); // Lista de productos cargados
+  const [loading, setLoading] = useState(false);              // Indica si se está cargando la data
+  const [error, setError] = useState<string | null>(null);    // Mensaje de error si ocurre algún fallo
+  const [page, setPage] = useState(0);                        // Página actual de paginación
+  const [hasMore, setHasMore] = useState(true);               // Bandera para saber si hay más páginas disponibles
+
+  // =========================
+  // Función para obtener productos desde la API
+  // =========================
   const fetchProductos = async (newPage = 0) => {
-    setLoading(true);
-    setError(null);
+    setLoading(true);  // Activamos indicador de carga
+    setError(null);    // Limpiamos errores previos
+
     try {
+      // Construimos la URL de la petición con paginación
       const res = await fetch(
-        `http://localhost:8080/productos/resumen?page=${newPage}&size=12`
+        `${API_URL}/api/productos/resumen?page=${newPage}&size=12`
       );
 
+      // Si la respuesta no es 200 OK, lanzamos error
       if (!res.ok) throw new Error("Error al obtener productos");
 
+      // Parseamos la respuesta JSON
       const data = await res.json();
-
-      // ✅ Manejo para cuando el backend devuelve un Page<>
+      console.log("Respuesta cruda de la API:", data);
+      // El backend devuelve Page<ProductoResumenDTO> con estructura { content: Producto[], last: boolean, ... }
       const nuevosProductos: Producto[] = data.content || data;
 
-      // ✅ Calcular precio final según ofertas activas
-      const hoy = new Date();
-      const productosConOferta = nuevosProductos.map((p) => {
-        let precioFinal = p.precio;
+      // Actualizamos el estado de productos
+      // Si es la primera página reemplazamos el array, si es paginación añadimos al final
+      setProductos((prev) => (newPage === 0 ? nuevosProductos : [...prev, ...nuevosProductos]));
 
-        const ofertaActiva = p.ofertas?.find((o) => {
-          const inicio = new Date(o.fechaInicio ?? new Date());
-          const fin = new Date(o.fechaFin ?? new Date());
-          return o.estado && hoy >= inicio && hoy <= fin;
-        });
+      // Controlamos paginación:
+      // - data.last indica si es la última página
+      // - nuevosProductos.length > 0 asegura que haya productos en la respuesta
+      setHasMore(!data.last && nuevosProductos.length > 0);
 
-        if (ofertaActiva) {
-          if (ofertaActiva.tipoDescuento === "PORCENTAJE") {
-            precioFinal = p.precio - (p.precio * (ofertaActiva.valorDescuento ?? 0)) / 100;
-          } else if (ofertaActiva.tipoDescuento === "MONTO") {
-            precioFinal = p.precio - (ofertaActiva.valorDescuento ?? 0);
-          }
-        }
-
-        return { ...p, precioFinal };
-      });
-
-      // ✅ Si es la primera página, reemplaza. Si no, concatena.
-      setProductos((prev) =>
-        newPage === 0 ? productosConOferta : [...prev, ...productosConOferta]
-      );
-
-      // ✅ Controlar si hay más productos
-      if (data.last || productosConOferta.length === 0) {
-        setHasMore(false);
-      } else {
-        setHasMore(true);
-      }
-
+      // Actualizamos la página actual
       setPage(newPage);
     } catch (err: any) {
+
+
+      // Mostramos error en consola para debugging
       console.error("Error al cargar productos:", err);
+
+      // Guardamos un mensaje amigable para mostrar en la UI
       setError("No se pudieron cargar los productos.");
     } finally {
+      // Terminamos el indicador de carga
       setLoading(false);
     }
   };
 
-  // ✅ Carga inicial
+  // =========================
+  // Efecto de carga inicial
+  // =========================
   useEffect(() => {
+    // Al montar el hook, cargamos la primera página (0)
     fetchProductos(0);
   }, []);
 
+  // =========================
+  // Retorno del hook
+  // =========================
   return {
-    productos,
-    loading,
-    error,
-    page,
-    hasMore,
-    fetchProductos,
+    productos,      // Lista de productos
+    loading,        // Indicador de carga
+    error,          // Mensaje de error si ocurrió alguno
+    page,           // Página actual
+    hasMore,        // Flag para saber si hay más páginas
+    fetchProductos  // Función para recargar o paginar productos
   };
 };
+
