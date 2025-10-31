@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import type { Producto } from "../types/producto";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_BASE = import.meta.env.VITE_API_URL_PROD || import.meta.env.VITE_API_URL;
 
 export const useProductosRelacionados = (categoriaId?: number, excludeId?: number) => {
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -17,7 +17,7 @@ export const useProductosRelacionados = (categoriaId?: number, excludeId?: numbe
       setError(null);
       try {
         const res = await fetch(
-          `${API_URL}/api/productos/relacionados?categoriaId=${categoriaId}&excludeId=${excludeId || ""}`
+          `${API_BASE}/api/productos/relacionados?categoriaId=${categoriaId}&excludeId=${excludeId || ""}`
         );
 
         if (!res.ok) throw new Error("Error al obtener productos relacionados");

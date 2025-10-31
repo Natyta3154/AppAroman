@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import type { Post } from "../types/post";
 
+const API_BASE = import.meta.env.VITE_API_URL_PROD || import.meta.env.VITE_API_URL;
+
+
 const PostDetalle = () => {
   const { id } = useParams<{ id: string }>();
   const [post, setPost] = useState<Post | null>(null);
@@ -10,7 +13,7 @@ const PostDetalle = () => {
   useEffect(() => {
     if (!id) return;
 
-    axios.get<Post>(`http://localhost:8080/api/posts/${id}`)
+    axios.get<Post>(`${API_BASE}/api/posts/${id}`)
       .then(res => setPost(res.data))
       .catch(err => console.error("Error al cargar el post:", err));
   }, [id]);

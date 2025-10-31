@@ -2,6 +2,10 @@ import { useCarrito } from "../contex/CarritoContext.tsx";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE = import.meta.env.VITE_API_URL_PROD || import.meta.env.VITE_API_URL;
+
+
+
 export function usePagoMercadoPago() {
   const { carrito } = useCarrito();
   const { user, loading } = useAuth(); // 🔹 este es el hook correcto
@@ -22,7 +26,7 @@ export function usePagoMercadoPago() {
   console.log("Usuario logueado, se puede pagar");
 
 
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/pedidos/realizarPedidoConPago`, {
+    const res = await fetch(`${API_BASE}/pedidos/realizarPedidoConPago`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

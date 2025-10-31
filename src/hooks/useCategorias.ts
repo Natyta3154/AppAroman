@@ -2,6 +2,10 @@
 import { useEffect, useState } from "react";
 import type { Categorias } from "../types/FraganciaCategoria";
 
+
+const API_BASE = import.meta.env.VITE_API_URL_PROD || import.meta.env.VITE_API_URL;
+
+
 export function useCategorias() {
   const [categorias, setCategorias] = useState<Categorias[]>([]);
   const [loading, setLoading] = useState(false);
@@ -10,7 +14,7 @@ export function useCategorias() {
   const fetchCategorias = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/categorias/listar`, {
+      const res = await fetch(`${API_BASE}/api/categorias/listar`, {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Error al obtener las categorías");
@@ -25,7 +29,7 @@ export function useCategorias() {
   };
 
   const createCategoria = async (nombre: string) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/categorias/agregar`, {
+    const res = await fetch(`${API_BASE}/api/categorias/agregar`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nombre }),
@@ -36,7 +40,7 @@ export function useCategorias() {
   };
 
   const updateCategoria = async (id: number, nombre: string) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/categorias/editar/${id}`, {
+    const res = await fetch(`${API_BASE}/api/categorias/editar/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nombre }),
@@ -47,7 +51,7 @@ export function useCategorias() {
   };
 
   const deleteCategoria = async (id: number) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/categorias/eliminar/${id}`, {
+    const res = await fetch(`${API_BASE}/api/categorias/eliminar/${id}`, {
       method: "DELETE",
       credentials: "include",
     });

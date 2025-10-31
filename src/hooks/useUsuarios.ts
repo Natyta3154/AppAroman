@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import type { Usuario } from "../types/usuario";
 
-const API_BASE = import.meta.env.VITE_API_URL;
+const API_BASE = import.meta.env.VITE_API_URL_PROD || import.meta.env.VITE_API_URL;
 
 // Función para manejar refresh token automáticamente
 async function requestWithRefresh(url: string, options: RequestInit = {}) {

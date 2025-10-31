@@ -3,10 +3,10 @@ import { usePosts } from "../../hooks/usePosts";
 import { Link } from "react-router-dom";
 
 const BlogSection = () => {
-  const { posts, loading } = usePosts();
+  const { posts, cargando } = usePosts();
   const featured = posts.slice(0, 3);
 
-  if (loading) return <p className="text-center mt-10">Cargando posts...</p>;
+  if (cargando) return <p className="text-center mt-10">Cargando posts...</p>;
 
   return (
     <main className=" bg-gradient-to-b from-gray-100 bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] to-gray-200 py-20 px-4">

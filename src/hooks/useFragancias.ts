@@ -2,6 +2,10 @@
 import { useEffect, useState } from "react";
 import type { Fragancias } from "../types/FraganciaCategoria";
 
+const API_BASE = import.meta.env.VITE_API_URL_PROD || import.meta.env.VITE_API_URL;
+
+
+
 export function useFragancias() {
   const [fragancias, setFragancias] = useState<Fragancias[]>([]);
   const [loading, setLoading] = useState(false);
@@ -10,7 +14,7 @@ export function useFragancias() {
   const fetchFragancias = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/fragancias/listar`, {
+      const res = await fetch(`${API_BASE}/api/fragancias/listar`, {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Error al obtener las fragancias");
@@ -25,7 +29,7 @@ export function useFragancias() {
   };
 
   const createFragancia = async (nombre: string) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/fragancias/agregar`, {
+    const res = await fetch(`${API_BASE}/api/fragancias/agregar`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nombre }),
@@ -36,7 +40,7 @@ export function useFragancias() {
   };
 
   const updateFragancia = async (id: number, nombre: string) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/fragancias/editar/${id}`, {
+    const res = await fetch(`${API_BASE}/api/fragancias/editar/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nombre }),
@@ -47,7 +51,7 @@ export function useFragancias() {
   };
 
   const deleteFragancia = async (id: number) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/fragancias/eliminarFragancias/${id}`, {
+    const res = await fetch(`${API_BASE}/api/fragancias/eliminarFragancias/${id}`, {
       method: "DELETE",
       credentials: "include",
     });

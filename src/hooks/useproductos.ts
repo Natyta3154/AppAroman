@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import type { Producto } from "../types/producto";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_BASE = import.meta.env.VITE_API_URL_PROD || import.meta.env.VITE_API_URL;
 
 export function useProductos() {
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -25,7 +25,7 @@ export function useProductos() {
     setError(null);
 
     try {
-      const res = await fetch(`${API_URL}/api/productos/resumen?page=${newPage}&size=12`, { credentials: "include" });
+      const res = await fetch(`${API_BASE}/api/productos/resumen?page=${newPage}&size=12`, { credentials: "include" });
       if (!res.ok) throw new Error("Error al obtener productos");
       const data = await res.json();
       const nuevosProductos: Producto[] = data.content || data;
@@ -46,7 +46,7 @@ export function useProductos() {
     setError(null);
 
     try {
-      const res = await fetch(`${API_URL}/api/productos/listado`, { credentials: "include" });
+      const res = await fetch(`${API_BASE}/api/productos/listado`, { credentials: "include" });
       if (!res.ok) throw new Error("Error al obtener productos (admin)");
       const data = await res.json();
       setProductos(data);
@@ -59,13 +59,13 @@ export function useProductos() {
   };
 
   const getById = async (id: number | string): Promise<Producto> => {
-    const res = await fetch(`${API_URL}/api/productos/${id}`, { credentials: "include" });
+    const res = await fetch(`${API_BASE}/api/productos/${id}`, { credentials: "include" });
     if (!res.ok) throw new Error("Error al obtener producto");
     return res.json();
   };
 
   const createProducto = async (producto: Omit<Producto, "id">): Promise<Producto> => {
-    const res = await fetch(`${API_URL}/api/productos/agregar`, {
+    const res = await fetch(`${API_BASE}/api/productos/agregar`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(producto),
@@ -78,7 +78,7 @@ export function useProductos() {
   };
 
   const updateProducto = async (id: number, producto: Partial<Producto>): Promise<Producto> => {
-    const res = await fetch(`${API_URL}/api/productos/editar/${id}`, {
+    const res = await fetch(`${API_BASE}/api/productos/editar/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(producto),
@@ -91,7 +91,7 @@ export function useProductos() {
   };
 
   const removeProducto = async (id: number) => {
-    const res = await fetch(`${API_URL}/api/productos/eliminar/${id}`, { method: "DELETE", credentials: "include" });
+    const res = await fetch(`${API_BASE}/api/productos/eliminar/${id}`, { method: "DELETE", credentials: "include" });
     if (!res.ok) throw new Error("Error al eliminar producto");
     setProductos(prev => prev.filter(p => p.id !== id));
   };
@@ -101,21 +101,21 @@ export function useProductos() {
   // =========================
 
   const fetchCategorias = async () => {
-    const res = await fetch(`${API_URL}/api/categorias/listado`, { credentials: "include" });
+    const res = await fetch(`${API_BASE}/api/categorias/listado`, { credentials: "include" });
     if (!res.ok) throw new Error("Error al obtener categorías");
     const data = await res.json();
     setCategorias(data);
   };
 
   const fetchFragancias = async () => {
-    const res = await fetch(`${API_URL}/api/fragancias/listadoFragancias`, { credentials: "include" });
+    const res = await fetch(`${API_BASE}/api/fragancias/listadoFragancias`, { credentials: "include" });
     if (!res.ok) throw new Error("Error al obtener fragancias");
     const data = await res.json();
     setFragancias(data);
   };
 
   const fetchAtributos = async () => {
-    const res = await fetch(`${API_URL}/api/atributos/listadoAtributos`, { credentials: "include" });
+    const res = await fetch(`${API_BASE}/api/atributos/listadoAtributos`, { credentials: "include" });
     if (!res.ok) throw new Error("Error al obtener atributos");
     const data = await res.json();
     setAtributos(data);

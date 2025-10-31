@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 
 const BlogPage = () => {
-  const { posts, loading } = usePosts();
+  const { posts, cargando } = usePosts();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  if (loading) return <p className="text-center mt-10">Cargando posts...</p>;
+  if (cargando) return <p className="text-center mt-10">Cargando posts...</p>;
 
   // Filtrado por categoría
   const filteredPosts = selectedCategory
