@@ -9,7 +9,7 @@ import { useDestacados } from '../hooks/useProductosDestacado';
 
 
 export default function Home() {
-  const {  loading: loadingProductos } = useProductos();
+  const { loading: loadingProductos } = useProductos();
   const { destacados } = useDestacados();
 
   return (

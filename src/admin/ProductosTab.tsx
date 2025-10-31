@@ -14,7 +14,6 @@ export default function ProductosTab() {
     removeProducto,
     categorias: categoriasHook,
     fragancias: fraganciasHook,
-    atributos: atributosHook,
     fetchCategorias,
     fetchFragancias,
     fetchAtributos,
@@ -38,7 +37,6 @@ export default function ProductosTab() {
 
   const categorias = categoriasHook;
   const fraganciasDisponibles = fraganciasHook.map(f => f.nombre);
-  const atributosDisponibles = atributosHook.map(a => a.nombre);
 
   // =======================
   // Carga inicial

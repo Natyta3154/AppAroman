@@ -15,7 +15,6 @@ export default function PostBlog() {
     crearPost,
     actualizarPost,
     eliminarPost,
-    fetchPosts,
   } = usePosts();
 
   const [modalOpen, setModalOpen] = useState(false);
