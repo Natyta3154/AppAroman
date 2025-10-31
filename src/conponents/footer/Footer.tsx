@@ -8,12 +8,12 @@ export default function Footer() {
           {/* Logo */}
           <div className="flex items-center gap-2">
             <img
-              src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
               alt="Logo"
-              className="h-8 w-8"
+              src="/rev.png"
+              className="h-8 w-auto"
             />
             <span className="text-lg font-semibold text-white">
-              Mi Ecommerce
+              Aromanza
             </span>
           </div>
 
@@ -34,39 +34,39 @@ export default function Footer() {
           </div>
 
           {/* Redes sociales */}
-              <div className="flex space-x-4 mt-6">
-      <a
-        href="https://wa.me/123456789"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-slate-600 hover:text-green-500 transition-colors"
-      >
-        <MessageCircle size={24} />
-      </a>
+          <div className="flex space-x-4 mt-6">
+            <a
+              href="https://wa.me/123456789"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-600 hover:text-green-500 transition-colors"
+            >
+              <MessageCircle size={24} />
+            </a>
 
-      <a
-        href="https://www.instagram.com/tuusuario"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-slate-600 hover:text-pink-500 transition-colors"
-      >
-        <Instagram size={24} />
-      </a>
+            <a
+              href="https://www.instagram.com/tuusuario"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-600 hover:text-pink-500 transition-colors"
+            >
+              <Instagram size={24} />
+            </a>
 
-      <a
-        href="https://www.facebook.com/tuusuario"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-slate-600 hover:text-blue-600 transition-colors"
-      >
-        <Facebook size={24} />
-      </a>
-    </div>
+            <a
+              href="https://www.facebook.com/tuusuario"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-600 hover:text-blue-600 transition-colors"
+            >
+              <Facebook size={24} />
+            </a>
+          </div>
         </div>
 
         {/* Derechos reservados */}
         <div className="mt-6 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} Mi Ecommerce. Todos los derechos reservados.
+          © {new Date().getFullYear()} Aromanza. Todos los derechos reservados.
         </div>
       </div>
     </footer>

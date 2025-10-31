@@ -53,9 +53,10 @@ export default function ProductoDetalle() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-200 py-20 px-4">
+        <main className="min-h-screen bg-gradient-to-b from-gray-100  to-gray-200 py-20 px-4  bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a]">
+
       <div className="lg:max-w-6xl max-w-xl mx-auto">
-        <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-8 mt-30">
           {/* 📸 GALERÍA */}
           <div className="w-full lg:sticky top-0">
             <div className="flex flex-row gap-2">

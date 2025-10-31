@@ -1,93 +1,111 @@
-// Blog.tsx
-import React from "react";
+import { usePosts } from "../hooks/usePosts";
+import BlogCard from "../conponents/blog/BlogCard";
+import { motion } from "framer-motion";
+import { useState } from "react";
 
-interface Post {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  category: string;
-  time: string;
-  comments: string;
-}
+const BlogPage = () => {
+  const { posts, loading } = usePosts();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-const posts: Post[] = [
-  {
-    id: 1,
-    title: "Simplest Salad Recipe ever",
-    description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    image: "https://images.pexels.com/photos/61180/pexels-photo-61180.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-    category: "Cooking",
-    time: "6 mins ago",
-    comments: "39 Comments",
-  },
-  {
-    id: 2,
-    title: "Best FastFood Ideas (Yummy)",
-    description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    image: "https://images.pexels.com/photos/1600727/pexels-photo-1600727.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-    category: "Cooking",
-    time: "10 days ago",
-    comments: "0 Comments",
-  },
-  {
-    id: 3,
-    title: "Why to eat salad?",
-    description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    image: "https://images.pexels.com/photos/6086/food-salad-healthy-vegetables.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-    category: "Cooking",
-    time: "16 hours ago",
-    comments: "9 Comments",
-  },
-];
+  if (loading) return <p className="text-center mt-10">Cargando posts...</p>;
 
-const Blog: React.FC = () => {
+  // Filtrado por categoría
+  const filteredPosts = selectedCategory
+    ? posts.filter(post => post.category && post.category.nombre === selectedCategory)
+    : posts;
+
+  // Extraer categorías únicas
+  const categories = Array.from(new Set(posts.map(post => post.category?.nombre).filter(Boolean)));
+
   return (
-    <div className="max-w-screen-xl mx-auto p-6 sm:p-10 md:p-16">
-      {/* Encabezado */}
-      <div className="border-b mb-5 flex justify-between text-sm">
-        <div className="text-indigo-600 flex items-center pb-2 pr-2 border-b-2 border-indigo-600 uppercase font-semibold">
-          Cooking Blog
-        </div>
-        <a href="#" className="hover:text-indigo-600">
-          See All
-        </a>
-      </div>
+    <main className="min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-200 py-16 px-4">
 
-      {/* Grid de posts */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-        {posts.map((post) => (
-          <div
-            key={post.id}
-            className="rounded overflow-hidden shadow-lg flex flex-col"
+      {/* Hero Blog */}
+      <section className="bg-purple-100 py-20 text-center rounded-b-3xl mb-12">
+        <h1 className="text-5xl font-extrabold text-purple-800 mb-4">Blog Aromanza</h1>
+        <p className="text-lg text-purple-700 max-w-2xl mx-auto">
+          Inspiración, bienestar y consejos aromáticos para elevar tu energía y armonizar tu día a día.
+        </p>
+      </section>
+
+      {/* Filtro por categorías */}
+      <div className="flex justify-center flex-wrap gap-3 mb-12">
+        <button
+          onClick={() => setSelectedCategory(null)}
+          className={`px-4 py-2 rounded-full font-medium transition ${
+            !selectedCategory ? "bg-purple-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-purple-200"
+          }`}
+        >
+          Todas
+        </button>
+        {categories.map(cat => (
+          <button
+            key={cat}
+            onClick={() => cat && setSelectedCategory(cat)}
+            className={`px-4 py-2 rounded-full font-medium transition ${
+              selectedCategory === cat ? "bg-purple-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-purple-200"
+            }`}
           >
-            {/* Imagen */}
-            <div className="relative">
-              <img className="w-full" src={post.image} alt={post.title} />
-              <div className="hover:bg-transparent transition duration-300 absolute inset-0 bg-gray-900 opacity-25"></div>
-              <div className="text-xs absolute top-0 right-0 bg-indigo-600 px-4 py-2 text-white mt-3 mr-3 hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out">
-                {post.category}
-              </div>
-            </div>
-
-            {/* Contenido */}
-            <div className="px-6 py-4 mb-auto">
-              <h2 className="font-medium text-lg hover:text-indigo-600 transition duration-500 ease-in-out mb-2">
-                {post.title}
-              </h2>
-              <p className="text-gray-500 text-sm">{post.description}</p>
-            </div>
-
-            {/* Footer */}
-            <div className="px-6 py-3 flex flex-row items-center justify-between bg-gray-100">
-              <span className="text-xs text-gray-700">{post.time}</span>
-              <span className="text-xs text-gray-700">{post.comments}</span>
-            </div>
-          </div>
+            {cat}
+          </button>
         ))}
       </div>
-    </div>
+
+      {/* Posts destacados */}
+      {filteredPosts.length > 0 && (
+        <section className="mb-12 max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold mb-6 text-center">Destacados</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {filteredPosts.slice(0, 2).map((post, index) => (
+              <motion.div
+                key={post.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.2, duration: 0.5 }}
+              >
+                <BlogCard post={post} />
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Listado completo de posts */}
+      <section className="max-w-7xl mx-auto">
+        <h2 className="text-3xl font-bold mb-6 text-center">Todos los posts</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+          {filteredPosts.slice(2).map((post, index) => (
+            <motion.div
+              key={post.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+            >
+              <BlogCard post={post} />
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Suscripción al newsletter */}
+      <section className="bg-purple-50 py-16 mt-16 rounded-3xl text-center">
+        <h3 className="text-2xl font-semibold mb-4">No te pierdas nada</h3>
+        <p className="text-gray-700 mb-6">
+          Suscribite para recibir las últimas novedades y consejos aromáticos
+        </p>
+        <div className="flex justify-center flex-wrap gap-2">
+          <input
+            type="email"
+            placeholder="Tu email"
+            className="px-4 py-2 rounded-l-full border border-gray-300 focus:outline-none"
+          />
+          <button className="px-6 py-2 bg-purple-600 text-white rounded-r-full hover:bg-purple-700 transition">
+            Suscribirse
+          </button>
+        </div>
+      </section>
+    </main>
   );
 };
 
-export default Blog;
+export default BlogPage;

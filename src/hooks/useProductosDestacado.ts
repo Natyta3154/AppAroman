@@ -16,7 +16,7 @@ export const useDestacados = () => {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`${API_URL}/api/productos/destacados`); // tu endpoint
+        const response = await fetch(`${API_URL}/api/productos/top5`); // tu endpoint
         if (!response.ok) throw new Error("Error al cargar productos destacados");
 
         const data: ProductoDestacadoSimple[] = await response.json();

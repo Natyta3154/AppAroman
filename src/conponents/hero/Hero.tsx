@@ -3,17 +3,17 @@ import { Link } from "react-router-dom";
 
 export default function Hero() {
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative h-270 flex items-center justify-center overflow-hidden">
       {/* Fondo con imagen */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0  bg-center bg-repeat"
         style={{
-          backgroundImage: "url('/img-hero.jpg')", // 👈 asegúrate de tener esta imagen en /public
+          backgroundImage: "url('/img-hero.jpg') ",  // 👈 asegúrate de tener esta imagen en /public
         }}
       />
 
       {/* Capa oscura para mejorar contraste */}
-      <div className="absolute inset-0 bg-black/50"></div>
+      {/* <div className="absolute inset-0 bg-black/50"></div> */}
 
       {/* Contenido con animación */}
       <motion.div
@@ -22,10 +22,10 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
       >
-        <h1 className="text-4xl sm:text-6xl font-bold mb-4">
+        <h1 className="text-4xl sm:text-6xl text-black font-bold mb-4">
           Bienvenido a <span className="text-yellow-400">Aromanza</span> — Conectá con la esencia de tu alma
         </h1>
-        <p className="text-base sm:text-lg text-gray-200 mb-6">
+        <p className="text-base sm:text-lg text-black font-bold mb-6">
           Sumergite en un universo de calma y energía positiva.  
           Cada aroma es una caricia para el alma, una invitación a reconectar con tu interior  
           y llenar tus espacios de armonía y belleza natural.

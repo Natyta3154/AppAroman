@@ -1,46 +1,18 @@
 // src/admin/UsuariosTab.tsx
-import { useEffect, useState } from "react";
-import { usuarioService } from "../services/usuarioService";
+import { useState } from "react";
 import type { Usuario } from "../types/usuario";
 import Modal from "./Modal";
+import { useUsuarios } from "../hooks/useUsuarios";
 
 export default function UsuariosTab() {
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const { usuarios, loading, error, createUsuario, updateUsuario, deleteUsuario } = useUsuarios();
+
   const [modalOpen, setModalOpen] = useState(false);
   const [editUsuario, setEditUsuario] = useState<Usuario | null>(null);
+
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [rol, setRol] = useState<"ADMIN" | "USER">("USER");
-
-  const fetchUsuarios = async () => {
-    const data = await usuarioService.getAll();
-    setUsuarios(data);
-  };
-
-  useEffect(() => {
-    fetchUsuarios();
-  }, []);
-
-  const handleDelete = async (id: number) => {
-    if (confirm("¿Eliminar usuario?")) {
-      await usuarioService.remove(id);
-      fetchUsuarios();
-    }
-  };
-
-  const handleSave = async () => {
-    if (editUsuario) {
-      await usuarioService.update(editUsuario.id, { nombre, email, rol });
-    } else {
-      await usuarioService.create({ nombre, email, rol });
-    }
-    setModalOpen(false);
-    setEditUsuario(null);
-    setNombre("");
-    setEmail("");
-    setRol("USER");
-    fetchUsuarios();
-  };
 
   const handleEdit = (usuario: Usuario) => {
     setEditUsuario(usuario);
@@ -50,15 +22,55 @@ export default function UsuariosTab() {
     setModalOpen(true);
   };
 
+  const handleCreate = () => {
+    setEditUsuario(null);
+    setNombre("");
+    setEmail("");
+    setRol("USER");
+    setModalOpen(true);
+  };
+
+  const handleSave = async () => {
+    try {
+      if (editUsuario) {
+        await updateUsuario(editUsuario.id, { nombre, email, rol });
+      } else {
+        await createUsuario({ nombre, email, rol });
+      }
+      setModalOpen(false);
+      setEditUsuario(null);
+      setNombre("");
+      setEmail("");
+      setRol("USER");
+    } catch (err) {
+      console.error(err);
+      alert("Ocurrió un error al guardar el usuario");
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("¿Eliminar usuario?")) return;
+    try {
+      await deleteUsuario(id);
+    } catch (err) {
+      console.error(err);
+      alert("Ocurrió un error al eliminar el usuario");
+    }
+  };
+
   return (
     <div className="p-6 bg-gray-800 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold text-white mb-4">Usuarios</h2>
       <button
-        onClick={() => setModalOpen(true)}
+        onClick={handleCreate}
         className="mb-4 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-400"
       >
         Crear Usuario
       </button>
+
+      {loading && <p className="text-white mb-4">Cargando usuarios...</p>}
+      {error && <p className="text-red-400 mb-4">{error}</p>}
+
       <table className="min-w-full bg-gray-700 text-white rounded-lg overflow-hidden">
         <thead>
           <tr className="bg-gray-600">
@@ -95,7 +107,11 @@ export default function UsuariosTab() {
         </tbody>
       </table>
 
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={editUsuario ? "Editar Usuario" : "Crear Usuario"}>
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={editUsuario ? "Editar Usuario" : "Crear Usuario"}
+      >
         <div className="flex flex-col space-y-2">
           <input
             type="text"
@@ -130,4 +146,3 @@ export default function UsuariosTab() {
     </div>
   );
 }
-

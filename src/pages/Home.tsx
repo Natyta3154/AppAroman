@@ -4,7 +4,9 @@ import OffersCarousel from '../conponents/carrouesel/OffersCarousel';
 import { Link } from 'react-router-dom';
 import { useProductos } from '../hooks/useproductos';
 import { useDestacados } from '../hooks/useProductosDestacado';
-import type { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from 'react';
+//import BlogSection from '../conponents/blog/BlogSection';
+
+
 
 export default function Home() {
   const { productos, loading: loadingProductos } = useProductos();
@@ -18,7 +20,7 @@ export default function Home() {
       {/* Hero */}
       <Hero />
 
-      {/* Texto introductorio antes del carrusel */}
+      {/* Texto introductorio antes del carrusel 
       <div className="mt-12 px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-3xl font-extrabold text-gray-900 mb-4">
           Descubre nuestras ofertas exclusivas
@@ -27,8 +29,8 @@ export default function Home() {
           Cada semana seleccionamos los productos más destacados para ofrecerte promociones
           únicas y oportunidades imperdibles. Explora nuestra colección y encuentra
           artículos que combinan calidad, estilo y precio. ¡No dejes pasar estas ofertas!
-        </p>
-
+        </p> */}
+<div>
         {/* Carrusel */}
         {loadingProductos ? (
           <div className="flex justify-center space-x-4 overflow-x-auto">
@@ -45,8 +47,7 @@ export default function Home() {
       </div>
 
       {/* Productos Destacados */}
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-beige-50 to-white rounded-3xl mt-16 mb-24 text-center bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a]
-">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-beige-50 to-white rounded-3xl mt-16 mb-24 text-center bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a]">
         <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 mb-6">
           Productos Destacados
         </h2>
@@ -103,11 +104,12 @@ export default function Home() {
             </div>
           ))}
         </div>
+
+
       </div>
 
-
-
-
+      {/* Sección de Blog */}
+      {/* <BlogSection /> */}
     </div>
   );
 }

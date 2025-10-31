@@ -1,61 +1,80 @@
-// hooks/useAuth.ts
-import React, { createContext, useContext, useEffect, useState } from "react";
-import type { Usuario } from "../types/usuario";
-import { usuarioService } from "../services/usuarioService";
+import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
+import type { Usuario } from "../types/usuario";
 
- 
 type AuthContextType = {
   user: Usuario | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<Usuario>;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-/**
- * AuthProvider envuelve la aplicación (o el layout) y provee uso de sesión desde cualquier componente
- */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<Usuario | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Al montar: preguntar al backend por perfil (usa cookie)
+  const API_BASE = import.meta.env.VITE_API_URL;
+
+  // 🔹 Recupera usuario actual al iniciar la app
   useEffect(() => {
-    usuarioService
-      .getCurrentUser()
-      .then((data) => {
-        // Maneja ambos formatos: { usuario: {...} } o directamente el usuario
-        const u = (data as any)?.usuario ?? data;
-        setUser(u ?? null);
-      })
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
+    refreshUser().finally(() => setLoading(false));
   }, []);
 
-  // login usa el servicio, normaliza la respuesta y guarda el usuario
+  // 🔹 LOGIN
   const login = async (email: string, password: string) => {
-    const res = await usuarioService.login(email, password);
-    // respuesta puede ser { usuario: {...} }
-    const u = (res as any)?.usuario ?? res;
-    setUser(u);
-    return u as Usuario;
+    const res = await fetch(`${API_BASE}/usuarios/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+      credentials: "include", // para cookies JWT si usas
+    });
+
+    if (!res.ok) throw new Error("Error en login");
+
+    const data = await res.json();
+    const usuario = data.usuario ?? data;
+    setUser(usuario);
+    return usuario;
   };
 
+  // 🔹 LOGOUT
   const logout = async () => {
-    await usuarioService.logout();
+    await fetch(`${API_BASE}/usuarios/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
     setUser(null);
   };
 
+  // 🔹 REFRESH USER
+const refreshUser = async () => {
+  try {
+    const res = await fetch(`${API_BASE}/usuarios/perfil`, {
+      credentials: "include",
+    });
+    if (!res.ok) {
+      // Usuario no autenticado, simplemente limpiamos el estado
+      setUser(null);
+      return;
+    }
+    const data = await res.json();
+    setUser(data.usuario ?? data);
+  } catch {
+    setUser(null);
+  }
+};
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-// hook para consumir el contexto fácilmente
+// 🔹 Hook para consumir el contexto
 export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useAuth debe usarse dentro de AuthProvider");

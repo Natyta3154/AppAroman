@@ -2,91 +2,154 @@
 import { useState, useEffect } from "react";
 import type { Producto } from "../types/producto";
 
-// Tomamos la URL base de la API desde las variables de entorno
 const API_URL = import.meta.env.VITE_API_URL;
 
-/**
- * Hook personalizado para manejar la carga, paginación y estado de los productos.
- *
- * @returns Un objeto con los productos, estado de carga, errores, página actual,
- *          bandera de más productos disponibles y función para recargar productos.
- */
-export const useProductos = () => {
-  // =========================
-  // Estados internos del hook
-  // =========================
+export function useProductos() {
+  const [productos, setProductos] = useState<Producto[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
-  const [productos, setProductos] = useState<Producto[]>([]); // Lista de productos cargados
-  const [loading, setLoading] = useState(false);              // Indica si se está cargando la data
-  const [error, setError] = useState<string | null>(null);    // Mensaje de error si ocurre algún fallo
-  const [page, setPage] = useState(0);                        // Página actual de paginación
-  const [hasMore, setHasMore] = useState(true);               // Bandera para saber si hay más páginas disponibles
+  // Para selects en admin
+  const [categorias, setCategorias] = useState<{ id: number; nombre: string; descripcion: string }[]>([]);
+  const [fragancias, setFragancias] = useState<{ id: number; nombre: string }[]>([]);
+  const [atributos, setAtributos] = useState<{ nombre: string }[]>([]);
 
   // =========================
-  // Función para obtener productos desde la API
+  // FUNCIONES CRUD
   // =========================
+
   const fetchProductos = async (newPage = 0) => {
-    setLoading(true);  // Activamos indicador de carga
-    setError(null);    // Limpiamos errores previos
+    setLoading(true);
+    setError(null);
 
     try {
-      // Construimos la URL de la petición con paginación
-      const res = await fetch(
-        `${API_URL}/api/productos/resumen?page=${newPage}&size=12`
-      );
-
-      // Si la respuesta no es 200 OK, lanzamos error
+      const res = await fetch(`${API_URL}/api/productos/resumen?page=${newPage}&size=12`, { credentials: "include" });
       if (!res.ok) throw new Error("Error al obtener productos");
-
-      // Parseamos la respuesta JSON
       const data = await res.json();
-      console.log("Respuesta cruda de la API:", data);
-      // El backend devuelve Page<ProductoResumenDTO> con estructura { content: Producto[], last: boolean, ... }
       const nuevosProductos: Producto[] = data.content || data;
 
-      // Actualizamos el estado de productos
-      // Si es la primera página reemplazamos el array, si es paginación añadimos al final
-      setProductos((prev) => (newPage === 0 ? nuevosProductos : [...prev, ...nuevosProductos]));
-
-      // Controlamos paginación:
-      // - data.last indica si es la última página
-      // - nuevosProductos.length > 0 asegura que haya productos en la respuesta
+      setProductos(prev => (newPage === 0 ? nuevosProductos : [...prev, ...nuevosProductos]));
       setHasMore(!data.last && nuevosProductos.length > 0);
-
-      // Actualizamos la página actual
       setPage(newPage);
-    } catch (err: any) {
-
-
-      // Mostramos error en consola para debugging
-      console.error("Error al cargar productos:", err);
-
-      // Guardamos un mensaje amigable para mostrar en la UI
+    } catch (err) {
+      console.error(err);
       setError("No se pudieron cargar los productos.");
     } finally {
-      // Terminamos el indicador de carga
       setLoading(false);
     }
   };
 
-  // =========================
-  // Efecto de carga inicial
-  // =========================
-  useEffect(() => {
-    // Al montar el hook, cargamos la primera página (0)
-    fetchProductos(0);
-  }, []);
+  const fetchProductosAdmin = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch(`${API_URL}/api/productos/listado`, { credentials: "include" });
+      if (!res.ok) throw new Error("Error al obtener productos (admin)");
+      const data = await res.json();
+      setProductos(data);
+    } catch (err) {
+      console.error(err);
+      setError("No se pudieron cargar los productos (admin).");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getById = async (id: number | string): Promise<Producto> => {
+    const res = await fetch(`${API_URL}/api/productos/${id}`, { credentials: "include" });
+    if (!res.ok) throw new Error("Error al obtener producto");
+    return res.json();
+  };
+
+  const createProducto = async (producto: Omit<Producto, "id">): Promise<Producto> => {
+    const res = await fetch(`${API_URL}/api/productos/agregar`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(producto),
+      credentials: "include",
+    });
+    if (!res.ok) throw new Error("Error al crear producto");
+    const data = await res.json();
+    setProductos(prev => [...prev, data]);
+    return data;
+  };
+
+  const updateProducto = async (id: number, producto: Partial<Producto>): Promise<Producto> => {
+    const res = await fetch(`${API_URL}/api/productos/editar/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(producto),
+      credentials: "include",
+    });
+    if (!res.ok) throw new Error("Error al actualizar producto");
+    const data = await res.json();
+    setProductos(prev => prev.map(p => (p.id === id ? data : p)));
+    return data;
+  };
+
+  const removeProducto = async (id: number) => {
+    const res = await fetch(`${API_URL}/api/productos/eliminar/${id}`, { method: "DELETE", credentials: "include" });
+    if (!res.ok) throw new Error("Error al eliminar producto");
+    setProductos(prev => prev.filter(p => p.id !== id));
+  };
 
   // =========================
-  // Retorno del hook
+  // FUNCIONES PARA SELECTS
   // =========================
-  return {
-    productos,      // Lista de productos
-    loading,        // Indicador de carga
-    error,          // Mensaje de error si ocurrió alguno
-    page,           // Página actual
-    hasMore,        // Flag para saber si hay más páginas
-    fetchProductos  // Función para recargar o paginar productos
+
+  const fetchCategorias = async () => {
+    const res = await fetch(`${API_URL}/api/categorias/listado`, { credentials: "include" });
+    if (!res.ok) throw new Error("Error al obtener categorías");
+    const data = await res.json();
+    setCategorias(data);
   };
-};
+
+  const fetchFragancias = async () => {
+    const res = await fetch(`${API_URL}/api/fragancias/listadoFragancias`, { credentials: "include" });
+    if (!res.ok) throw new Error("Error al obtener fragancias");
+    const data = await res.json();
+    setFragancias(data);
+  };
+
+  const fetchAtributos = async () => {
+    const res = await fetch(`${API_URL}/api/atributos/listadoAtributos`, { credentials: "include" });
+    if (!res.ok) throw new Error("Error al obtener atributos");
+    const data = await res.json();
+    setAtributos(data);
+  };
+
+  // =========================
+  // EFECTOS
+  // =========================
+
+  useEffect(() => {
+    fetchProductos(0);
+    fetchCategorias();
+    fetchFragancias();
+    fetchAtributos();
+  }, []);
+
+  return {
+    productos,
+    loading,
+    error,
+    page,
+    hasMore,
+    fetchProductos,
+    fetchProductosAdmin,
+    getById,
+    createProducto,
+    updateProducto,
+    removeProducto,
+    categorias,
+    fragancias,
+    atributos,
+    fetchCategorias,
+    fetchFragancias,
+    fetchAtributos,
+  };
+}
 

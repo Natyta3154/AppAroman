@@ -10,7 +10,6 @@ import { useCarrito } from "../contex/CarritoContext.tsx";
 export default function Productos() {
   const { productos, loading, page, hasMore, fetchProductos } = useProductos();
 
-  // Usamos estado con ProductoResumen para el listado rápido
   const [cart, setCart] = useState<ProductoResumen[]>([]);
   const { agregarProducto } = useCarrito();
   const [filtroCategoria, setFiltroCategoria] = useState<string | null>(null);
@@ -41,7 +40,7 @@ export default function Productos() {
         return [...prev, { ...product, quantity: 1 }];
       }
     });
-    agregarProducto(product as Producto); // para el carrito completo seguimos usando Producto
+    agregarProducto(product as Producto);
   };
 
   const formatPrice = (precio: number) =>
@@ -71,7 +70,7 @@ export default function Productos() {
   });
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-200 py-20 px-4">
+    <main className="min-h-screen bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] py-20 px-4">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center tracking-tight">
           🌸 Catálogo de Productos
@@ -135,77 +134,111 @@ export default function Productos() {
             Limpiar filtros
           </button>
         </div>
+{/* GRID DE PRODUCTOS */}
+<div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+  {productosFiltrados.map((producto) => {
+    // Buscar oferta activa
+    const ofertaActiva = producto.ofertas?.find((oferta) => oferta.estado === true);
 
-        {/* GRID DE PRODUCTOS */}
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {productosFiltrados.map((producto) => {
-            const precioOriginal = producto.precioFinal ?? producto.precio;
-            const precioFinal = producto.precioFinal ?? producto.precio;
+    // Usar precioConDescuento del producto en lugar de calcularlo
+    const precioConDescuento = producto.precioConDescuento;
 
-            return (
-              <motion.div
-                key={producto.id}
-                whileHover={{ scale: 1.04, y: -5 }}
-                whileTap={{ scale: 0.98 }}
-                className="relative bg-black rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group border border-gray-100"
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={producto.imagenUrl}
-                    alt={producto.nombre}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-                    <Link
-                      to={`/productos/${producto.id}`}
-                      className="bg-white rounded-full p-3 shadow-lg hover:bg-yellow-500 hover:text-white text-black flex items-center gap-2 font-semibold"
-                    >
-                      <span className="text-xl">👁️</span>
-                      Detalle
-                    </Link>
-                  </div>
-                  {producto.destacado && (
-                    <span className="absolute top-3 left-3 bg-gradient-to-r from-yellow-400 to-yellow-300 text-gray-900 text-xs font-bold px-3 py-1 rounded-full shadow-md">
-                      🌟 DESTACADO
-                    </span>
-                  )}
-                </div>
+    return (
+      <motion.div
+        key={producto.id}
+        whileHover={{ scale: 1.04, y: -5 }}
+        whileTap={{ scale: 0.98 }}
+        className="relative bg-black rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group border border-gray-100"
+      >
+        {/* Imagen */}
+        <div className="relative overflow-hidden">
+          <img
+            src={producto.imagenUrl}
+            alt={producto.nombre}
+            className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+          />
 
-                <div className="p-5 flex flex-col justify-between min-h-[180px]">
-                  <div>
-                    <h3 className="text-lg font-semibold text-yellow-500 hover:text-indigo-600 transition-colors line-clamp-1">
-                      <Link to={`/productos/${producto.id}`}>{producto.nombre}</Link>
-                    </h3>
-                    <p className="text-sm text-yellow-500 mt-3 line-clamp-3">{producto.descripcion}</p>
-                  </div>
+          {/* Overlay detalle */}
+          <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <Link
+              to={`/productos/${producto.id}`}
+              className="bg-white rounded-full p-3 shadow-lg hover:bg-yellow-500 hover:text-white text-black flex items-center gap-2 font-semibold"
+            >
+              <span className="text-xl">👁️</span>
+              Detalle
+            </Link>
+          </div>
 
-                  <div className="mt-5 flex items-center justify-between">
-                    <div className="flex flex-col">
-                      {precioFinal < Number(precioOriginal) ? (
-                        <>
-                          <p className="text-sm text-gray-400 line-through">{formatPrice(Number(precioOriginal))}</p>
-                          <p className="text-2xl font-bold text-indigo-600 drop-shadow-sm">{formatPrice(precioFinal)}</p>
-                        </>
-                      ) : (
-                        <p className="text-2xl font-bold text-yellow-600 drop-shadow-sm">{formatPrice(precioFinal)}</p>
-                      )}
-                    </div>
+          {/* Badges */}
+          {producto.destacado && (
+            <span className="absolute top-3 left-3 bg-gradient-to-r from-yellow-400 to-yellow-300 text-gray-900 text-xs font-bold px-3 py-1 rounded-full shadow-md">
+              🌟 DESTACADO
+            </span>
+          )}
 
-                    <motion.button
-                      whileHover={{ scale: 1.07 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => addToCart(producto)}
-                      className="bg-yellow-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-yellow-500 flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
-                    >
-                      <ShoppingBag className="w-4 h-4" />
-                      Agregar
-                    </motion.button>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
+          {ofertaActiva && (
+            <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md animate-pulse">
+              🔥{" "}
+              {ofertaActiva.tipoDescuento === "PORCENTAJE"
+                ? `${ofertaActiva.valorDescuento}% OFF`
+                : "OFERTA"}
+            </span>
+          )}
         </div>
+
+        {/* Info del producto */}
+        <div className="p-5 flex flex-col justify-between min-h-[180px]">
+          <div>
+            <h3 className="text-lg font-semibold text-yellow-500 hover:text-indigo-600 transition-colors line-clamp-1">
+              <Link to={`/productos/${producto.id}`}>{producto.nombre}</Link>
+            </h3>
+            <p className="text-sm text-yellow-500 mt-3 line-clamp-3">
+              {producto.descripcion}
+            </p>
+          </div>
+
+          {/* Precios */}
+          <div className="mt-5 flex items-center justify-between">
+            <div className="flex flex-col">
+              {ofertaActiva ? (
+                <>
+                  <p className="text-sm text-gray-400 line-through">
+                    {formatPrice(producto.precio)}
+                  </p>
+                  <p className="text-2xl font-bold text-green-500 drop-shadow-sm">
+                    {formatPrice(precioConDescuento)}
+                  </p>
+                  {ofertaActiva.fechaFin && (
+                    <p className="text-xs text-gray-300 mt-1">
+                      Hasta{" "}
+                      {new Date(ofertaActiva.fechaFin).toLocaleDateString("es-AR")}
+                    </p>
+                  )}
+                </>
+              ) : (
+                <p className="text-2xl font-bold text-yellow-600 drop-shadow-sm">
+                  {formatPrice(producto.precio)}
+                </p>
+              )}
+            </div>
+
+            {/* Botón agregar */}
+            <motion.button
+              whileHover={{ scale: 1.07 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => addToCart(producto)}
+              className="bg-yellow-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-yellow-500 flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              Agregar
+            </motion.button>
+          </div>
+        </div>
+      </motion.div>
+    );
+  })}
+</div>
+
 
         {/* BOTÓN CARGAR MÁS */}
         {hasMore && (

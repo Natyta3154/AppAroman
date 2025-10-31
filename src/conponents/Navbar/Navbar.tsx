@@ -11,6 +11,7 @@ const navigation = [
   { name: "Home", href: "/" },
   { name: "Productos", href: "/productos" },
   { name: "Ofertas", href: "/ofertas" },
+  { name: "Blog", href: "/blog" },
   { name: "Quienes Somos", href: "/quienes-somos" },
   { name: "Contacto", href: "/contacto" },
 ];
@@ -31,17 +32,20 @@ export default function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-yellow-600 shadow-xl">
       <nav className="flex items-center justify-between p-6 lg:px-8">
-        {/* Logo */}
-        <div className="flex lg:flex-1">
-          <Link to="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Tu Empresa</span>
-            <img
-              alt="Logo"
-              src="/rev.png"
-              className="h-8 w-auto"
-            />
-          </Link>
-        </div>
+     {/* Logo + Nombre */}
+<div className="flex items-center lg:flex-1">
+  <Link to="/" className="flex items-center gap-2 -m-1.5 p-1.5">
+    <img
+      alt="Logo"
+      src="/rev.png"
+      className="h-8 w-auto"
+    />
+    <span className="text-xl font-semibold text-black tracking-wide">
+      Aromanza
+    </span>
+  </Link>
+</div>
+
 
         {/* Navegación principal */}
         <div className="hidden lg:flex lg:gap-x-12">
@@ -65,34 +69,52 @@ export default function Navbar() {
 
           {/* 🔹 Usuario */}
           {user ? (
-            <div className="relative">
-              <button
-                onClick={() => setMenuOpen((s) => !s)}
-                className="text-white font-semibold px-4 py-2 bg-gray-700 rounded-lg"
-              >
-                {user.nombre}
-              </button>
+  <div className="relative">
+    <button
+      onClick={() => setMenuOpen((s) => !s)}
+      className="text-white font-semibold px-4 py-2 bg-gray-700 rounded-lg"
+    >
+      {user.nombre}
+    </button>
 
-              {menuOpen && (
-                <ul className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-50">
-                  <li>
-                    <Link to="/perfil" className="block px-4 py-2 text-white hover:bg-gray-700">
-                      Editar Perfil
-                    </Link>
-                  </li>
-                  <li>
-                    <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-white hover:bg-gray-700">
-                      Cerrar Sesión
-                    </button>
-                  </li>
-                </ul>
-              )}
-            </div>
-          ) : (
-            <Link to="/login" className="text-sm/6 font-semibold text-white hover:text-gray-300">
-              Log in &rarr;
+    {menuOpen && (
+      <ul className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-50">
+        <li>
+          <Link to="/perfil" className="block px-4 py-2 text-white hover:bg-gray-700">
+            Editar Perfil
+          </Link>
+        </li>
+
+        {/* 🔹 Solo para admins */}
+        {user.rol === "ADMIN" && (
+          <li>
+            <Link to="/admin" className="block px-4 py-2 text-white hover:bg-gray-700">
+              Panel Admin
             </Link>
-          )}
+          </li>
+        )}
+
+        <li>
+          <button
+            onClick={handleLogout}
+            className="w-full text-left px-4 py-2 text-white hover:bg-gray-700"
+          >
+            Cerrar Sesión
+          </button>
+        </li>
+      </ul>
+    )}
+  </div>
+) : (
+  <Link
+  to="/login"
+  className="inline-block px-5 py-2 text-white font-semibold text-sm rounded-lg bg-yellow-500 hover:bg-yellow-600 shadow-md hover:shadow-lg transition-all duration-300"
+>
+  Iniciar Sesión
+</Link>
+
+)}
+
         </div>
 
         {/* Botón mobile */}
