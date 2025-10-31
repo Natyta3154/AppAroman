@@ -1,7 +1,7 @@
 // src/components/CarritoUI.tsx
 
 import { motion } from "framer-motion";
-import { ShoppingCart, Trash2, Tag, Truck, Percent } from "lucide-react";
+import { ShoppingCart, Trash2, Tag, Percent } from "lucide-react";
 import { useCarrito } from "../../contex/CarritoContext.tsx";
 import { usePagoMercadoPago } from "../../hooks/usePagoMercadoPago";
 import { useAuth } from "../../hooks/useAuth";
