@@ -9,8 +9,8 @@ import { useDestacados } from '../hooks/useProductosDestacado';
 
 
 export default function Home() {
-  const { productos, loading: loadingProductos } = useProductos();
-  const { destacados, loading: loadingDestacados, error: errorDestacados } = useDestacados();
+  const {  loading: loadingProductos } = useProductos();
+  const { destacados } = useDestacados();
 
   return (
     <div className="bg-gray-50">

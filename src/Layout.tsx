@@ -6,7 +6,7 @@ import { useAuth } from "./hooks/useAuth";
 
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const { user, loading, logout} = useAuth();
+  const { loading} = useAuth();
 
   if (loading) {
     return <div>Cargando...</div>;

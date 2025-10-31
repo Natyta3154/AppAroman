@@ -51,6 +51,7 @@ export interface Producto {
   atributos: { nombre: string; valor: string }[];
   ofertas: Oferta[];
   destacado?: boolean;
+  quantity?: number; // para carrito
 }
 
 export interface ProductoOferta {
