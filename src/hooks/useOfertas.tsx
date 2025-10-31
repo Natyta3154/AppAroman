@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import type { TipoDescuento, Oferta } from "../types/producto";
 
-const API_BASE = import.meta.env.VITE_API_URL_PROD || import.meta.env.VITE_API_URL;
+const API_BASE = import.meta.env.VITE_API_URL;
 
 
 export function useOfertas(

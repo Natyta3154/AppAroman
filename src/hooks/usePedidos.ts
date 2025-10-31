@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import type { Pedido } from "../types/pedido";
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_URL_PROD || import.meta.env.VITE_API_URL;
+const API_BASE = import.meta.env.VITE_API_URL;
 
 export function usePedidos() {
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
