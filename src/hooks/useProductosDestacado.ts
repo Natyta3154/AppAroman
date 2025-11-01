@@ -16,7 +16,8 @@ export const useDestacados = () => {
         setLoading(true);
         setError(null);
 
-        const { data } = await axios.get<ProductoDestacadoSimple[]>(`${API_BASE}/api/productos/top5`, {
+        const categoriaId = 3; // o la que corresponda
+const { data } = await axios.get(`${API_BASE}/api/productos/top5/${categoriaId}`, {
           //withCredentials: true,
         });
 

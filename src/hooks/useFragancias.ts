@@ -16,7 +16,7 @@ export function useFragancias() {
   const fetchFragancias = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get("/api/fragancias/listar");
+      const { data } = await api.get("/api/fragancias/listadoFragancias");
       setFragancias(data);
     } catch (err) {
       console.error(err);
@@ -27,12 +27,12 @@ export function useFragancias() {
   };
 
   const createFragancia = async (nombre: string) => {
-    await api.post("/api/fragancias/agregar", { nombre });
+    await api.post("/api/fragancias/agregarFragancia", { nombre });
     await fetchFragancias();
   };
 
   const updateFragancia = async (id: number, nombre: string) => {
-    await api.put(`/api/fragancias/editar/${id}`, { nombre });
+    await api.put(`/api/fragancias/editarFragancia/${id}`, { nombre });
     await fetchFragancias();
   };
 
