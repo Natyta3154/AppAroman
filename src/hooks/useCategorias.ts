@@ -13,7 +13,8 @@ export function useCategorias() {
   const fetchCategorias = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`${API_BASE}/api/categorias/listar`, { withCredentials: true });
+      const { data } = await axios.get(`${API_BASE}/api/categorias/listar`, 
+        /*{ withCredentials: true });*/);
       setCategorias(data);
     } catch (err) {
       console.error(err);

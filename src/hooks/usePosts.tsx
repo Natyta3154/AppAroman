@@ -16,7 +16,7 @@ export function usePosts() {
       setCargando(true);
       setError(null);
       const res = await axios.get<Post[]>(`${API_BASE}/api/posts`, {
-        withCredentials: true,
+        //withCredentials: true,
       });
       setPosts(res.data);
     } catch (err) {

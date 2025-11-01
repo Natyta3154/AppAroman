@@ -58,7 +58,7 @@ export function useOfertas(
       setCargando(true);
       const { data } = await axios.get<any[]>(
         `${API_BASE}/api/ofertas/carrusel?limite=${limite}`,
-        { withCredentials: true }
+        //{ withCredentials: true }
       );
       setOfertas(data.map(mapToOferta));
       setError(null);
@@ -77,7 +77,7 @@ export function useOfertas(
     try {
       setCargando(true);
       const { data } = await axios.get<any[]>(`${API_BASE}/api/ofertas/listar`, {
-        withCredentials: true,
+        //withCredentials: true,
       });
       setOfertas(data.map(mapToOferta));
       setError(null);

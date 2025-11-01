@@ -17,7 +17,7 @@ export const useDestacados = () => {
         setError(null);
 
         const { data } = await axios.get<ProductoDestacadoSimple[]>(`${API_BASE}/api/productos/top5`, {
-          withCredentials: true,
+          //withCredentials: true,
         });
 
         setDestacados(data);

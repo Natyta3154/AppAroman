@@ -26,7 +26,7 @@ export function useProductos() {
     setError(null);
     try {
       const { data } = await axios.get(`${API_BASE}/api/productos/resumen?page=${newPage}&size=12`, {
-        withCredentials: true,
+       // withCredentials: true,
       });
       const nuevosProductos: Producto[] = data.content || data;
       setProductos(prev => (newPage === 0 ? nuevosProductos : [...prev, ...nuevosProductos]));
@@ -45,7 +45,7 @@ export function useProductos() {
     setError(null);
     try {
       const { data } = await axios.get(`${API_BASE}/api/productos/listado`, {
-        withCredentials: true,
+        //withCredentials: true,
       });
       setProductos(data);
     } catch (err) {
@@ -57,7 +57,8 @@ export function useProductos() {
   };
 
   const getById = async (id: number | string): Promise<Producto> => {
-    const { data } = await axios.get(`${API_BASE}/api/productos/${id}`, { withCredentials: true });
+    const { data } = await axios.get(`${API_BASE}/api/productos/${id}`, 
+      { withCredentials: true });
     return data;
   };
 

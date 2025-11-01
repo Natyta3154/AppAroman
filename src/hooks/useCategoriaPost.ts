@@ -17,7 +17,8 @@ export function useCategoriasPost() {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await axios.get<CategoriaPost[]>(`${API_BASE}/api/categorias-blog/listarCategoriaBlog`, { withCredentials: true });
+      const { data } = await axios.get<CategoriaPost[]>(`${API_BASE}/api/categorias-blog/listarCategoriaBlog`, 
+        /*{ withCredentials: true }*/);
       setCategorias(data);
     } catch (err: any) {
       console.error(err);

@@ -17,7 +17,7 @@ export function useProductoDetalle(id: string | undefined) {
       try {
         setLoading(true);
         const { data } = await axios.get<Producto>(`${API_BASE}/api/productos/${id}`, {
-          withCredentials: true,
+          //withCredentials: true,
         });
 
         setProducto(data);
