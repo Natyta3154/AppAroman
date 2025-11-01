@@ -1,40 +1,27 @@
-import Navbnar from '../conponents/Navbar/Navbar';
+import Navbar from '../conponents/Navbar/Navbar';
 import Hero from '../conponents/hero/Hero';
 import OffersCarousel from '../conponents/carrouesel/OffersCarousel';
 import { Link } from 'react-router-dom';
-import { useProductos } from '../hooks/useproductos';
 import { useDestacados } from '../hooks/useProductosDestacado';
 
 export default function Home() {
-  const { loading: loadingProductos, productos } = useProductos(); // listado de productos
   const { destacados, loading: loadingDestacados } = useDestacados();
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 min-h-screen">
       {/* Navbar */}
-      <Navbnar />
+      <Navbar />
 
       {/* Hero */}
       <Hero />
 
       {/* Carrusel de Ofertas */}
-      <div className="mt-12">
-        {loadingProductos ? (
-          <div className="flex justify-center space-x-4 overflow-x-auto px-4">
-            {[...Array(4)].map((_, i) => (
-              <div
-                key={i}
-                className="w-64 h-40 bg-gray-200 rounded-lg animate-pulse flex-shrink-0"
-              ></div>
-            ))}
-          </div>
-        ) : (
-          <OffersCarousel />
-        )}
-      </div>
+      <section className="mt-12">
+        <OffersCarousel />
+      </section>
 
       {/* Productos Destacados */}
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-beige-50 to-white rounded-3xl mt-16 mb-24 text-center">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-beige-50 to-white rounded-3xl mt-16 mb-24 text-center shadow-sm">
         <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 mb-6">
           Productos Destacados
         </h2>
@@ -75,7 +62,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="mt-5 px-4 pb-4 flex justify-between items-start ">
+                  <div className="mt-5 px-4 pb-4 flex justify-between items-start">
                     <div className="text-left">
                       <h3 className="text-lg font-semibold text-gray-800">
                         <Link
@@ -89,46 +76,14 @@ export default function Home() {
                         {producto.descripcion}
                       </p>
                     </div>
-                    <p className="text-lg font-bold text-purple-600">{producto.precioFinal}</p>
+                    <p className="text-lg font-bold text-purple-600">
+                      ${producto.precioFinal}
+                    </p>
                   </div>
                 </div>
               ))}
         </div>
-      </div>
-
-      {/* Listado completo de productos (público) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
-        <h2 className="text-3xl font-extrabold text-gray-900 mb-6">Todos los Productos</h2>
-        {loadingProductos ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="w-full h-64 bg-gray-200 rounded-3xl animate-pulse"></div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {productos.map((producto) => (
-              <div
-                key={producto.id}
-                className="group relative bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2"
-              >
-                <img
-                  src={producto.imagenUrl}
-                  alt={producto.nombre}
-                  className="w-full aspect-square object-cover rounded-2xl"
-                />
-                <div className="mt-4 flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800">{producto.nombre}</h3>
-                    <p className="mt-1 text-sm text-gray-500 line-clamp-2">{producto.descripcion}</p>
-                  </div>
-                  <p className="text-lg font-bold text-purple-600">{producto.precioFinal}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      </section>
     </div>
   );
 }
