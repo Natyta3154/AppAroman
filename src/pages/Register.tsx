@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 
@@ -11,36 +12,31 @@ export default function Register() {
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError(""); // limpiar errores previos
+    e.preventDefault();
+    setError(""); // limpiar errores previos
 
-  try {
-    const res = await fetch(`${API_BASE}/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre, email, password }),
-    });
+    try {
+         await axios.post(
+        `${API_BASE}/register`,
+        { nombre, email, password },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-    if (!res.ok) {
-      // capturo el mensaje del backend si existe
-      const errorData = await res.json();
-      throw new Error(errorData.error || "Error en el registro");
+      // ✅ Registro exitoso
+      alert("✅ Usuario registrado con éxito. Ahora inicia sesión.");
+      navigate("/login");
+    } catch (err: any) {
+      // Captura mensaje de backend si existe
+      if (err.response?.data?.error) setError(err.response.data.error);
+      else setError(err.message || "Error al registrarse");
     }
-
-    // si todo bien
-    alert("✅ Usuario registrado con éxito. Ahora inicia sesión.");
-    navigate("/login"); // 🔹 redirige al login
-  } catch (err: any) {
-    setError(err.message || "Error al registrarse");
-  }
-};
-
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
       <div className="max-w-md w-full bg-gray-800 p-8 rounded-xl shadow-lg">
         <h2 className="text-2xl font-bold text-white mb-6 text-center">Registro</h2>
-        
+
         {error && <p className="text-red-400 mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -49,21 +45,24 @@ export default function Register() {
             placeholder="Nombre"
             className="w-full p-3 rounded bg-gray-700 text-white"
             value={nombre}
-            onChange={e => setNombre(e.target.value)}
+            onChange={(e) => setNombre(e.target.value)}
+            required
           />
           <input
             type="email"
             placeholder="Email"
             className="w-full p-3 rounded bg-gray-700 text-white"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
           <input
             type="password"
             placeholder="Contraseña"
             className="w-full p-3 rounded bg-gray-700 text-white"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
           <button
             type="submit"

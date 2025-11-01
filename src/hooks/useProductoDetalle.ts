@@ -1,5 +1,6 @@
 // src/hooks/useProductoDetalle.ts
 import { useEffect, useState } from "react";
+import axios from "axios";
 import type { Producto } from "../types/producto";
 
 export function useProductoDetalle(id: string | undefined) {
@@ -7,12 +8,7 @@ export function useProductoDetalle(id: string | undefined) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-
-
- const API_BASE = import.meta.env.VITE_API_URL;
-
-
-
+  const API_BASE = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     if (!id) return;
@@ -20,15 +16,14 @@ export function useProductoDetalle(id: string | undefined) {
     const fetchProducto = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`${API_BASE}/api/productos/${id}`);
-        if (!res.ok) throw new Error("No se pudo obtener el producto");
+        const { data } = await axios.get<Producto>(`${API_BASE}/api/productos/${id}`, {
+          withCredentials: true,
+        });
 
-        const data: Producto = await res.json();
-
-       // console.log("Producto cargado:", data);
         setProducto(data);
       } catch (err: any) {
-        setError(err.message);
+        console.error("Error al cargar producto:", err);
+        setError(err.message || "No se pudo obtener el producto");
       } finally {
         setLoading(false);
       }

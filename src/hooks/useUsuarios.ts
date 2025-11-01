@@ -1,45 +1,38 @@
-// hooks/useUsuarios.ts
 import { useState, useEffect } from "react";
+import axios from "axios";
+import type { AxiosRequestConfig } from "axios"; // ✅ import solo tipo
 import type { Usuario } from "../types/usuario";
 
 const API_BASE = import.meta.env.VITE_API_URL;
-
-
-// Función para manejar refresh token automáticamente
-async function requestWithRefresh(url: string, options: RequestInit = {}) {
-  const res = await fetch(url, { ...options, credentials: "include" });
-
-  if (res.status === 401) {
-    // Intentar renovar token
-    const refreshRes = await fetch(`${API_BASE}/api/usuarios/refresh`, {
-      method: "POST",
-      credentials: "include",
-    });
-    if (!refreshRes.ok) throw new Error("Sesión expirada, por favor loguearse de nuevo");
-
-    // Reintentar la request original
-    return fetch(url, { ...options, credentials: "include" });
-  }
-
-  return res;
-}
 
 export function useUsuarios() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // =========================
-  // Cargar todos los usuarios
-  // =========================
+  // Función para manejar solicitudes con refresh token
+  const requestWithRefresh = async (url: string, options: AxiosRequestConfig = {}) => {
+    try {
+      return await axios({ url: API_BASE + url, withCredentials: true, ...options });
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        const refreshRes = await axios.post(`${API_BASE}/usuarios/refresh`, {}, { withCredentials: true });
+        if (!refreshRes.status || refreshRes.status !== 200) {
+          throw new Error("Sesión expirada, por favor loguearse de nuevo");
+        }
+        return axios({ url: API_BASE + url, withCredentials: true, ...options });
+      }
+      throw err;
+    }
+  };
+
+  //Cargar usuarios
   const fetchUsuarios = async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await requestWithRefresh(`${API_BASE}/usuarios/listaDeUser`);
-      if (!res.ok) throw new Error("Error al cargar usuarios");
-      const data: Usuario[] = await res.json();
-      setUsuarios(data);
+      const res = await requestWithRefresh("/usuarios/listaDeUser");
+      setUsuarios(res.data);
     } catch (err: any) {
       console.error(err);
       setError("Error al cargar usuarios");
@@ -48,44 +41,23 @@ export function useUsuarios() {
     }
   };
 
-  // =========================
-  // Crear usuario
-  // =========================
+  //Crear usuario
   const createUsuario = async (usuario: Omit<Usuario, "id">) => {
-    const res = await requestWithRefresh(`${API_BASE}/usuarios`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(usuario),
-    });
-    if (!res.ok) throw new Error("Error al crear usuario");
-    const nuevo: Usuario = await res.json();
-    setUsuarios(prev => [...prev, nuevo]);
-    return nuevo;
+    const res = await requestWithRefresh("/usuarios", { method: "POST", data: usuario });
+    setUsuarios(prev => [...prev, res.data]);
+    return res.data;
   };
 
-  // =========================
-  // Actualizar usuario
-  // =========================
+  //Actualizar usuario
   const updateUsuario = async (id: number, usuario: Partial<Usuario>) => {
-    const res = await requestWithRefresh(`${API_BASE}/usuarios/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(usuario),
-    });
-    if (!res.ok) throw new Error("Error al actualizar usuario");
-    const updated: Usuario = await res.json();
-    setUsuarios(prev => prev.map(u => (u.id === id ? updated : u)));
-    return updated;
+    const res = await requestWithRefresh(`/usuarios/${id}`, { method: "PUT", data: usuario });
+    setUsuarios(prev => prev.map(u => (u.id === id ? res.data : u)));
+    return res.data;
   };
 
-  // =========================
-  // Eliminar usuario
-  // =========================
+  //Eliminar usuario
   const deleteUsuario = async (id: number) => {
-    const res = await requestWithRefresh(`${API_BASE}/usuarios/${id}`, {
-      method: "DELETE",
-    });
-    if (!res.ok) throw new Error("Error al eliminar usuario");
+    await requestWithRefresh(`/usuarios/eliminarUser/${id}`, { method: "DELETE" });
     setUsuarios(prev => prev.filter(u => u.id !== id));
   };
 

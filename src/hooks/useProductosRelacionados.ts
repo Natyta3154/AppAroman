@@ -1,9 +1,9 @@
 // src/hooks/useProductosRelacionados.ts
 import { useState, useEffect } from "react";
+import axios from "axios";
 import type { Producto } from "../types/producto";
 
 const API_BASE = import.meta.env.VITE_API_URL;
-
 
 export const useProductosRelacionados = (categoriaId?: number, excludeId?: number) => {
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -17,13 +17,14 @@ export const useProductosRelacionados = (categoriaId?: number, excludeId?: numbe
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(
-          `${API_BASE}/api/productos/relacionados?categoriaId=${categoriaId}&excludeId=${excludeId || ""}`
+        const { data } = await axios.get<Producto[]>(
+          `${API_BASE}/api/productos/relacionados`,
+          {
+            params: { categoriaId, excludeId },
+            withCredentials: true,
+          }
         );
 
-        if (!res.ok) throw new Error("Error al obtener productos relacionados");
-
-        const data: Producto[] = await res.json();
         setProductos(data || []);
       } catch (err: any) {
         console.error("Error al cargar productos relacionados:", err);

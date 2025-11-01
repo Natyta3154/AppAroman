@@ -1,6 +1,8 @@
+// src/context/AuthContext.tsx
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type { Usuario } from "../types/usuario";
+import axios from "axios";
 
 type AuthContextType = {
   user: Usuario | null;
@@ -16,7 +18,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<Usuario | null>(null);
   const [loading, setLoading] = useState(true);
 
-const API_BASE = import.meta.env.VITE_API_URL;
+  const API_BASE = import.meta.env.VITE_API_URL;
 
   // 🔹 Recupera usuario actual al iniciar la app
   useEffect(() => {
@@ -25,47 +27,41 @@ const API_BASE = import.meta.env.VITE_API_URL;
 
   // 🔹 LOGIN
   const login = async (email: string, password: string) => {
-    const res = await fetch(`${API_BASE}/usuarios/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-      credentials: "include", // para cookies JWT si usas
-    });
-
-    if (!res.ok) throw new Error("Error en login");
-
-    const data = await res.json();
-    const usuario = data.usuario ?? data;
-    setUser(usuario);
-    return usuario;
+    try {
+      const { data } = await axios.post(
+        `${API_BASE}/usuarios/login`,
+        { email, password },
+        { withCredentials: true }
+      );
+      const usuario = data.usuario ?? data;
+      setUser(usuario);
+      return usuario;
+    } catch (err) {
+      console.error(err);
+      throw new Error("Error en login");
+    }
   };
 
   // 🔹 LOGOUT
   const logout = async () => {
-    await fetch(`${API_BASE}/usuarios/logout`, {
-      method: "POST",
-      credentials: "include",
-    });
-    setUser(null);
+    try {
+      await axios.post(`${API_BASE}/usuarios/logout`, {}, { withCredentials: true });
+      setUser(null);
+    } catch (err) {
+      console.error(err);
+      throw new Error("Error al cerrar sesión");
+    }
   };
 
   // 🔹 REFRESH USER
-const refreshUser = async () => {
-  try {
-    const res = await fetch(`${API_BASE}/usuarios/perfil`, {
-      credentials: "include",
-    });
-    if (!res.ok) {
-      // Usuario no autenticado, simplemente limpiamos el estado
+  const refreshUser = async () => {
+    try {
+      const { data } = await axios.get(`${API_BASE}/usuarios/perfil`, { withCredentials: true });
+      setUser(data.usuario ?? data);
+    } catch {
       setUser(null);
-      return;
     }
-    const data = await res.json();
-    setUser(data.usuario ?? data);
-  } catch {
-    setUser(null);
-  }
-};
+  };
 
   return (
     <AuthContext.Provider value={{ user, loading, login, logout, refreshUser }}>

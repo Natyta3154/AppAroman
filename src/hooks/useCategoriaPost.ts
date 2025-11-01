@@ -1,11 +1,9 @@
 // src/hooks/useCategoriasPost.ts
 import { useState, useEffect } from "react";
-
-import type {CategoriaPost} from "../types/post";
+import type { CategoriaPost } from "../types/post";
+import axios from "axios";
 
 const API_BASE = import.meta.env.VITE_API_URL;
-
-
 
 export function useCategoriasPost() {
   const [categorias, setCategorias] = useState<CategoriaPost[]>([]);
@@ -19,9 +17,7 @@ export function useCategoriasPost() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE}/api/categorias-blog/listarCategoriaBlog`, { credentials: "include" });
-      if (!res.ok) throw new Error("No se pudieron cargar las categorías");
-      const data: CategoriaPost[] = await res.json();
+      const { data } = await axios.get<CategoriaPost[]>(`${API_BASE}/api/categorias-blog/listarCategoriaBlog`, { withCredentials: true });
       setCategorias(data);
     } catch (err: any) {
       console.error(err);
@@ -35,44 +31,49 @@ export function useCategoriasPost() {
   // Crear categoría
   // =========================
   const createCategoria = async (data: { nombre: string; descripcion?: string }) => {
-    const res = await fetch(`${API_BASE}/api/categorias-blog/agregarCategoriaBlog`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-      credentials: "include",
-    });
-    if (!res.ok) throw new Error("Error al crear categoría");
-    const nueva: CategoriaPost = await res.json();
-    setCategorias(prev => [...prev, nueva]);
-    return nueva;
+    try {
+      const { data: nueva } = await axios.post<CategoriaPost>(
+        `${API_BASE}/api/categorias-blog/agregarCategoriaBlog`,
+        data,
+        { withCredentials: true }
+      );
+      setCategorias(prev => [...prev, nueva]);
+      return nueva;
+    } catch (err) {
+      console.error(err);
+      throw new Error("Error al crear categoría");
+    }
   };
 
   // =========================
   // Actualizar categoría
   // =========================
   const updateCategoria = async (id: number, data: { nombre: string; descripcion?: string }) => {
-    const res = await fetch(`${API_BASE}/api/categorias-blog/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-      credentials: "include",
-    });
-    if (!res.ok) throw new Error("Error al actualizar categoría");
-    const updated: CategoriaPost = await res.json();
-    setCategorias(prev => prev.map(c => (c.id === id ? updated : c)));
-    return updated;
+    try {
+      const { data: updated } = await axios.put<CategoriaPost>(
+        `${API_BASE}/api/categorias-blog/${id}`,
+        data,
+        { withCredentials: true }
+      );
+      setCategorias(prev => prev.map(c => (c.id === id ? updated : c)));
+      return updated;
+    } catch (err) {
+      console.error(err);
+      throw new Error("Error al actualizar categoría");
+    }
   };
 
   // =========================
   // Eliminar categoría
   // =========================
   const deleteCategoria = async (id: number) => {
-    const res = await fetch(`${API_BASE}/api/categorias-blog/${id}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-    if (!res.ok) throw new Error("Error al eliminar categoría");
-    setCategorias(prev => prev.filter(c => c.id !== id));
+    try {
+      await axios.delete(`${API_BASE}/api/categorias-blog/${id}`, { withCredentials: true });
+      setCategorias(prev => prev.filter(c => c.id !== id));
+    } catch (err) {
+      console.error(err);
+      throw new Error("Error al eliminar categoría");
+    }
   };
 
   // =========================

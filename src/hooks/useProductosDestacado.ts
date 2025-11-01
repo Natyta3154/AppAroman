@@ -1,10 +1,9 @@
 // src/hooks/useDestacados.ts
 import { useEffect, useState } from "react";
+import axios from "axios";
 import type { ProductoDestacadoSimple } from "../types/productoDestacado";
 
 const API_BASE = import.meta.env.VITE_API_URL;
-
-
 
 export const useDestacados = () => {
   const [destacados, setDestacados] = useState<ProductoDestacadoSimple[]>([]);
@@ -17,12 +16,13 @@ export const useDestacados = () => {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`${API_BASE}/api/productos/top5`); // tu endpoint
-        if (!response.ok) throw new Error("Error al cargar productos destacados");
+        const { data } = await axios.get<ProductoDestacadoSimple[]>(`${API_BASE}/api/productos/top5`, {
+          withCredentials: true,
+        });
 
-        const data: ProductoDestacadoSimple[] = await response.json();
         setDestacados(data);
       } catch (err: any) {
+        console.error(err);
         setError(err.message || "Error desconocido");
       } finally {
         setLoading(false);

@@ -1,10 +1,12 @@
-// src/hooks/useFragancias.ts
 import { useEffect, useState } from "react";
+import axios from "axios";
 import type { Fragancias } from "../types/FraganciaCategoria";
 
-const API_BASE = import.meta.env.VITE_API_URL;
-
-
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
+  timeout: 10000, // evita que se congele
+});
 
 export function useFragancias() {
   const [fragancias, setFragancias] = useState<Fragancias[]>([]);
@@ -14,11 +16,7 @@ export function useFragancias() {
   const fetchFragancias = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE}/api/fragancias/listar`, {
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Error al obtener las fragancias");
-      const data = await res.json();
+      const { data } = await api.get("/api/fragancias/listar");
       setFragancias(data);
     } catch (err) {
       console.error(err);
@@ -29,33 +27,17 @@ export function useFragancias() {
   };
 
   const createFragancia = async (nombre: string) => {
-    const res = await fetch(`${API_BASE}/api/fragancias/agregar`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre }),
-      credentials: "include",
-    });
-    if (!res.ok) throw new Error("Error al crear la fragancia");
+    await api.post("/api/fragancias/agregar", { nombre });
     await fetchFragancias();
   };
 
   const updateFragancia = async (id: number, nombre: string) => {
-    const res = await fetch(`${API_BASE}/api/fragancias/editar/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre }),
-      credentials: "include",
-    });
-    if (!res.ok) throw new Error("Error al actualizar la fragancia");
+    await api.put(`/api/fragancias/editar/${id}`, { nombre });
     await fetchFragancias();
   };
 
   const deleteFragancia = async (id: number) => {
-    const res = await fetch(`${API_BASE}/api/fragancias/eliminarFragancias/${id}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-    if (!res.ok) throw new Error("Error al eliminar la fragancia");
+    await api.delete(`/api/fragancias/eliminarFragancias/${id}`);
     await fetchFragancias();
   };
 

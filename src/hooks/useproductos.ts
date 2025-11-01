@@ -1,9 +1,9 @@
 // src/hooks/useProductos.ts
 import { useState, useEffect } from "react";
+import axios from "axios";
 import type { Producto } from "../types/producto";
 
 const API_BASE = import.meta.env.VITE_API_URL;
-
 
 export function useProductos() {
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -24,13 +24,11 @@ export function useProductos() {
   const fetchProductos = async (newPage = 0) => {
     setLoading(true);
     setError(null);
-
     try {
-      const res = await fetch(`${API_BASE}/api/productos/resumen?page=${newPage}&size=12`, { credentials: "include" });
-      if (!res.ok) throw new Error("Error al obtener productos");
-      const data = await res.json();
+      const { data } = await axios.get(`${API_BASE}/api/productos/resumen?page=${newPage}&size=12`, {
+        withCredentials: true,
+      });
       const nuevosProductos: Producto[] = data.content || data;
-
       setProductos(prev => (newPage === 0 ? nuevosProductos : [...prev, ...nuevosProductos]));
       setHasMore(!data.last && nuevosProductos.length > 0);
       setPage(newPage);
@@ -45,11 +43,10 @@ export function useProductos() {
   const fetchProductosAdmin = async () => {
     setLoading(true);
     setError(null);
-
     try {
-      const res = await fetch(`${API_BASE}/api/productos/listado`, { credentials: "include" });
-      if (!res.ok) throw new Error("Error al obtener productos (admin)");
-      const data = await res.json();
+      const { data } = await axios.get(`${API_BASE}/api/productos/listado`, {
+        withCredentials: true,
+      });
       setProductos(data);
     } catch (err) {
       console.error(err);
@@ -60,40 +57,24 @@ export function useProductos() {
   };
 
   const getById = async (id: number | string): Promise<Producto> => {
-    const res = await fetch(`${API_BASE}/api/productos/${id}`, { credentials: "include" });
-    if (!res.ok) throw new Error("Error al obtener producto");
-    return res.json();
+    const { data } = await axios.get(`${API_BASE}/api/productos/${id}`, { withCredentials: true });
+    return data;
   };
 
   const createProducto = async (producto: Omit<Producto, "id">): Promise<Producto> => {
-    const res = await fetch(`${API_BASE}/api/productos/agregar`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(producto),
-      credentials: "include",
-    });
-    if (!res.ok) throw new Error("Error al crear producto");
-    const data = await res.json();
+    const { data } = await axios.post(`${API_BASE}/api/productos/agregar`, producto, { withCredentials: true });
     setProductos(prev => [...prev, data]);
     return data;
   };
 
   const updateProducto = async (id: number, producto: Partial<Producto>): Promise<Producto> => {
-    const res = await fetch(`${API_BASE}/api/productos/editar/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(producto),
-      credentials: "include",
-    });
-    if (!res.ok) throw new Error("Error al actualizar producto");
-    const data = await res.json();
+    const { data } = await axios.put(`${API_BASE}/api/productos/editar/${id}`, producto, { withCredentials: true });
     setProductos(prev => prev.map(p => (p.id === id ? data : p)));
     return data;
   };
 
   const removeProducto = async (id: number) => {
-    const res = await fetch(`${API_BASE}/api/productos/eliminar/${id}`, { method: "DELETE", credentials: "include" });
-    if (!res.ok) throw new Error("Error al eliminar producto");
+    await axios.delete(`${API_BASE}/api/productos/eliminar/${id}`, { withCredentials: true });
     setProductos(prev => prev.filter(p => p.id !== id));
   };
 
@@ -102,23 +83,17 @@ export function useProductos() {
   // =========================
 
   const fetchCategorias = async () => {
-    const res = await fetch(`${API_BASE}/api/categorias/listado`, { credentials: "include" });
-    if (!res.ok) throw new Error("Error al obtener categorías");
-    const data = await res.json();
+    const { data } = await axios.get(`${API_BASE}/api/categorias/listado`, { withCredentials: true });
     setCategorias(data);
   };
 
   const fetchFragancias = async () => {
-    const res = await fetch(`${API_BASE}/api/fragancias/listadoFragancias`, { credentials: "include" });
-    if (!res.ok) throw new Error("Error al obtener fragancias");
-    const data = await res.json();
+    const { data } = await axios.get(`${API_BASE}/api/fragancias/listadoFragancias`, { withCredentials: true });
     setFragancias(data);
   };
 
   const fetchAtributos = async () => {
-    const res = await fetch(`${API_BASE}/api/atributos/listadoAtributos`, { credentials: "include" });
-    if (!res.ok) throw new Error("Error al obtener atributos");
-    const data = await res.json();
+    const { data } = await axios.get(`${API_BASE}/api/atributos/listadoAtributos`, { withCredentials: true });
     setAtributos(data);
   };
 
@@ -153,4 +128,3 @@ export function useProductos() {
     fetchAtributos,
   };
 }
-
