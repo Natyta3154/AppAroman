@@ -14,9 +14,9 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => (
     />
     <div className="p-5">
       <div className="mb-2">
-        {post.category && (
+        {post.categoria && (
           <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
-            {post.category.nombre}
+            {post.categoria.nombre}
           </span>
         )}
       </div>
