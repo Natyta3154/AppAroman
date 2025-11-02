@@ -11,11 +11,11 @@ const BlogPage = () => {
 
   // Filtrado por categoría
   const filteredPosts = selectedCategory
-    ? posts.filter(post => post.category && post.category.nombre === selectedCategory)
+    ? posts.filter(post => post.categoria && post.categoria.nombre === selectedCategory)
     : posts;
 
   // Extraer categorías únicas
-  const categories = Array.from(new Set(posts.map(post => post.category?.nombre).filter(Boolean)));
+  const categories = Array.from(new Set(posts.map(post => post.categoria?.nombre).filter(Boolean)));
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-200 py-16 px-4">
