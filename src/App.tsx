@@ -20,11 +20,11 @@ import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
-    
+
     <BrowserRouter>
       <CarritoProvider>
         <Layout>
-            <Toaster position="top-right" reverseOrder={false} />
+          <Toaster position="top-right" reverseOrder={false} />
           <Routes>
             {/* Inicio con sección de blog resumida */}
             <Route

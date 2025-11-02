@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import type { Usuario } from "../types/usuario";
 import axios from "axios";
 
+// 🔹 Definimos la forma del contexto de autenticación
 type AuthContextType = {
   user: Usuario | null;
   loading: boolean;
@@ -12,6 +13,7 @@ type AuthContextType = {
   refreshUser: () => Promise<void>;
 };
 
+// 🔹 Creamos el contexto vacío
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -20,9 +22,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const API_BASE = import.meta.env.VITE_API_URL;
 
-  // 🔹 Recupera usuario actual al iniciar la app
+  // 🧠 Importante: definimos refreshUser *antes* de usarlo en useEffect
+  const refreshUser = async () => {
+    try {
+      // Verifica sesión actual (requiere que el backend responda con cookie o JWT)
+      const { data } = await axios.get(`${API_BASE}/usuarios/perfil`, {
+        withCredentials: true,
+      });
+      setUser(data.usuario ?? data);
+    } catch (err) {
+      console.warn("No hay sesión activa:", err);
+      setUser(null);
+    } finally {
+      // 👇 Esto asegura que el loading se detenga incluso si el backend falla
+      setLoading(false);
+    }
+  };
+
+  // 🔹 Efecto que se ejecuta al montar la app (solo una vez)
   useEffect(() => {
-    refreshUser().finally(() => setLoading(false));
+    refreshUser();
   }, []);
 
   // 🔹 LOGIN
@@ -37,8 +56,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(usuario);
       return usuario;
     } catch (err) {
-      console.error(err);
-      throw new Error("Error en login");
+      console.error("Error en login:", err);
+      throw new Error("Error al iniciar sesión");
     }
   };
 
@@ -48,21 +67,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await axios.post(`${API_BASE}/usuarios/logout`, {}, { withCredentials: true });
       setUser(null);
     } catch (err) {
-      console.error(err);
+      console.error("Error al cerrar sesión:", err);
       throw new Error("Error al cerrar sesión");
     }
   };
 
-  // 🔹 REFRESH USER
-  const refreshUser = async () => {
-    try {
-      const { data } = await axios.get(`${API_BASE}/usuarios/perfil`, { withCredentials: true });
-      setUser(data.usuario ?? data);
-    } catch {
-      setUser(null);
-    }
-  };
-
+  // ✅ El valor del contexto: siempre incluye user, loading y funciones de control
   return (
     <AuthContext.Provider value={{ user, loading, login, logout, refreshUser }}>
       {children}
@@ -70,9 +80,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// 🔹 Hook para consumir el contexto
+// 🔹 Hook para consumir el contexto de forma segura
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth debe usarse dentro de AuthProvider");
+  if (!ctx) throw new Error("useAuth debe usarse dentro de <AuthProvider>");
   return ctx;
 }

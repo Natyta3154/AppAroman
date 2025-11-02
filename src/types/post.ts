@@ -14,7 +14,7 @@ export interface Post {
   descripcion: string;
   contenido?: string;
   imagenUrl: string;
-  category?: CategoriaPost;
+  categoria?: CategoriaPost;
   fecha?: string;
   comentarios?: any[]; // si vas a manejar comentarios como array
 }

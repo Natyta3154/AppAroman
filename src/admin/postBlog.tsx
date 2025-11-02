@@ -31,7 +31,7 @@ export default function PostBlog() {
   useEffect(() => {
     async function fetchCategorias() {
       try {
-        const res = await axios.get<CategoriaPost[]>(`${API_BASE}/api/categoriasPost`, {
+        const res = await axios.get<CategoriaPost[]>(`${API_BASE}/api/categorias-blog/listarCategoriaBlog`, {
           withCredentials: true,
         });
         setCategorias(res.data);
@@ -61,7 +61,7 @@ export default function PostBlog() {
     setDescripcion(p.descripcion ?? "");
     setContenido(p.contenido ?? "");
     setImagenUrl(p.imagenUrl ?? "");
-    setCategoria(p.category ?? null);
+    setCategoria(p.categoria ?? null);
     setModalOpen(true);
   };
 
@@ -76,7 +76,7 @@ export default function PostBlog() {
       descripcion,
       contenido,
       imagenUrl,
-      categoria: categoria ? { id: categoria.id } : null,
+      categorias: categoria ? { id: categoria.id } : null,
     };
 
     try {
@@ -156,7 +156,7 @@ export default function PostBlog() {
                   <td className="px-4 py-2 text-sm truncate max-w-[150px]">
                     {p.imagenUrl || "—"}
                   </td>
-                  <td className="px-4 py-2">{p.category?.nombre ?? "Sin categoría"}</td>
+                  <td className="px-4 py-2">{p.categoria?.nombre ?? "Sin categoría"}</td>
                   <td className="px-4 py-2 space-x-2">
                     <button
                       onClick={() => handleEdit(p)}

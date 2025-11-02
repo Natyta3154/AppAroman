@@ -3,6 +3,6 @@ export interface ProductoDestacadoSimple {
   id: number;
   nombre: string;
   imagenUrl: string;
-  precioFinal: number;
+  precio: number;
   descripcion?: string;
 }

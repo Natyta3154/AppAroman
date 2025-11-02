@@ -1,11 +1,14 @@
+// src/pages/Login.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  // 🔹 Estados del formulario
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -20,151 +23,158 @@ export default function Login() {
 
     try {
       const data = await login(email, password);
-      //console.log("Respuesta del backend:", data);
 
       // Redirección según rol
       if (data.rol === "ADMIN") navigate("/admin");
       else navigate("/");
+
+      toast.success("¡Bienvenido!");
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Error en la conexión con el servidor");
+      toast.error("Error al iniciar sesión ❌");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-200 py-20 bg-yellow-20 bg-cover bg-center bg-no-repeat bg-fixed bg-blend-overlay">
-      <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8 bg-gray-800/70 backdrop-blur-md rounded-2xl p-10 shadow-xl">
-          <div className="text-center">
-            <img
-              className="mx-auto h-12 w-auto"
-              src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-              alt="Logo"
-            />
-            <h2 className="mt-6 text-3xl font-extrabold text-white">
-              Inicia sesión
-            </h2>
-            <p className="mt-2 text-sm text-gray-300">
-              O{" "}
-              <a
-                href="/register"
-                className="font-medium text-indigo-400 hover:text-indigo-300"
+    // 🔹 Fondo con gradiente y overlay de imagen
+    <main className="min-h-screen relative flex items-center justify-center bg-gradient-to-br from-purple-700 via-indigo-600 to-pink-500 overflow-hidden">
+      {/* 🔹 Imagen de fondo decorativa */}
+      <div className="absolute inset-0 opacity-20">
+        <img
+          src="https://media.istockphoto.com/id/1460937551/photo/smoldering-white-sage-smudge-stick.jpg?s=2048x2048&w=is&k=20&c=VwgEO_n0h-m48eNCSxiyX4OyXbD1_0Z77RkYTQzOptw="
+         //src="https://images.pexels.com/photos/373543/pexels-photo-373543.jpeg"
+          alt="Fondo decorativo"
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* 🔹 Contenedor del formulario: efecto glassmorphism */}
+      <div className="relative z-10 max-w-md w-full space-y-8 bg-gray-900/70 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-white/20 animate-fadeIn">
+        {/* 🔹 Logo y título */}
+        <div className="text-center">
+          <img
+            className="mx-auto h-12 w-auto"
+            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+            alt="Logo"
+          />
+          <h2 className="mt-6 text-3xl font-extrabold text-white">
+            Inicia sesión
+          </h2>
+          <p className="mt-2 text-sm text-gray-300">
+            O{" "}
+            <a
+              href="/register"
+              className="font-medium text-indigo-400 hover:text-indigo-300"
+            >
+              crea una cuenta nueva
+            </a>
+          </p>
+        </div>
+
+        {/* 🔹 Formulario */}
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          {/* Error de login */}
+          {error && (
+            <p className="text-red-500 text-center font-medium">{error}</p>
+          )}
+
+          {/* 🔹 Inputs */}
+          <div className="rounded-md shadow-sm -space-y-px">
+            {/* Email */}
+            <div className="mb-4">
+              <label htmlFor="email" className="sr-only">
+                Email address
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="Email address"
+                className="appearance-none rounded-lg relative block w-full px-4 py-3 text-gray-100 placeholder-gray-400 bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 hover:scale-105"
+              />
+            </div>
+
+            {/* Password */}
+            <div className="relative">
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="Password"
+                className="appearance-none rounded-lg relative block w-full px-4 py-3 text-gray-100 placeholder-gray-400 bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 hover:scale-105"
+              />
+              {/* 🔹 Botón para mostrar/ocultar password */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-200"
               >
-                crea una cuenta nueva
-              </a>
-            </p>
+                
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-200"
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </button>
+              </button>
+            </div>
           </div>
 
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            {error && (
-              <p className="text-red-500 text-center font-medium">{error}</p>
-            )}
-
-            <div className="rounded-md shadow-sm -space-y-px">
-              <div className="mb-4">
-                <label htmlFor="email" className="sr-only">
-                  Email address
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="Email address"
-                  className="appearance-none rounded-lg relative block w-full px-4 py-3 text-gray-100 placeholder-gray-400 bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
-                />
-              </div>
-
-              <div className="relative">
-                <label htmlFor="password" className="sr-only">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="Password"
-                  className="appearance-none rounded-lg relative block w-full px-4 py-3 text-gray-100 placeholder-gray-400 bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-200"
-                >
-                  {showPassword ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10a9.963 9.963 0 012.175-5.9m1.7-1.7A10.05 10.05 0 0112 5c5.523 0 10 4.477 10 10a9.963 9.963 0 01-2.175 5.9m-1.7 1.7L4.5 4.5"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label className="flex items-center text-gray-300 text-sm">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 text-indigo-500 focus:ring-indigo-400 border-gray-600 rounded mr-2"
-                />
-                Recordarme
-              </label>
-              <a
-                href="#"
-                className="font-medium text-indigo-400 hover:text-indigo-300 text-sm"
-              >
-                ¿Olvidaste tu contraseña?
-              </a>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white ${
-                loading ? "bg-indigo-300 cursor-not-allowed" : "bg-indigo-500 hover:bg-indigo-400"
-              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 shadow-md`}
+          {/* 🔹 Recordarme y olvidé mi contraseña */}
+          <div className="flex items-center justify-between">
+            <label className="flex items-center text-gray-300 text-sm">
+              <input
+                type="checkbox"
+                className="h-4 w-4 text-indigo-500 focus:ring-indigo-400 border-gray-600 rounded mr-2"
+              />
+              Recordarme
+            </label>
+            <a
+              href="#"
+              className="font-medium text-indigo-400 hover:text-indigo-300 text-sm"
             >
-              {loading ? "Iniciando sesión..." : "Iniciar sesión"}
-            </button>
-          </form>
-        </div>
+              ¿Olvidaste tu contraseña?
+            </a>
+          </div>
+
+          {/* 🔹 Botón de login */}
+          <button
+            type="submit"
+            disabled={loading}
+            className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white ${
+              loading
+                ? "bg-indigo-300 cursor-not-allowed"
+                : "bg-indigo-500 hover:bg-indigo-400 shadow-lg shadow-indigo-500/50 hover:shadow-indigo-600/60"
+            } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200`}
+          >
+            {loading ? "Iniciando sesión..." : "Iniciar sesión"}
+          </button>
+        </form>
       </div>
+
+      {/* 🔹 Animación fadeIn usando Tailwind custom */}
+      <style>
+        {`
+          @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+          }
+          .animate-fadeIn {
+            animation: fadeIn 0.8s ease-out forwards;
+          }
+        `}
+      </style>
     </main>
   );
 }

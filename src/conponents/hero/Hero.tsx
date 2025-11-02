@@ -1,34 +1,40 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import "../../App.css";
 
 export default function Hero() {
   return (
-    <section className="relative h-270 flex items-center justify-center overflow-hidden">
+    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
       {/* Fondo con imagen */}
-      <div
-        className="absolute inset-0  bg-center bg-repeat"
-        style={{
-          backgroundImage: "url('/img-hero.jpg') ",  // 👈 asegúrate de tener esta imagen en /public
-        }}
-      />
+      <div className="absolute inset-0 w-full h-full">
+        <picture>
+          {/* Imagen para pantallas grandes */}
+          <source media="(min-width:1024px)" srcSet="/img-hero.jpg" />
+          {/* Imagen para tablet */}
+          <source media="(min-width:640px)" srcSet="/hero-movil.png" />
+          {/* Imagen por defecto / móvil */}
+          <img
+            src="/hero-movil.png"
+            alt="Hero Aromanza"
+            className="w-full h-full object-cover object-center"
+          />
+        </picture>
+        {/* Overlay oscuro */}
+        <div className="absolute inset-0 bg-black/40" />
+      </div>
 
-      {/* Capa oscura para mejorar contraste */}
-      {/* <div className="absolute inset-0 bg-black/50"></div> */}
-
-      {/* Contenido con animación */}
+      {/* Contenido por encima de la imagen */}
       <motion.div
-        className="relative z-10 p-8 text-center max-w-3xl mx-auto text-white"
+        className="relative z-20 text-center max-w-3xl mx-auto px-6 text-white"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
       >
-        <h1 className="text-4xl sm:text-6xl text-black font-bold mb-4">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 leading-snug">
           Bienvenido a <span className="text-yellow-400">Aromanza</span> — Conectá con la esencia de tu alma
         </h1>
-        <p className="text-base sm:text-lg text-black font-bold mb-6">
-          Sumergite en un universo de calma y energía positiva.  
-          Cada aroma es una caricia para el alma, una invitación a reconectar con tu interior  
-          y llenar tus espacios de armonía y belleza natural.
+        <p className="text-base sm:text-lg md:text-xl font-semibold mb-6 leading-relaxed">
+          Sumergite en un universo de calma y energía positiva. Cada aroma es una caricia para el alma, una invitación a reconectar con tu interior y llenar tus espacios de armonía y belleza natural.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Link

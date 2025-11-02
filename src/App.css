@@ -13,6 +13,60 @@
  /* background-color: #1e40af; /* azul oscuro Tailwind */
 }
 
+/* Contenedor del hero */
+.hero {
+  border: solid;               /* solo para debug, luego podés quitar */
+  width: 100%;                 /* ocupa todo el ancho */
+  height: 80vh;                /* altura del hero */
+  position: relative;          /* para posicionar la imagen y overlay */
+  overflow: hidden;            /* evita que la imagen sobresalga */
+  display: flex;               /* centra el contenido */
+  justify-content: center;
+  align-items: center;
+  /*background-color: #000;      /* opcional, mientras carga la imagen */
+}
+
+/* Imagen dentro del hero */
+.hero img {
+  width: 100%;                 /* ocupa todo el contenedor */
+  height: 100%;                /* ocupa todo el contenedor */
+  object-fit: contain;         /* mantiene proporciones, no recorta */
+  object-position: center;     /* centra la imagen */
+  display: block;              /* elimina espacios abajo en algunos navegadores */
+}
+
+/* Overlay oscuro (opcional) */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4); /* capa oscura */
+  z-index: 1;
+}
+
+/* Contenido dentro del hero */
+.hero .hero-content {
+  position: relative;
+  z-index: 2;                  /* siempre sobre la imagen y overlay */
+  text-align: center;
+  color: #fff;
+  padding: 0 1rem;
+}
+
+/* Responsive: ajusta altura en móviles */
+@media (max-width: 640px) {
+  .hero {
+    height: 100%;
+  }
+}
+
+
+
+
+
+
+
+
 @keyframes mist {
   0% {
     transform: translateX(0) translateY(0) scale(1);
