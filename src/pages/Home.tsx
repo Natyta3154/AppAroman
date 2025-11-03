@@ -61,25 +61,23 @@ export default function Home() {
                       </Link>
                     </div>
                   </div>
+<div className="mt-5 px-4 pb-4">
+  <h3 className="text-lg font-semibold text-gray-800">
+    <Link
+      to={`/productos/${producto.id}`}
+      className="hover:text-purple-600 transition-colors duration-300"
+    >
+      {producto.nombre}
+    </Link>
+  </h3>
+  <p className="mt-1 text-sm text-gray-500 line-clamp-2">
+    {producto.descripcion}
+  </p>
+  <p className="mt-2 text-lg font-bold text-purple-600">
+    ${producto.precio}
+  </p>
+</div>
 
-                  <div className="mt-5 px-4 pb-4 flex justify-between items-start">
-                    <div className="text-left">
-                      <h3 className="text-lg font-semibold text-gray-800">
-                        <Link
-                          to={`/productos/${producto.id}`}
-                          className="hover:text-purple-600 transition-colors duration-300"
-                        >
-                          {producto.nombre}
-                        </Link>
-                      </h3>
-                      <p className="mt-1 text-sm text-gray-500 line-clamp-2">
-                        {producto.descripcion}
-                      </p>
-                    </div>
-                    <p className="text-lg font-bold text-purple-600">
-                      ${producto.precio}
-                    </p>
-                  </div>
                 </div>
               ))}
         </div>

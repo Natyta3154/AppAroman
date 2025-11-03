@@ -17,6 +17,9 @@ import BlogSection from "./conponents/blog/BlogSection";
 import BlogPage from "./pages/Blog";
 import PostDetalle from "./pages/PostDetalle.tsx";
 import { Toaster } from "react-hot-toast";
+import ExitoPage from "./pages/ExitoPage.tsx";
+import FalloPage from "./pages/FalloPage.tsx";
+import PendientePage from "./pages/PendientePage.tsx";
 
 function App() {
   return (
@@ -45,6 +48,10 @@ function App() {
                 </AdminRoute>
               }
             />
+             {/* Pedidos*/}
+            <Route path="/exito" element={<ExitoPage />} />
+            <Route path="/fallo" element={<FalloPage />} />
+            <Route path="/pendiente" element={<PendientePage />} />
 
             {/* Productos */}
             <Route path="/productos" element={<Productos />} />
