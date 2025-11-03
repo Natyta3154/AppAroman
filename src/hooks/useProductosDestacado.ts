@@ -6,7 +6,7 @@ const API_BASE = import.meta.env.VITE_API_URL;
 
 export const useDestacados = () => {
   const [destacados, setDestacados] = useState<ProductoDestacadoSimple[]>([]);
-  console.log(destacados);
+  //console.log(destacados);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 

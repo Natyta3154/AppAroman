@@ -9,18 +9,17 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminPage from "./admin/AdminPage";
 import { AdminRoute } from "./routes/AdminRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import ShoppingCarts from "./conponents/CarritoUI/CarritoUI.tsx";
 import { CarritoProvider } from "./contex/CarritoContext.tsx";
 import ProductoDetalle from "./pages/ProductoDetalle";
-import BlogSection from "./conponents/blog/BlogSection"; // 👈 import correcto para sección resumida
-import BlogPage from "./pages/Blog"; // página completa del blog
+import BlogSection from "./conponents/blog/BlogSection";
+import BlogPage from "./pages/Blog";
 import PostDetalle from "./pages/PostDetalle.tsx";
 import { Toaster } from "react-hot-toast";
 
-
 function App() {
   return (
-
     <BrowserRouter>
       <CarritoProvider>
         <Layout>
@@ -37,7 +36,7 @@ function App() {
               }
             />
 
-            {/* Administración */}
+            {/* Administración (ya protegida por AdminRoute) */}
             <Route
               path="/admin"
               element={
@@ -60,12 +59,19 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-            {/* Carrito */}
-            <Route path="/carrito" element={<ShoppingCarts />} />
+            {/* Carrito protegido */}
+            <Route
+              path="/carrito"
+              element={
+                <ProtectedRoute>
+                  <ShoppingCarts />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Blog */}
-            <Route path="/blog" element={<BlogPage />} />         {/* lista completa */}
-            <Route path="/blog/:id" element={<PostDetalle />} />  {/* detalle de post */}
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:id" element={<PostDetalle />} />
           </Routes>
         </Layout>
       </CarritoProvider>
