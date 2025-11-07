@@ -1,3 +1,11 @@
+
+
+// ProtectedRoute actúa como un guardián para las rutas protegidas de la aplicación.
+//  Maneja tres escenarios principales: mostrar un indicador de carga mientras se verifica la autenticación, 
+// redirigir a los usuarios no autenticados a la página de inicio de sesión y permitir el acceso a los usuarios autenticados mostrando el contenido protegido.
+
+
+
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import React from "react"; // 👈 necesario para el tipo React.ReactElement

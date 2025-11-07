@@ -134,110 +134,110 @@ export default function Productos() {
             Limpiar filtros
           </button>
         </div>
-{/* GRID DE PRODUCTOS */}
-<div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-  {productosFiltrados.map((producto) => {
-    // Buscar oferta activa
-    const ofertaActiva = producto.ofertas?.find((oferta) => oferta.estado === true);
+        {/* GRID DE PRODUCTOS */}
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          {productosFiltrados.map((producto) => {
+            // Buscar oferta activa
+            const ofertaActiva = producto.ofertas?.find((oferta) => oferta.estado === true);
 
-    // Usar precioConDescuento del producto en lugar de calcularlo
-    const precioConDescuento = producto.precioConDescuento;
+            // Usar precioConDescuento del producto en lugar de calcularlo
+            const precioConDescuento = producto.precioConDescuento;
 
-    return (
-      <motion.div
-        key={producto.id}
-        whileHover={{ scale: 1.04, y: -5 }}
-        whileTap={{ scale: 0.98 }}
-        className="relative bg-black rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group border border-gray-100"
-      >
-        {/* Imagen */}
-        <div className="relative overflow-hidden">
-          <img
-            src={producto.imagenUrl}
-            alt={producto.nombre}
-            className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-          />
+            return (
+              <motion.div
+                key={producto.id}
+                whileHover={{ scale: 1.04, y: -5 }}
+                whileTap={{ scale: 0.98 }}
+                className="relative bg-black rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group border border-gray-100"
+              >
+                {/* Imagen */}
+                <div className="relative overflow-hidden">
+                  <img
+                    src={producto.imagenUrl}
+                    alt={producto.nombre}
+                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                  />
 
-          {/* Overlay detalle */}
-          <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-            <Link
-              to={`/productos/${producto.id}`}
-              className="bg-white rounded-full p-3 shadow-lg hover:bg-yellow-500 hover:text-white text-black flex items-center gap-2 font-semibold"
-            >
-              <span className="text-xl">👁️</span>
-              Detalle
-            </Link>
-          </div>
+                  {/* Overlay detalle */}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                    <Link
+                      to={`/productos/${producto.id}`}
+                      className="bg-white rounded-full p-3 shadow-lg hover:bg-yellow-500 hover:text-white text-black flex items-center gap-2 font-semibold"
+                    >
+                      <span className="text-xl">👁️</span>
+                      Detalle
+                    </Link>
+                  </div>
 
-          {/* Badges */}
-          {producto.destacado && (
-            <span className="absolute top-3 left-3 bg-gradient-to-r from-yellow-400 to-yellow-300 text-gray-900 text-xs font-bold px-3 py-1 rounded-full shadow-md">
-              🌟 DESTACADO
-            </span>
-          )}
-
-          {ofertaActiva && (
-            <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md animate-pulse">
-              🔥{" "}
-              {ofertaActiva.tipoDescuento === "PORCENTAJE"
-                ? `${ofertaActiva.valorDescuento}% OFF`
-                : "OFERTA"}
-            </span>
-          )}
-        </div>
-
-        {/* Info del producto */}
-        <div className="p-5 flex flex-col justify-between min-h-[180px]">
-          <div>
-            <h3 className="text-lg font-semibold text-yellow-500 hover:text-indigo-600 transition-colors line-clamp-1">
-              <Link to={`/productos/${producto.id}`}>{producto.nombre}</Link>
-            </h3>
-            <p className="text-sm text-yellow-500 mt-3 line-clamp-3">
-              {producto.descripcion}
-            </p>
-          </div>
-
-          {/* Precios */}
-          <div className="mt-5 flex items-center justify-between">
-            <div className="flex flex-col">
-              {ofertaActiva ? (
-                <>
-                  <p className="text-sm text-gray-400 line-through">
-                    {formatPrice(producto.precio)}
-                  </p>
-                  <p className="text-2xl font-bold text-green-500 drop-shadow-sm">
-                    {formatPrice(precioConDescuento)}
-                  </p>
-                  {ofertaActiva.fechaFin && (
-                    <p className="text-xs text-gray-300 mt-1">
-                      Hasta{" "}
-                      {new Date(ofertaActiva.fechaFin).toLocaleDateString("es-AR")}
-                    </p>
+                  {/* Badges */}
+                  {producto.destacado && (
+                    <span className="absolute top-3 left-3 bg-gradient-to-r from-yellow-400 to-yellow-300 text-gray-900 text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                      🌟 DESTACADO
+                    </span>
                   )}
-                </>
-              ) : (
-                <p className="text-2xl font-bold text-yellow-600 drop-shadow-sm">
-                  {formatPrice(producto.precio)}
-                </p>
-              )}
-            </div>
 
-            {/* Botón agregar */}
-            <motion.button
-              whileHover={{ scale: 1.07 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => addToCart(producto)}
-              className="bg-yellow-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-yellow-500 flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              Agregar
-            </motion.button>
-          </div>
+                  {ofertaActiva && (
+                    <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md animate-pulse">
+                      🔥{" "}
+                      {ofertaActiva.tipoDescuento === "PORCENTAJE"
+                        ? `${ofertaActiva.valorDescuento}% OFF`
+                        : "OFERTA"}
+                    </span>
+                  )}
+                </div>
+
+                {/* Info del producto */}
+                <div className="p-5 flex flex-col justify-between min-h-[180px]">
+                  <div>
+                    <h3 className="text-lg font-semibold text-yellow-500 hover:text-indigo-600 transition-colors line-clamp-1">
+                      <Link to={`/productos/${producto.id}`}>{producto.nombre}</Link>
+                    </h3>
+                    <p className="text-sm text-yellow-500 mt-3 line-clamp-3">
+                      {producto.descripcion}
+                    </p>
+                  </div>
+
+                  {/* Precios */}
+                  <div className="mt-5 flex items-center justify-between">
+                    <div className="flex flex-col">
+                      {ofertaActiva ? (
+                        <>
+                          <p className="text-sm text-gray-400 line-through">
+                            {formatPrice(producto.precio)}
+                          </p>
+                          <p className="text-2xl font-bold text-green-500 drop-shadow-sm">
+                            {formatPrice(precioConDescuento)}
+                          </p>
+                          {ofertaActiva.fechaFin && (
+                            <p className="text-xs text-gray-300 mt-1">
+                              Hasta{" "}
+                              {new Date(ofertaActiva.fechaFin).toLocaleDateString("es-AR")}
+                            </p>
+                          )}
+                        </>
+                      ) : (
+                        <p className="text-2xl font-bold text-yellow-600 drop-shadow-sm">
+                          {formatPrice(producto.precio)}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Botón agregar */}
+                    <motion.button
+                      whileHover={{ scale: 1.07 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => addToCart(producto)}
+                      className="bg-yellow-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-yellow-500 flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
+                    >
+                      <ShoppingBag className="w-4 h-4" />
+                      Agregar
+                    </motion.button>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
-      </motion.div>
-    );
-  })}
-</div>
 
 
         {/* BOTÓN CARGAR MÁS */}

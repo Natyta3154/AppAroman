@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
 import axios from "axios";
-
+import { useCarrito } from "../contex/CarritoContext.tsx";
 import type { Oferta, ProductoOferta } from "../types/producto";
 
 const API_BASE = import.meta.env.VITE_API_URL;
@@ -14,6 +14,9 @@ export default function Ofertas() {
   const [ofertasInactivas, setOfertasInactivas] = useState<ProductoOferta[]>([]);
   const [cargando, setCargando] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const { agregarAlCarrito } = useCarrito();
+
+
 
   const fetchOfertas = useCallback(async () => {
     try {
@@ -49,20 +52,20 @@ export default function Ofertas() {
 
   // Clasificar activas e inactivas
   useEffect(() => {
-   const hoy = new Date();
-hoy.setHours(0, 0, 0, 0); // 🔹 Ignoramos horas, solo fecha
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); // 🔹 Ignoramos horas, solo fecha
 
-const activas = ofertas.filter((o) => {
-  if (!o.estado || !o.fechaFin) return false;
-  const fin = new Date(o.fechaFin + "T23:59:59"); // 🔹 Asegura que dure todo el día
-  return fin >= hoy;
-});
+    const activas = ofertas.filter((o) => {
+      if (!o.estado || !o.fechaFin) return false;
+      const fin = new Date(o.fechaFin + "T23:59:59"); // 🔹 Asegura que dure todo el día
+      return fin >= hoy;
+    });
 
-const inactivas = ofertas.filter((o) => {
-  if (!o.fechaFin) return true;
-  const fin = new Date(o.fechaFin + "T23:59:59");
-  return fin < hoy;
-});
+    const inactivas = ofertas.filter((o) => {
+      if (!o.fechaFin) return true;
+      const fin = new Date(o.fechaFin + "T23:59:59");
+      return fin < hoy;
+    });
 
     setOfertasActivas(activas);
     setOfertasInactivas(inactivas);
@@ -94,7 +97,7 @@ const inactivas = ofertas.filter((o) => {
   }
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-white to-gray-100 py-16 px-6">
+    <main className="min-h-screen bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] py-20 px-4">
       <motion.h1
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -133,11 +136,13 @@ const inactivas = ofertas.filter((o) => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={() => agregarAlCarrito(oferta)} // 👈 agrega el producto al carrito
                   className="flex items-center justify-center w-full bg-green-500 text-white py-2 rounded-xl hover:bg-green-600 transition-colors"
                 >
                   <ShoppingBag className="mr-2 w-5 h-5" />
                   Agregar al carrito
                 </motion.button>
+
               </div>
             </motion.div>
           ))}
@@ -176,6 +181,6 @@ const inactivas = ofertas.filter((o) => {
       ) : (
         <p className="text-center text-gray-500">No hay ofertas vencidas.</p>
       )}
-    </section>
+    </main>
   );
 }

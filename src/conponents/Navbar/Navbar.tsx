@@ -32,19 +32,19 @@ export default function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-yellow-600 shadow-xl">
       <nav className="flex items-center justify-between p-6 lg:px-8">
-     {/* Logo + Nombre */}
-<div className="flex items-center lg:flex-1">
-  <Link to="/" className="flex items-center gap-2 -m-1.5 p-1.5">
-    <img
-      alt="Logo"
-      src="/rev.png"
-      className="h-8 w-auto"
-    />
-    <span className="text-xl font-semibold text-black tracking-wide">
-      Aromanza
-    </span>
-  </Link>
-</div>
+        {/* Logo + Nombre */}
+        <div className="flex items-center lg:flex-1">
+          <Link to="/" className="flex items-center gap-2 -m-1.5 p-1.5">
+            <img
+              alt="Logo"
+              src="/rev.png"
+              className="h-8 w-auto"
+            />
+            <span className="text-xl font-semibold text-black tracking-wide">
+              Aromanza
+            </span>
+          </Link>
+        </div>
 
 
         {/* Navegación principal */}
@@ -52,6 +52,7 @@ export default function Navbar() {
           {navigation.map((item) => (
             <Link key={item.name} to={item.href} className="text-sm/6 font-semibold text-white hover:text-gray-300">
               {item.name}
+
             </Link>
           ))}
         </div>
@@ -69,51 +70,51 @@ export default function Navbar() {
 
           {/* 🔹 Usuario */}
           {user ? (
-  <div className="relative">
-    <button
-      onClick={() => setMenuOpen((s) => !s)}
-      className="text-white font-semibold px-4 py-2 bg-gray-700 rounded-lg"
-    >
-      {user.nombre}
-    </button>
+            <div className="relative">
+              <button
+                onClick={() => setMenuOpen((s) => !s)}
+                className="text-white font-semibold px-4 py-2 bg-gray-700 rounded-lg"
+              >
+                {user.nombre}
+              </button>
 
-    {menuOpen && (
-      <ul className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-50">
-        <li>
-          <Link to="/perfil" className="block px-4 py-2 text-white hover:bg-gray-700">
-            Editar Perfil
-          </Link>
-        </li>
+              {menuOpen && (
+                <ul className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-50">
+                  <li>
+                    <Link to="/perfil" className="block px-4 py-2 text-white hover:bg-gray-700">
+                      Editar Perfil
+                    </Link>
+                  </li>
 
-        {/* 🔹 Solo para admins */}
-        {user.rol === "ADMIN" && (
-          <li>
-            <Link to="/admin" className="block px-4 py-2 text-white hover:bg-gray-700">
-              Panel Admin
+                  {/* 🔹 Solo para admins */}
+                  {user.rol === "ADMIN" && (
+                    <li>
+                      <Link to="/admin" className="block px-4 py-2 text-white hover:bg-gray-700">
+                        Panel Admin
+                      </Link>
+                    </li>
+                  )}
+
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-white hover:bg-gray-700"
+                    >
+                      Cerrar Sesión
+                    </button>
+                  </li>
+                </ul>
+              )}
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="inline-block px-5 py-2 text-white font-semibold text-sm rounded-lg bg-yellow-500 hover:bg-yellow-600 shadow-md hover:shadow-lg transition-all duration-300"
+            >
+              Iniciar Sesión
             </Link>
-          </li>
-        )}
 
-        <li>
-          <button
-            onClick={handleLogout}
-            className="w-full text-left px-4 py-2 text-white hover:bg-gray-700"
-          >
-            Cerrar Sesión
-          </button>
-        </li>
-      </ul>
-    )}
-  </div>
-) : (
-  <Link
-  to="/login"
-  className="inline-block px-5 py-2 text-white font-semibold text-sm rounded-lg bg-yellow-500 hover:bg-yellow-600 shadow-md hover:shadow-lg transition-all duration-300"
->
-  Iniciar Sesión
-</Link>
-
-)}
+          )}
 
         </div>
 
@@ -133,19 +134,19 @@ export default function Navbar() {
       {/* Menú móvil */}
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
         <div className="fixed inset-0 z-50" />
-        <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
+        <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white/10 backdrop-blur-md p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
           <div className="flex items-center justify-between">
             <Link to="/" className="-m-1.5 p-1.5">
               <img
                 alt="Logo"
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                src="./rev.png"
                 className="h-8 w-auto"
               />
             </Link>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(false)}
-              className="-m-2.5 rounded-md p-2.5 text-gray-200"
+              className="-m-2.5 rounded-md p-2.5 text-yellow-200"
             >
               <span className="sr-only">Cerrar menú</span>
               <XMarkIcon aria-hidden="true" className="h-6 w-6" />
@@ -159,14 +160,17 @@ export default function Navbar() {
                   <Link
                     key={item.name}
                     to={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
                     className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5"
                   >
                     {item.name}
                   </Link>
                 ))}
                 {/* 🔹 Ícono carrito en móvil */}
-                <nav className="bg-gray-900 p-4 flex justify-between items-center">
-                  <Link to="/" className="text-white text-lg font-bold">Mi Tienda</Link>
+                <nav className="bg-gray-900/30 backdrop-blur-md p-4 flex justify-between items-center rounded-xl border border-white/10">
+                  <Link to="/carrito" className="text-white text-lg font-bold">
+                    Carrito
+                  </Link>
 
                   <button onClick={toggleCart} className="relative">
                     <ShoppingCartIcon className="h-6 w-6 text-white hover:text-gray-300 transition" />
@@ -177,6 +181,7 @@ export default function Navbar() {
                     )}
                   </button>
                 </nav>
+
 
               </div>
 
