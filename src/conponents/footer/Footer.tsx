@@ -1,36 +1,23 @@
 import { Facebook, Instagram, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-yellow-600   text-gray-300">
+    <footer className="bg-yellow-600 text-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <img
-              alt="Logo"
-              src="/rev.png"
-              className="h-8 w-auto"
-            />
-            <span className="text-lg font-semibold text-white">
-              Aromanza
-            </span>
+            <img alt="Logo" src="/rev.png" className="h-8 w-auto" />
+            <span className="text-lg font-semibold text-white">Aromanza</span>
           </div>
 
           {/* Links */}
           <div className="flex gap-6">
-            <a href="/productos" className="hover:text-white transition">
-              Productos
-            </a>
-            <a href="/ofertas" className="hover:text-white transition">
-              Ofertas
-            </a>
-            <a href="/blog" className="hover:text-white transition">
-              Blog
-            </a>
-            <a href="/contacto" className="hover:text-white transition">
-              Contacto
-            </a>
+            <Link to="/productos" className="hover:text-white transition">Productos</Link>
+            <Link to="/ofertas" className="hover:text-white transition">Ofertas</Link>
+            <Link to="/blog" className="hover:text-white transition">Blog</Link>
+            <Link to="/contacto" className="hover:text-white transition">Contacto</Link>
           </div>
 
           {/* Redes sociales */}
@@ -70,5 +57,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }
