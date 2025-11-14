@@ -21,6 +21,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<Usuario | null>(null);
   const [loading, setLoading] = useState(true);
+
+  
   const API_BASE = import.meta.env.VITE_API_URL;
 
   // 🔹 Refrescar usuario al iniciar la app

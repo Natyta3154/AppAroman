@@ -49,9 +49,9 @@ function App() {
               }
             />
              {/* Pedidos*/}
-            <Route path="/exito" element={<ExitoPage />} />
-            <Route path="/fallo" element={<FalloPage />} />
-            <Route path="/pendiente" element={<PendientePage />} />
+            <Route path="/checkout/exito" element={<ExitoPage />} />
+            <Route path="/checkout/fallo" element={<FalloPage />} />
+            <Route path="/checkout/pendiente" element={<PendientePage />} />
 
             {/* Productos */}
             <Route path="/productos" element={<Productos />} />

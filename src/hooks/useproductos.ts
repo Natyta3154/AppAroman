@@ -84,17 +84,17 @@ export function useProductos() {
   // =========================
 
   const fetchCategorias = async () => {
-    const { data } = await axios.get(`${API_BASE}/api/categorias/listado`, { withCredentials: true });
+    const { data } = await axios.get(`${API_BASE}/api/categoria/listadoCat`, { withCredentials: false });
     setCategorias(data);
   };
 
   const fetchFragancias = async () => {
-    const { data } = await axios.get(`${API_BASE}/api/fragancias/listadoFragancias`, { withCredentials: true });
+    const { data } = await axios.get(`${API_BASE}/api/fragancias/listadoFragancias`, { withCredentials: false });
     setFragancias(data);
   };
 
   const fetchAtributos = async () => {
-    const { data } = await axios.get(`${API_BASE}/api/atributos/listadoAtributos`, { withCredentials: true });
+    const { data } = await axios.get(`${API_BASE}/api/atributos/listadoAtributos`, { withCredentials: false });
     setAtributos(data);
   };
 
