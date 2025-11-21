@@ -20,6 +20,7 @@ import { Toaster } from "react-hot-toast";
 import ExitoPage from "./pages/ExitoPage.tsx";
 import FalloPage from "./pages/FalloPage.tsx";
 import PendientePage from "./pages/PendientePage.tsx";
+import Perfil from "./pages/Perfil.tsx";
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
             {/* Autenticación */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/perfil" element={<Perfil />} />
 
             {/* Carrito protegido */}
             <Route

@@ -24,7 +24,7 @@ export const CarritoProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   // ===============================
-  // 🔹 Cargar desde localStorage al iniciar
+  //  Cargar desde localStorage al iniciar
   // ===============================
   useEffect(() => {
     try {
@@ -36,13 +36,13 @@ export const CarritoProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // ✅ Guardar en localStorage cada vez que cambia
+  //  Guardar en localStorage cada vez que cambia
   useEffect(() => {
     localStorage.setItem("carrito", JSON.stringify(carrito));
   }, [carrito]);
 
   // ===============================
-  // 🔹 Funciones auxiliares
+  //  Funciones auxiliares
   // ===============================
 
   const guardar = (nuevo: Producto[]) => {
@@ -57,7 +57,7 @@ export const CarritoProvider = ({ children }: { children: ReactNode }) => {
     sessionStorage.removeItem("carrito");
   };
 
-  // 🔹 Adaptar una oferta a un producto compatible
+  //  Adaptar una oferta a un producto compatible
   const adaptarOfertaAProducto = (o: any): Producto => ({
     id: o.productoId ?? o.idOferta ?? o.id ?? 0,
     nombre: o.nombreProducto ?? o.nombre ?? "Producto sin nombre",
@@ -82,7 +82,7 @@ export const CarritoProvider = ({ children }: { children: ReactNode }) => {
   });
 
   // ===============================
-  // 🔹 Operaciones principales
+  //  Operaciones principales
   // ===============================
 
   const agregarProducto = (item: Producto | any) => {
@@ -122,7 +122,7 @@ export const CarritoProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // ===============================
-  // 🔹 Totales
+  //  Totales
   // ===============================
 
   const totalSinDescuento = carrito.reduce(
@@ -141,7 +141,7 @@ export const CarritoProvider = ({ children }: { children: ReactNode }) => {
   const toggleCart = () => setIsOpen(!isOpen);
 
   // ===============================
-  // 🔹 Proveedor
+  //  Proveedor
   // ===============================
   return (
     <CarritoContext.Provider
@@ -166,7 +166,7 @@ export const CarritoProvider = ({ children }: { children: ReactNode }) => {
 };
 
 // ===============================
-// 🔹 Hook personalizado
+//  Hook personalizado
 // ===============================
 export const useCarrito = () => {
   const context = useContext(CarritoContext);

@@ -1,3 +1,7 @@
+/* Este componente de React llamado BlogCard está diseñado para 
+mostrar una tarjeta individual de una publicación de blog.  */ 
+
+
 import type { Post } from "../../types/post";
 import { Link } from "react-router-dom";
 
