@@ -13,7 +13,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import ShoppingCarts from "./conponents/CarritoUI/CarritoUI.tsx";
 import { CarritoProvider } from "./contex/CarritoContext.tsx";
 import ProductoDetalle from "./pages/ProductoDetalle";
-import BlogSection from "./conponents/blog/BlogSection";
+//import BlogSection from "./conponents/blog/BlogSection";
 import BlogPage from "./pages/Blog";
 import PostDetalle from "./pages/PostDetalle.tsx";
 import { Toaster } from "react-hot-toast";
@@ -35,7 +35,7 @@ function App() {
               element={
                 <>
                   <Home />
-                  <BlogSection />
+                  
                 </>
               }
             />

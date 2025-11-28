@@ -112,7 +112,7 @@ export default function Productos() {
             onChange={(e) => setFiltroPrecioMax(e.target.value ? Number(e.target.value) : null)}
             className="px-4 py-2 border rounded-lg bg-white shadow-sm focus:outline-none w-32"
           />
-          <label className="flex items-center gap-2">
+         {/* <label className="flex items-center gap-2">
             <input
               type="checkbox"
               checked={filtroDestacado ?? false}
@@ -120,7 +120,9 @@ export default function Productos() {
               className="w-4 h-4"
             />
             Destacados
-          </label>
+          </label>*/}
+
+          
           <button
             onClick={() => {
               setFiltroCategoria(null);

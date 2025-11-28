@@ -40,11 +40,11 @@ export default function Contacto() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-200 py-20 bg-fixed bg-cover bg-center">
+    <main className="min-h-screen bg-gradient-to-b from-gray-100 from-[#E9D8FD] via-[#775c92] to-[#a06b9a] to-gray-200 py-50 px-4 to-gray-200 bg-fixed bg-cover bg-center">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <div className="grid lg:grid-cols-2 gap-10 items-start">
+        <div className="grid lg:grid-cols-2 gap-10 items-center">
           {/* FORMULARIO DE CONTACTO */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+          <div className="bg-white rounded-4xl shadow-sm border border-gray-200 p-8 ">
             <h2 className="text-3xl font-bold text-slate-900 mb-3">
               Contáctanos
             </h2>
