@@ -10,14 +10,14 @@ export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // 🔹 Estados del formulario
+  //  Estados del formulario
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🔹 Función de envío del formulario
+  //  Función de envío del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -26,7 +26,7 @@ export default function Login() {
     try {
       const data = await login(email, password);
 
-      // 🔹 Redirección según rol
+      // Redirección según rol
       if (data.rol === "ADMIN") navigate("/admin");
       else navigate("/");
 
