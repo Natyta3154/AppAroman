@@ -78,10 +78,10 @@ export default function OffersCarousel({ limite = 5 }: OffersCarouselProps) {
                 {currentOffer?.nombreProducto}
               </h2>
               <p className="text-xl mt-2 flex items-center gap-3">
-                <span className="line-through text-gray-300">
+                <span className="line-through text-red-500">
                   ${currentOffer?.precio.toFixed(2)}
                 </span>
-                <span className="text-yellow-300 font-bold text-2xl">
+                <span className="text-black font-bold text-2xl">
                   ${currentOffer?.precioConDescuento.toFixed(2)}
                 </span>
               </p>

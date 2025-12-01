@@ -18,12 +18,12 @@ const BlogPage = () => {
   const categories = Array.from(new Set(posts.map(post => post.categoria?.nombre).filter(Boolean)));
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-200 py-16 px-4">
+    <main className="min-h-screen bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] py-16 px-4">
 
       {/* Hero Blog */}
-      <section className="bg-purple-100 py-20 text-center rounded-b-3xl mb-12">
-        <h1 className="text-5xl font-extrabold text-purple-800 mb-4">Blog Aromanza</h1>
-        <p className="text-lg text-purple-700 max-w-2xl mx-auto">
+      <section className="bg-purple-100 mt-16 py-20 text-center rounded-4xl mb-12">
+        <h1 className="text-5xl font-extrabold font-extrabold text-black mb-4">Blog Aromanza</h1>
+        <p className="text-lg font-semibold text-black max-w-2xl mx-auto">
           Inspiración, bienestar y consejos aromáticos para elevar tu energía y armonizar tu día a día.
         </p>
       </section>
@@ -97,9 +97,9 @@ const BlogPage = () => {
           <input
             type="email"
             placeholder="Tu email"
-            className="px-4 py-2 rounded-l-full border border-gray-300 focus:outline-none"
+            className="px-4 py-2 rounded-full border border-gray-300 focus:outline-none"
           />
-          <button className="px-6 py-2 bg-purple-600 text-white rounded-r-full hover:bg-purple-700 transition">
+          <button className="px-6 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition">
             Suscribirse
           </button>
         </div>

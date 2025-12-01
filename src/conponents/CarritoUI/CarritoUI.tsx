@@ -19,23 +19,23 @@ export default function CarritoUI() {
 
   if (carrito.length === 0) {
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-gray-50 to-gray-100">
+      <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-gray-50 to-gray-100 p-6 bg-[url('/public/img-hero.jpg')] bg-cover bg-center bg-no-repeat overflow-hidden">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5 }}
           className="flex flex-col items-center text-center"
         >
-          <ShoppingCart className="w-20 h-20 text-gray-400 mb-4" />
-          <p className="text-gray-600 text-xl font-medium mb-2">
+          <ShoppingCart className="w-20 h-20 text-black mb-4" />
+          <p className="text-black text-xl font-medium mb-2">
             Tu carrito está vacío 😔
           </p>
-          <p className="text-gray-500 mb-6 text-sm">
+          <p className="text-black text-sm">
             Agrega algunos productos y vuelve para completar tu compra.
           </p>
           <a
             href="/productos"
-            className="bg-yellow-600 hover:bg-yellow-500 text-white px-6 py-2 rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all"
+            className="bg-purple-600 hover:bg-purple-800 px-6 py-2 rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all"
           >
             Ir al catálogo
           </a>

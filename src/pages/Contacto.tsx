@@ -114,11 +114,11 @@ export default function Contacto() {
               <button
                 type="submit"
                 disabled={estado === "enviando"}
-                className={`w-full text-sm font-medium py-3 px-6 rounded-lg transition-colors border-0 cursor-pointer
+                className={`w-full bg-purple-600 text-sm font-medium py-3 px-6 rounded-lg transition-colors border-0 cursor-pointer
                   ${
                     estado === "enviando"
                       ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-indigo-700 hover:bg-slate-900 text-white"
+                      : "bg-purple-700 hover:bg-purple-900 text-white"
                   }`}
               >
                 {estado === "enviando"

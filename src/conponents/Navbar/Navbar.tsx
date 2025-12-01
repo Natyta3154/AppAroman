@@ -50,7 +50,7 @@ export default function Navbar() {
         {/* Navegación principal */}
         <div className="hidden lg:flex lg:gap-x-12">
           {navigation.map((item) => (
-            <Link key={item.name} to={item.href} className="text-sm/6 font-semibold text-white hover:text-gray-300">
+            <Link key={item.name} to={item.href} className="text-sm/6 font-semibold text-black hover:text-gray-300">
               {item.name}
 
             </Link>
@@ -61,7 +61,7 @@ export default function Navbar() {
         <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-6 relative">
           {/* 🔹 Ícono del carrito */}
           <Link to="/carrito" className="relative">
-            <ShoppingCartIcon className="h-6 w-6 text-white hover:text-gray-300 transition" />
+            <ShoppingCartIcon className="h-6 w-6 font-semibold text-black hover:text-gray-300 transition" />
             {/* Burbuja opcional */}
             <span className="absolute -top-2 -right-2 bg-red-600 text-xs font-bold text-white rounded-full h-4 w-4 flex items-center justify-center">
               {carrito.length}
@@ -73,7 +73,7 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setMenuOpen((s) => !s)}
-                className="text-white font-semibold px-4 py-2 bg-gray-700 rounded-lg"
+                className="font-semibold text-black px-4 py-2 bg-gray-700 rounded-lg"
               >
                 {user.nombre}
               </button>
@@ -109,7 +109,7 @@ export default function Navbar() {
           ) : (
             <Link
               to="/login"
-              className="inline-block px-5 py-2 text-white font-semibold text-sm rounded-lg bg-yellow-500 hover:bg-yellow-600 shadow-md hover:shadow-lg transition-all duration-300"
+              className="inline-block px-5 py-2 font-semibold text-black text-sm rounded-lg bg-yellow-500 hover:bg-yellow-600 shadow-md hover:shadow-lg transition-all duration-300"
             >
               Iniciar Sesión
             </Link>
@@ -123,7 +123,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(true)}
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200"
+            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-primario"
           >
             <span className="sr-only">Abrir menú principal</span>
             <Bars3Icon aria-hidden="true" className="h-6 w-6" />
@@ -146,7 +146,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setMobileMenuOpen(false)}
-          className="-m-2.5 rounded-md p-2.5 text-yellow-200"
+          className="-m-2.5 rounded-md p-2.5 text-black-200"
         >
           <span className="sr-only">Cerrar menú</span>
           <XMarkIcon aria-hidden="true" className="h-6 w-6" />
@@ -161,7 +161,7 @@ export default function Navbar() {
                 key={item.name}
                 to={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5"
+                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-black hover:bg-white/5"
               >
                 {item.name}
               </Link>
@@ -173,11 +173,11 @@ export default function Navbar() {
             <Link
               to="/carrito"
               onClick={() => setMobileMenuOpen(false)}
-              className="-mx-3 flex justify-between items-center rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5"
+              className="-mx-3 flex justify-between items-center rounded-lg px-3 py-2 text-base/7 font-semibold text-black hover:bg-white/5"
             >
               <span>Carrito</span>
               <div className="relative">
-                <ShoppingCartIcon className="h-6 w-6 text-white" />
+                <ShoppingCartIcon className="h-6 w-6 text-black" />
                 {carrito.length > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-600 text-xs font-bold text-white rounded-full h-4 w-4 flex items-center justify-center">
                     {carrito.length}
@@ -193,13 +193,13 @@ export default function Navbar() {
               <>
                 <Link
                   to="/perfil"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-black hover:bg-white/5"
                 >
                   Editar Perfil
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="-mx-3 block w-full rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-white hover:bg-white/5"
+                  className="-mx-3 block w-full rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-black hover:bg-white/5"
                 >
                   Cerrar Sesión
                 </button>
@@ -208,7 +208,7 @@ export default function Navbar() {
               <Link
                 to="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5"
+                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-black hover:bg-white/5"
               >
                 Login
               </Link>

@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-yellow-600 text-gray-300">
+    <footer className="bg-yellow-600 text-black mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           {/* Logo */}
           <div className="flex items-center gap-2">
             <img alt="Logo" src="/rev.png" className="h-8 w-auto" />
-            <span className="text-lg font-semibold text-white">Aromanza</span>
+            <Link to="/" className="text-lg font-semibold text-black">Aromanza</Link>
           </div>
 
           {/* Links */}
@@ -52,7 +52,7 @@ export default function Footer() {
         </div>
 
         {/* Derechos reservados */}
-        <div className="mt-6 text-center text-sm text-gray-500">
+        <div className="mt-6 text-center text-sm text-black">
           © {new Date().getFullYear()} Aromanza. Todos los derechos reservados.
         </div>
       </div>

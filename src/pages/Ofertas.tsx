@@ -7,16 +7,12 @@ import type { Oferta, ProductoOferta } from "../types/producto";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 
-
 export default function Ofertas() {
   const [ofertas, setOfertas] = useState<ProductoOferta[]>([]);
   const [ofertasActivas, setOfertasActivas] = useState<ProductoOferta[]>([]);
-  const [ofertasInactivas, setOfertasInactivas] = useState<ProductoOferta[]>([]);
   const [cargando, setCargando] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { agregarAlCarrito } = useCarrito();
-
-
 
   const fetchOfertas = useCallback(async () => {
     try {
@@ -25,7 +21,6 @@ export default function Ofertas() {
         withCredentials: true,
       });
 
-      // Transformamos a ProductoOferta
       const ofertasTransformadas: ProductoOferta[] = data.map((o) => ({
         id: o.idOferta,
         nombre: o.nombreProducto,
@@ -50,25 +45,18 @@ export default function Ofertas() {
     }
   }, []);
 
-  // Clasificar activas e inactivas
+  // 🔥 SOLO filtramos activas
   useEffect(() => {
     const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0); // 🔹 Ignoramos horas, solo fecha
+    hoy.setHours(0, 0, 0, 0);
 
     const activas = ofertas.filter((o) => {
       if (!o.estado || !o.fechaFin) return false;
-      const fin = new Date(o.fechaFin + "T23:59:59"); // 🔹 Asegura que dure todo el día
+      const fin = new Date(o.fechaFin + "T23:59:59");
       return fin >= hoy;
     });
 
-    const inactivas = ofertas.filter((o) => {
-      if (!o.fechaFin) return true;
-      const fin = new Date(o.fechaFin + "T23:59:59");
-      return fin < hoy;
-    });
-
     setOfertasActivas(activas);
-    setOfertasInactivas(inactivas);
   }, [ofertas]);
 
   useEffect(() => {
@@ -76,7 +64,11 @@ export default function Ofertas() {
   }, [fetchOfertas]);
 
   const formatPrice = (precio: number) =>
-    new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", minimumFractionDigits: 0 }).format(precio);
+    new Intl.NumberFormat("es-AR", {
+      style: "currency",
+      currency: "ARS",
+      minimumFractionDigits: 0,
+    }).format(precio);
 
   if (cargando) {
     return (
@@ -106,8 +98,9 @@ export default function Ofertas() {
         🔥 Ofertas Especiales 🔥
       </motion.h1>
 
-      {/* OFERTAS ACTIVAS */}
+      {/* SOLO OFERTAS ACTIVAS */}
       <h2 className="text-2xl font-semibold mb-6 text-green-600 text-center">🟢 Activas</h2>
+
       {ofertasActivas.length > 0 ? (
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-7xl mx-auto mb-12">
           {ofertasActivas.map((oferta, i) => (
@@ -133,53 +126,22 @@ export default function Ofertas() {
                   <span className="text-gray-400 line-through text-sm">{formatPrice(oferta.precio)}</span>
                   <span className="text-green-600 font-bold text-lg">{formatPrice(oferta.precioConDescuento)}</span>
                 </div>
+
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => agregarAlCarrito(oferta)} // 👈 agrega el producto al carrito
+                  onClick={() => agregarAlCarrito(oferta)}
                   className="flex items-center justify-center w-full bg-green-500 text-white py-2 rounded-xl hover:bg-green-600 transition-colors"
                 >
                   <ShoppingBag className="mr-2 w-5 h-5" />
                   Agregar al carrito
                 </motion.button>
-
               </div>
             </motion.div>
           ))}
         </div>
       ) : (
         <p className="text-center text-gray-500 mb-12">No hay ofertas activas.</p>
-      )}
-
-      {/* OFERTAS INACTIVAS */}
-      <h2 className="text-2xl font-semibold mb-6 text-red-600 text-center">🔴 Vencidas / Inactivas</h2>
-      {ofertasInactivas.length > 0 ? (
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-7xl mx-auto">
-          {ofertasInactivas.map((oferta, i) => (
-            <motion.div
-              key={oferta.id}
-              className="bg-gray-100 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all opacity-70"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.1 }}
-            >
-              <div className="relative">
-                <img src={oferta.imagenUrl} alt={oferta.nombre} className="w-full h-60 object-cover grayscale" />
-                <div className="absolute top-2 right-2 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                  VENCIDA
-                </div>
-              </div>
-              <div className="p-5 text-center">
-                <h2 className="text-xl font-semibold mb-2 text-gray-800">{oferta.nombre}</h2>
-                <div className="flex justify-center items-center space-x-2 mb-4">
-                  <span className="text-gray-400 line-through text-sm">{formatPrice(oferta.precio)}</span>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      ) : (
-        <p className="text-center text-gray-500">No hay ofertas vencidas.</p>
       )}
     </main>
   );

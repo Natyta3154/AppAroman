@@ -30,22 +30,22 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
       >
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 leading-snug">
-          Bienvenido a <span className="text-yellow-400">Aromanza</span> — Conectá con la esencia de tu alma
+        <h1 className="text-3xl sm:text-5xl text-black md:text-6xl font-bold mb-4 leading-snug">
+          Bienvenido a <span className="font-extrabold text-black">Aromanza</span> — Conectá con la esencia de tu alma
         </h1>
-        <p className="text-base sm:text-lg md:text-xl font-semibold mb-6 leading-relaxed">
+        <p className="font-extrabold text-black sm:text-lg md:text-xl mb-6 leading-relaxed">
           Sumergite en un universo de calma y energía positiva. Cada aroma es una caricia para el alma, una invitación a reconectar con tu interior y llenar tus espacios de armonía y belleza natural.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Link
             to="/productos"
-            className="rounded-md bg-yellow-600 px-6 py-3 text-white font-semibold hover:bg-yellow-500 transition"
+            className="rounded-md bg-yellow-600 px-6 py-3 text-black font-semibold hover:bg-yellow-500 transition"
           >
             Explorar aromas
           </Link>
           <Link
             to="/ofertas"
-            className="rounded-md px-6 py-3 border border-white text-white font-semibold hover:bg-yellow-600 hover:text-black transition"
+            className="rounded-md px-6 py-3 border border-white text-black font-semibold hover:bg-yellow-600 hover:text-black transition"
           >
             Inspirarme
           </Link>

@@ -35,7 +35,7 @@ function App() {
               element={
                 <>
                   <Home />
-                  
+
                 </>
               }
             />
@@ -49,10 +49,12 @@ function App() {
                 </AdminRoute>
               }
             />
-             {/* Pedidos*/}
+            {/* Pedidos*/}
             <Route path="/checkout/exito" element={<ExitoPage />} />
             <Route path="/checkout/fallo" element={<FalloPage />} />
             <Route path="/checkout/pendiente" element={<PendientePage />} />
+            <Route path="/carrito" element={<ShoppingCarts />} />
+
 
             {/* Productos */}
             <Route path="/productos" element={<Productos />} />
@@ -69,14 +71,14 @@ function App() {
             <Route path="/perfil" element={<Perfil />} />
 
             {/* Carrito protegido */}
-            <Route
+            {/*<Route
               path="/carrito"
               element={
                 <ProtectedRoute>
                   <ShoppingCarts />
                 </ProtectedRoute>
               }
-            />
+            />*/}
 
             {/* Blog */}
             <Route path="/blog" element={<BlogPage />} />

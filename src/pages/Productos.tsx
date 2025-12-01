@@ -111,11 +111,11 @@ export default function Productos() {
         // 💡 CAMBIO 1: Aplicación del degradado solicitado en el fondo.
         <main className="min-h-screen bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] py-16 px-4">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h1 className="text-5xl font-extrabold text-gray-900 mb-4 text-center tracking-tight">
-                    🌸 Catálogo Premium
+                <h1 className="text-5xl font-extrabold  mt-20 mb-8 text-center tracking-tight">
+                    ✨ Colección Exclusiva de Aromas y Estilo
                 </h1>
-                <p className="text-center text-gray-800 mb-12 text-xl font-light">
-                    Encuentra el producto perfecto para tu hogar y bienestar.
+                <p className="text-center font-bold  mb-12 text-xl  ">
+                   Utiliza palabras clave de marketing como "Exclusiva" (que implica calidad superior y acceso limitado) y "Aromas y Estilo" (que cubre tanto la función de los productos como su valor decorativo).
                 </p>
 
                 {/* FILTROS CONTENEDOR */}
