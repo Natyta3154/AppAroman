@@ -57,44 +57,75 @@ export default function Categorias() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] py-20 px-4 flex justify-center items-center">
-      <div className="w-full max-w-4x2 p-6 bg-gray-800 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-white mb-4 text-center">Administrar Categorías</h2>
+    <div
+      className="
+        p-6 
+        bg-white/20 backdrop-blur-xl 
+        rounded-3xl shadow-xl 
+        border border-white/30
+        text-gray-900
+      "
+    >
+      <h2 className="text-3xl font-bold mb-6 text-purple-800 text-center">
+        Categorías
+      </h2>
 
-        <div className="flex justify-center mb-4">
-          <button
-            onClick={handleCreate}
-            className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-400 transition"
-          >
-            Agregar Categoría
-          </button>
-        </div>
+      <div className="flex justify-center mb-6">
+        <button
+          onClick={handleCreate}
+          className="
+            px-5 py-2 
+            bg-gradient-to-r from-purple-600 to-pink-500 
+            text-white rounded-full 
+            shadow-md hover:shadow-xl 
+            transition-all duration-300
+          "
+        >
+          Crear Categoría
+        </button>
+      </div>
 
-        <table className="w-full bg-gray-700 text-white rounded-lg overflow-hidden border border-gray-600 text-center">
+      {/* Tabla con scroll para mobile */}
+      <div className="overflow-x-auto rounded-2xl border border-white/30 bg-white/10 backdrop-blur-lg">
+        <table className="min-w-full text-left text-gray-900">
           <thead>
-            <tr className="bg-gray-600">
-              <th className="px-4 py-2 border-b border-gray-500">ID</th>
-              <th className="px-4 py-2 border-b border-gray-500">Nombre</th>
-              <th className="px-4 py-2 border-b border-gray-500">Descripción</th>
-              <th className="px-4 py-2 border-b border-gray-500">Acciones</th>
+            <tr className="bg-white/20 backdrop-blur-xl text-purple-900 font-semibold">
+              <th className="px-4 py-3">ID</th>
+              <th className="px-4 py-3">Nombre</th>
+              <th className="px-4 py-3">Descripción</th>
+              <th className="px-4 py-3 text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {categorias.map(c => (
-              <tr key={c.id} className="border-b border-gray-500 hover:bg-gray-600 transition">
-                <td className="px-4 py-2">{c.id}</td>
-                <td className="px-4 py-2">{c.nombre}</td>
-                <td className="px-4 py-2">{c.descripcion || "—"}</td>
-                <td className="px-4 py-2 space-x-2">
+            {categorias.map((c) => (
+              <tr
+                key={c.id}
+                className="border-b border-purple-200/30 hover:bg-white/30 transition"
+              >
+                <td className="px-4 py-3">{c.id}</td>
+                <td className="px-4 py-3">{c.nombre}</td>
+                <td className="px-4 py-3">{c.descripcion || "—"}</td>
+                <td className="px-4 py-3 flex gap-2 justify-center">
                   <button
                     onClick={() => handleEdit(c)}
-                    className="px-2 py-1 bg-yellow-500 rounded hover:bg-yellow-400"
+                    className="
+                      px-3 py-1 rounded-full 
+                      bg-yellow-500 text-white 
+                      hover:bg-yellow-400 
+                      transition-all shadow
+                    "
                   >
                     Editar
                   </button>
+
                   <button
                     onClick={() => handleDelete(c.id)}
-                    className="px-2 py-1 bg-red-500 rounded hover:bg-red-400"
+                    className="
+                      px-3 py-1 rounded-full 
+                      bg-red-500 text-white 
+                      hover:bg-red-400 
+                      transition-all shadow
+                    "
                   >
                     Eliminar
                   </button>
@@ -103,33 +134,37 @@ export default function Categorias() {
             ))}
           </tbody>
         </table>
-
-        <Modal
-          isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-          title={editCategoria ? "Editar Categoría" : "Agregar Categoría"}
-        >
-          <div className="flex flex-col space-y-3 text-white">
-            <label>
-              Nombre:
-              <input
-                type="text"
-                placeholder="Ej. Lavanda"
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
-                value={nombre}
-                onChange={e => setNombre(e.target.value)}
-              />
-            </label>
-
-            <button
-              onClick={handleSave}
-              className="mt-4 px-4 py-2 bg-green-600 rounded hover:bg-green-500"
-            >
-              {editCategoria ? "Guardar cambios" : "Guardar Categoría"}
-            </button>
-          </div>
-        </Modal>
       </div>
-    </main>
+
+      {/* MODAL */}
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={editCategoria ? "Editar Categoría" : "Crear Categoría"}
+      >
+        <div className="flex flex-col space-y-3">
+          <input
+            type="text"
+            placeholder="Nombre"
+            className="px-3 py-2 rounded bg-white/30 backdrop-blur-lg border border-white/40"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+          />
+
+          <button
+            onClick={handleSave}
+            className="
+              px-4 py-2 
+              bg-gradient-to-r from-purple-600 to-pink-500 
+              text-white rounded-full 
+              shadow-md hover:shadow-xl 
+              transition-all duration-300
+            "
+          >
+            Guardar
+          </button>
+        </div>
+      </Modal>
+    </div>
   );
 }

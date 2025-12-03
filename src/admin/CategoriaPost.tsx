@@ -5,8 +5,9 @@ import type { CategoriaPost } from "../types/post";
 import Modal from "./Modal";
 import toast from "react-hot-toast";
 
-export default function CategoriaPost() {
-  const { categorias, createCategoria, updateCategoria, deleteCategoria } = useCategoriasPost();
+export default function CategoriaPostTab() {
+  const { categorias, createCategoria, updateCategoria, deleteCategoria } =
+    useCategoriasPost();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editCategoria, setEditCategoria] = useState<CategoriaPost | null>(null);
@@ -14,7 +15,6 @@ export default function CategoriaPost() {
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
 
-  // --- CREAR NUEVA CATEGORÍA ---
   const handleCreate = () => {
     setEditCategoria(null);
     setNombre("");
@@ -22,7 +22,6 @@ export default function CategoriaPost() {
     setModalOpen(true);
   };
 
-  // --- EDITAR CATEGORÍA ---
   const handleEdit = (c: CategoriaPost) => {
     setEditCategoria(c);
     setNombre(c.nombre ?? "");
@@ -30,7 +29,6 @@ export default function CategoriaPost() {
     setModalOpen(true);
   };
 
-  // --- GUARDAR CAMBIOS ---
   const handleSave = async () => {
     if (!nombre.trim()) return toast.error("El nombre es obligatorio ❗");
 
@@ -39,115 +37,159 @@ export default function CategoriaPost() {
     try {
       if (editCategoria) {
         await updateCategoria(editCategoria.id, payload);
-        toast.success("Categoría actualizada ✅");
+        toast.success("Categoría actualizada");
       } else {
         await createCategoria(payload);
-        toast.success("Categoría creada ✅");
+        toast.success("Categoría creada");
       }
       setModalOpen(false);
       setEditCategoria(null);
     } catch (err) {
       console.error(err);
-      toast.error("Ocurrió un error al guardar ❌");
+      toast.error("Error al guardar");
     }
   };
 
-  // --- ELIMINAR CATEGORÍA ---
   const handleDelete = async (id: number) => {
     if (!confirm("¿Eliminar esta categoría?")) return;
     try {
       await deleteCategoria(id);
-      toast.success("Categoría eliminada ✅");
+      toast.success("Categoría eliminada");
     } catch (err) {
       console.error(err);
-      toast.error("No se pudo eliminar ❌");
+      toast.error("No se pudo eliminar");
     }
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] py-20 px-4 flex justify-center items-center">
-      <div className="w-full max-w-4xl p-6 bg-gray-800 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">
-          🏷 Administrar Categorías de Posts
+    <main className="min-h-screen bg-gradient-to-br from-purple-200 via-purple-400 to-pink-300 p-6 flex justify-center">
+      <div
+        className="
+          w-full max-w-4xl 
+          p-6 
+          bg-white/20 backdrop-blur-xl 
+          rounded-3xl shadow-xl 
+          border border-white/30
+        "
+      >
+        <h2 className="text-3xl font-bold text-purple-900 mb-6 text-center">
+          📂 Categorías del Blog
         </h2>
 
+        {/* Botón crear */}
         <div className="flex justify-center mb-6">
           <button
             onClick={handleCreate}
-            className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-400 transition"
+            className="
+              px-5 py-2 
+              bg-gradient-to-r from-purple-600 to-pink-500 
+              text-white rounded-full 
+              shadow-md hover:shadow-xl 
+              transition-all duration-300
+            "
           >
-            Agregar Categoría
+            ➕ Agregar Categoría
           </button>
         </div>
 
-        <table className="w-full bg-gray-700 text-white rounded-lg overflow-hidden border border-gray-600 text-center">
-          <thead>
-            <tr className="bg-gray-600 divide-x divide-gray-500">
-              <th className="px-4 py-2 border-b border-gray-500">ID</th>
-              <th className="px-4 py-2 border-b border-gray-500">Nombre</th>
-              <th className="px-4 py-2 border-b border-gray-500">Descripción</th>
-              <th className="px-4 py-2 border-b border-gray-500">Acciones</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-600">
-            {categorias.map((c) => (
-              <tr key={c.id} className="divide-x divide-gray-600 hover:bg-gray-600 transition">
-                <td className="px-4 py-2">{c.id}</td>
-                <td className="px-4 py-2">{c.nombre}</td>
-                <td className="px-4 py-2">{c.descripcion}</td>
-                <td className="px-4 py-2 space-x-2">
-                  <button
-                    onClick={() => handleEdit(c)}
-                    className="px-2 py-1 bg-yellow-500 rounded hover:bg-yellow-400"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => handleDelete(c.id)}
-                    className="px-2 py-1 bg-red-500 rounded hover:bg-red-400"
-                  >
-                    Eliminar
-                  </button>
-                </td>
+        {/* Tabla con el mismo estilo translúcido */}
+        <div className="overflow-x-auto rounded-2xl border border-white/30 bg-white/10 backdrop-blur-lg">
+          <table className="min-w-full text-left text-gray-900">
+            <thead>
+              <tr className="bg-white/20 backdrop-blur-xl text-purple-900 font-semibold">
+                <th className="px-4 py-3">ID</th>
+                <th className="px-4 py-3">Nombre</th>
+                <th className="px-4 py-3">Descripción</th>
+                <th className="px-4 py-3 text-center">Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
 
-        {/* MODAL */}
+            <tbody>
+              {categorias.map((c) => (
+                <tr
+                  key={c.id}
+                  className="
+                    border-b border-purple-200/30 
+                    hover:bg-white/30 
+                    transition
+                  "
+                >
+                  <td className="px-4 py-3">{c.id}</td>
+                  <td className="px-4 py-3">{c.nombre}</td>
+                  <td className="px-4 py-3">{c.descripcion || "—"}</td>
+
+                  <td className="px-4 py-3 flex gap-2 justify-center">
+                    <button
+                      onClick={() => handleEdit(c)}
+                      className="
+                        px-3 py-1 rounded-full 
+                        bg-yellow-500 text-white 
+                        hover:bg-yellow-400 
+                        transition-all shadow
+                      "
+                    >
+                      Editar
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(c.id)}
+                      className="
+                        px-3 py-1 rounded-full 
+                        bg-red-500 text-white 
+                        hover:bg-red-400 
+                        transition-all shadow
+                      "
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Modal con el mismo diseño del panel admin */}
         <Modal
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
           title={editCategoria ? "Editar Categoría" : "Nueva Categoría"}
         >
-          <div className="flex flex-col space-y-3 text-white">
-            <label>
-              Nombre:
-              <input
-                type="text"
-                placeholder="Nombre de la categoría"
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-              />
-            </label>
+          <div className="flex flex-col space-y-3 text-gray-900">
+            <input
+              type="text"
+              placeholder="Nombre"
+              className="
+                px-3 py-2 rounded 
+                bg-white/30 backdrop-blur-lg 
+                border border-white/40
+              "
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+            />
 
-            <label>
-              Descripción:
-              <input
-                type="text"
-                placeholder="Descripción opcional"
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
-                value={descripcion}
-                onChange={(e) => setDescripcion(e.target.value)}
-              />
-            </label>
+            <textarea
+              placeholder="Descripción"
+              className="
+                px-3 py-2 rounded h-32
+                bg-white/30 backdrop-blur-lg 
+                border border-white/40
+              "
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+            />
 
             <button
               onClick={handleSave}
-              className="mt-4 px-4 py-2 bg-green-600 rounded hover:bg-green-500"
+              className="
+                mt-3 px-4 py-2 
+                bg-gradient-to-r from-purple-600 to-pink-500 
+                text-white rounded-full 
+                shadow-md hover:shadow-xl 
+                transition-all duration-300
+              "
             >
-              {editCategoria ? "Guardar cambios" : "Crear Categoría"}
+              Guardar
             </button>
           </div>
         </Modal>

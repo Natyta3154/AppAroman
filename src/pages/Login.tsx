@@ -30,7 +30,7 @@ export default function Login() {
       if (data.rol === "ADMIN") navigate("/admin");
       else navigate("/");
 
-      toast.success("¡Bienvenido!");
+      toast.success(`¡Bienvenido!, ${data.nombre} 👋`);
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Error en la conexión con el servidor");

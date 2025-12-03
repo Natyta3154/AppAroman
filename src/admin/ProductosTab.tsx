@@ -22,7 +22,6 @@ export default function ProductosTab() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editProducto, setEditProducto] = useState<Producto | null>(null);
 
-  // Estados del formulario
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [precio, setPrecio] = useState(0);
@@ -38,34 +37,27 @@ export default function ProductosTab() {
   const categorias = categoriasHook;
   const fraganciasDisponibles = fraganciasHook.map(f => f.nombre);
 
-  // =======================
-  // Carga inicial
-  // =======================
   useEffect(() => {
-    const cargarDatos = async () => {
+    const load = async () => {
       try {
         await fetchProductosAdmin();
         await fetchCategorias();
         await fetchFragancias();
         await fetchAtributos();
       } catch (err) {
-        console.error("Error al cargar datos de admin:", err);
+        console.error(err);
       }
     };
-    cargarDatos();
+    load();
   }, []);
 
-  // =======================
-  // Funciones CRUD
-  // =======================
   const handleDelete = async (id: number) => {
     if (!confirm("¿Eliminar producto?")) return;
     try {
       await removeProducto(id);
-      toast.success("Producto eliminado ✅");
-    } catch (err) {
-      console.error(err);
-      toast.error("Error al eliminar producto ❌");
+      toast.success("Producto eliminado");
+    } catch {
+      toast.error("Error al eliminar producto");
     }
   };
 
@@ -108,7 +100,7 @@ export default function ProductosTab() {
       precio,
       precioMayorista,
       stock,
-      categoriaId: categoriaId ?? null,
+      categoriaId,
       imagenUrl,
       activo,
       destacado,
@@ -119,75 +111,108 @@ export default function ProductosTab() {
     try {
       if (editProducto) {
         await updateProducto(editProducto.id, payload);
-        toast.success("Producto actualizado ✅");
+        toast.success("Producto actualizado");
       } else {
         await createProducto(payload);
-        toast.success("Producto creado ✅");
+        toast.success("Producto creado");
       }
       setModalOpen(false);
       setEditProducto(null);
-    } catch (err) {
-      console.error(err);
-      toast.error("Error al guardar producto ❌");
+    } catch {
+      toast.error("Error al guardar producto");
     }
   };
 
-  // =======================
-  // Render
-  // =======================
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] py-20 px-4 flex justify-center items-center">
-      <div className="p-6 bg-gray-800 rounded-lg shadow-lg mt-6 w-full max-w-6x2">
-        <h2 className="text-2xl font-bold text-white mb-5 text-center">Productos Admin</h2>
+    <div
+      className="
+        p-6 
+        bg-white/20 backdrop-blur-xl 
+        rounded-3xl shadow-xl 
+        border border-white/30
+        text-gray-900
+      "
+    >
+      <h2 className="text-3xl font-bold mb-6 text-purple-800">
+        Productos
+      </h2>
 
-        <div className="flex justify-center">
-          <button
-            onClick={handleCreate}
-            className="mb-4 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-400 transition"
-          >
-            Crear Producto
-          </button>
-        </div>
+      <button
+        onClick={handleCreate}
+        className="
+          mb-6 px-5 py-2 
+          bg-gradient-to-r from-purple-600 to-pink-500 
+          text-white rounded-full 
+          shadow-md hover:shadow-xl 
+          transition-all duration-300
+        "
+      >
+        Crear Producto
+      </button>
 
-        <table className="min-w-full bg-gray-700 divide-x divide-gray-600 text-white rounded-lg overflow-hidden border border-gray-600">
+      <div className="overflow-x-auto rounded-2xl border border-white/30 bg-white/10 backdrop-blur-lg">
+        <table className="min-w-full text-left text-gray-900">
           <thead>
-            <tr className="bg-gray-600 divide-x divide-gray-500">
-              <th className="px-4 py-2 border-b border-gray-500">ID</th>
-              <th className="px-4 py-2 border-b border-gray-500">Nombre</th>
-              <th className="px-4 py-2 border-b border-gray-500">Imagen</th>
-              <th className="px-4 py-2 border-b border-gray-500">Precio</th>
-              <th className="px-4 py-2 border-b border-gray-500">Precio Mayorista</th>
-              <th className="px-4 py-2 border-b border-gray-500">Stock</th>
-              <th className="px-4 py-2 border-b border-gray-500">Activo</th>
-              <th className="px-4 py-2 border-b border-gray-500">Acciones</th>
+            <tr className="bg-white/20 backdrop-blur-xl text-purple-900 font-semibold">
+              <th className="px-4 py-3">ID</th>
+              <th className="px-4 py-3">Nombre</th>
+              <th className="px-4 py-3">Imagen</th>
+              <th className="px-4 py-3">Precio</th>
+              <th className="px-4 py-3">Mayorista</th>
+              <th className="px-4 py-3">Stock</th>
+              <th className="px-4 py-3">Activo</th>
+              <th className="px-4 py-3 text-center">Acciones</th>
             </tr>
           </thead>
+
           <tbody>
             {productos.map(p => (
-              <tr key={p.id} className="border-b divide-x divide-gray-600 border-gray-500 hover:bg-gray-600 transition text-center">
-                <td className="px-4 py-2">{p.id}</td>
-                <td className="px-4 py-2">{p.nombre}</td>
-                <td className="px-4 py-2">
+              <tr
+                key={p.id}
+                className="
+                  border-b border-purple-200/30 
+                  hover:bg-white/30 
+                  transition
+                "
+              >
+                <td className="px-4 py-3">{p.id}</td>
+                <td className="px-4 py-3">{p.nombre}</td>
+                <td className="px-4 py-3">
                   {p.imagenUrl ? (
-                    <img src={p.imagenUrl} alt={p.nombre} className="w-16 h-16 object-cover mx-auto" />
+                    <img
+                      src={p.imagenUrl}
+                      className="w-14 h-14 object-cover rounded-xl shadow-md"
+                    />
                   ) : (
                     "Sin imagen"
                   )}
                 </td>
-                <td className="px-4 py-2">${p.precio}</td>
-                <td className="px-4 py-2">${p.precioMayorista}</td>
-                <td className="px-4 py-2">{p.stock}</td>
-                <td className="px-4 py-2">{p.activo ? "Sí" : "No"}</td>
-                <td className="px-4 py-2 space-x-2">
+                <td className="px-4 py-3">${p.precio}</td>
+                <td className="px-4 py-3">${p.precioMayorista}</td>
+                <td className="px-4 py-3">{p.stock}</td>
+                <td className="px-4 py-3">{p.activo ? "Sí" : "No"}</td>
+
+                <td className="px-4 py-3 flex gap-2 justify-center">
                   <button
                     onClick={() => handleEdit(p)}
-                    className="px-2 py-1 bg-yellow-500 rounded hover:bg-yellow-400 transition"
+                    className="
+                      px-3 py-1 rounded-full 
+                      bg-yellow-500 text-white 
+                      hover:bg-yellow-400 
+                      transition-all shadow
+                    "
                   >
                     Editar
                   </button>
+
                   <button
                     onClick={() => handleDelete(p.id)}
-                    className="px-2 py-1 bg-red-500 rounded hover:bg-red-400 transition"
+                    className="
+                      px-3 py-1 rounded-full 
+                      bg-red-500 text-white 
+                      hover:bg-red-400 
+                      transition-all shadow
+                    "
                   >
                     Eliminar
                   </button>
@@ -195,174 +220,177 @@ export default function ProductosTab() {
               </tr>
             ))}
           </tbody>
+
         </table>
+      </div>
 
-        <Modal
-          isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-          title={editProducto ? "Editar Producto" : "Crear Producto"}
-        >
-          <div className="flex flex-col space-y-3 max-h-[80vh] overflow-y-auto text-white">
-            <label>
-              Nombre:
+      {/* MODAL */}
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={editProducto ? "Editar Producto" : "Crear Producto"}
+      >
+        <div className="flex flex-col space-y-3 text-gray-900">
+
+          <input
+            type="text"
+            placeholder="Nombre"
+            className="px-3 py-2 rounded bg-white/30 border border-white/40 backdrop-blur-lg"
+            value={nombre}
+            onChange={e => setNombre(e.target.value)}
+          />
+
+          <textarea
+            placeholder="Descripción"
+            className="px-3 py-2 rounded bg-white/30 border border-white/40 backdrop-blur-lg"
+            value={descripcion}
+            onChange={e => setDescripcion(e.target.value)}
+          />
+
+          <input
+            type="number"
+            placeholder="Precio"
+            className="px-3 py-2 rounded bg-white/30 border border-white/40 backdrop-blur-lg"
+            value={precio}
+            onChange={e => setPrecio(Number(e.target.value))}
+          />
+
+          <input
+            type="number"
+            placeholder="Precio Mayorista"
+            className="px-3 py-2 rounded bg-white/30 border border-white/40 backdrop-blur-lg"
+            value={precioMayorista}
+            onChange={e => setPrecioMayorista(Number(e.target.value))}
+          />
+
+          <input
+            type="number"
+            placeholder="Stock"
+            className="px-3 py-2 rounded bg-white/30 border border-white/40 backdrop-blur-lg"
+            value={stock}
+            onChange={e => setStock(Number(e.target.value))}
+          />
+
+          <select
+            className="px-3 py-2 rounded bg-white/30 border border-white/40 backdrop-blur-lg"
+            value={categoriaId ?? ""}
+            onChange={e => setCategoriaId(Number(e.target.value))}
+          >
+            <option value="">Seleccionar categoría</option>
+            {categorias.map(c => (
+              <option key={c.id} value={c.id}>{c.nombre}</option>
+            ))}
+          </select>
+
+          <input
+            type="text"
+            placeholder="URL de imagen"
+            className="px-3 py-2 rounded bg-white/30 border border-white/40 backdrop-blur-lg"
+            value={imagenUrl}
+            onChange={e => setImagenUrl(e.target.value)}
+          />
+
+          {/* Activo */}
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={activo}
+              onChange={e => setActivo(e.target.checked)}
+            />
+            <span>Activo</span>
+          </label>
+
+          {/* Destacado */}
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={destacado}
+              onChange={e => setDestacado(e.target.checked)}
+            />
+            <span>Destacado</span>
+          </label>
+
+          {/* Fragancias */}
+          <label>Fragancias:</label>
+          <select
+            multiple
+            className="px-3 py-2 rounded bg-white/30 border border-white/40 backdrop-blur-lg"
+            value={fragancias}
+            onChange={e =>
+              setFragancias(Array.from(e.target.selectedOptions, o => o.value))
+            }
+          >
+            {fraganciasDisponibles.map(f => (
+              <option key={f} value={f}>{f}</option>
+            ))}
+          </select>
+
+          {/* Atributos */}
+          <label>Atributos:</label>
+          {atributos.map((a, i) => (
+            <div key={i} className="flex gap-2">
               <input
                 type="text"
-                placeholder="Ej. Vela aromática"
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
-                value={nombre}
-                onChange={e => setNombre(e.target.value)}
+                placeholder="Nombre"
+                className="px-2 py-1 rounded bg-white/30 border border-white/40 text-sm"
+                value={a.nombre}
+                onChange={e => {
+                  const copy = [...atributos];
+                  copy[i].nombre = e.target.value;
+                  setAtributos(copy);
+                }}
               />
-            </label>
-
-            <label>
-              Descripción:
-              <textarea
-                placeholder="Ej. Aroma relajante de lavanda"
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
-                value={descripcion}
-                onChange={e => setDescripcion(e.target.value)}
-              />
-            </label>
-
-            <label>
-              Precio:
-              <input
-                type="number"
-                placeholder="Ej. 1500"
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
-                value={precio}
-                onChange={e => setPrecio(Number(e.target.value))}
-              />
-            </label>
-
-            <label>
-              Precio Mayorista:
-              <input
-                type="number"
-                placeholder="Ej. 1200"
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
-                value={precioMayorista}
-                onChange={e => setPrecioMayorista(Number(e.target.value))}
-              />
-            </label>
-
-            <label>
-              Stock:
-              <input
-                type="number"
-                placeholder="Ej. 30"
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
-                value={stock}
-                onChange={e => setStock(Number(e.target.value))}
-              />
-            </label>
-
-            <label>
-              Categoría:
-              <select
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
-                value={categoriaId ?? ""}
-                onChange={e => setCategoriaId(Number(e.target.value))}
-              >
-                <option value="">Seleccionar categoría</option>
-                {categorias.map(c => (
-                  <option key={c.id} value={c.id}>{c.nombre}</option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              URL de Imagen:
               <input
                 type="text"
-                placeholder="Ej. https://..."
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
-                value={imagenUrl}
-                onChange={e => setImagenUrl(e.target.value)}
+                placeholder="Valor"
+                className="px-2 py-1 rounded bg-white/30 border border-white/40 text-sm"
+                value={a.valor}
+                onChange={e => {
+                  const copy = [...atributos];
+                  copy[i].valor = e.target.value;
+                  setAtributos(copy);
+                }}
               />
-            </label>
-
-            <div className="flex items-center space-x-2">
-              <input type="checkbox" checked={activo} onChange={e => setActivo(e.target.checked)} />
-              <span>Activo</span>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <input type="checkbox" checked={destacado} onChange={e => setDestacado(e.target.checked)} />
-              <span>Destacado</span>
-            </div>
-
-            {/* Fragancias */}
-            <div>
-              <label>Fragancias:</label>
-              <select
-                multiple
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
-                value={fragancias}
-                onChange={e => setFragancias(Array.from(e.target.selectedOptions, o => o.value))}
-              >
-                {fraganciasDisponibles.map(f => (
-                  <option key={f} value={f}>{f}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Atributos */}
-            <div>
-              <label>Atributos:</label>
-              {atributos.map((a, i) => (
-                <div key={i} className="flex space-x-2 mb-1 mt-1">
-                  <input
-                    type="text"
-                    placeholder="Nombre del atributo"
-                    className="px-2 py-1 rounded bg-gray-700 text-white"
-                    value={a.nombre}
-                    onChange={e => {
-                      const copy = [...atributos];
-                      copy[i].nombre = e.target.value;
-                      setAtributos(copy);
-                    }}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Valor"
-                    className="px-2 py-1 rounded bg-gray-700 text-white"
-                    value={a.valor}
-                    onChange={e => {
-                      const copy = [...atributos];
-                      copy[i].valor = e.target.value;
-                      setAtributos(copy);
-                    }}
-                  />
-                  <button
-                    onClick={() => setAtributos(prev => prev.filter((_, idx) => idx !== i))}
-                    className="px-2 py-1 bg-red-500 rounded hover:bg-red-400"
-                  >
-                    X
-                  </button>
-                </div>
-              ))}
               <button
-                onClick={() => setAtributos(prev => [...prev, { nombre: "", valor: "" }])}
-                className="px-2 py-1 bg-indigo-500 rounded hover:bg-indigo-400 mt-1"
+                onClick={() =>
+                  setAtributos(prev => prev.filter((_, idx) => idx !== i))
+                }
+                className="px-2 py-1 bg-red-500 text-white rounded-full hover:bg-red-400 text-sm"
               >
-                Agregar atributo
+                X
               </button>
             </div>
+          ))}
 
-            <button
-              onClick={handleSave}
-              className="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition"
-            >
-              {editProducto ? "Guardar Cambios" : "Guardar Producto"}
-            </button>
+          <button
+            onClick={() =>
+              setAtributos(prev => [...prev, { nombre: "", valor: "" }])
+            }
+            className="
+              px-3 py-2 
+              bg-gradient-to-r from-purple-600 to-pink-500 
+              text-white rounded-full 
+              shadow-md hover:shadow-xl 
+              transition-all
+            "
+          >
+            Agregar atributo
+          </button>
 
-
-
-          </div>
-        </Modal>
-
-      </div>
-    </main>
+          <button
+            onClick={handleSave}
+            className="
+              mt-3 px-4 py-2 
+              bg-gradient-to-r from-purple-600 to-pink-500 
+              text-white rounded-full 
+              shadow-md hover:shadow-xl 
+              transition-all duration-300
+            "
+          >
+            Guardar
+          </button>
+        </div>
+      </Modal>
+    </div>
   );
 }

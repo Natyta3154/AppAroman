@@ -133,8 +133,21 @@ export default function Navbar() {
 
       {/* Menú móvil */}
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
-    <div className="fixed inset-0 z-50" />
-    <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-black/50 backdrop-blur-md p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
+   <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm" />
+
+<Dialog.Panel
+  className="
+    fixed inset-y-0 right-0 z-50 w-full
+    overflow-y-auto
+    bg-gradient-to-b from-[#E9D8FD]/70 via-[#775c92]/70 to-[#a06b9a]/70
+    backdrop-blur-xl
+    p-6
+    sm:max-w-sm
+    shadow-xl
+    ring-1 ring-white/10
+  "
+>
+
       <div className="flex items-center justify-between">
         <Link to="/" className="-m-1.5 p-1.5">
           <img

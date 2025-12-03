@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import type { AxiosRequestConfig } from "axios"; // ✅ import solo tipo
+import type { AxiosRequestConfig } from "axios"; 
 import type { Usuario } from "../types/usuario";
 
 const API_BASE = import.meta.env.VITE_API_URL;

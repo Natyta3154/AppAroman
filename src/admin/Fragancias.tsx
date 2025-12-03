@@ -56,42 +56,74 @@ export default function FraganciasTab() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] py-20 px-4 flex justify-center items-center">
-      <div className="w-full max-w-6x3 p-6 bg-gray-800 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-white mb-4 text-center">Administrar Fragancias</h2>
+    <div
+      className="
+        p-6 
+        bg-white/20 backdrop-blur-xl 
+        rounded-3xl shadow-xl 
+        border border-white/30
+        text-gray-900
+      "
+    >
+      <h2 className="text-3xl font-bold mb-6 text-purple-800 text-center">
+        Fragancias
+      </h2>
 
-        <div className="flex justify-center mb-4">
-          <button
-            onClick={handleCreate}
-            className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-400 transition"
-          >
-            Agregar Fragancia
-          </button>
-        </div>
+      <div className="flex justify-center mb-6">
+        <button
+          onClick={handleCreate}
+          className="
+            px-5 py-2 
+            bg-gradient-to-r from-purple-600 to-pink-500 
+            text-white rounded-full 
+            shadow-md hover:shadow-xl 
+            transition-all duration-300
+          "
+        >
+          Agregar Fragancia
+        </button>
+      </div>
 
-        <table className="w-full bg-gray-700 text-white rounded-lg overflow-hidden border border-gray-600 text-center">
+      {/* Tabla con diseño moderno y scroll mobile */}
+      <div className="overflow-x-auto rounded-2xl border border-white/30 bg-white/10 backdrop-blur-lg">
+        <table className="min-w-full text-left text-gray-900">
           <thead>
-            <tr className="bg-gray-600">
-              <th className="px-4 py-2 border-b border-gray-500">ID</th>
-              <th className="px-4 py-2 border-b border-gray-500">Nombre</th>
-              <th className="px-4 py-2 border-b border-gray-500">Acciones</th>
+            <tr className="bg-white/20 backdrop-blur-xl text-purple-900 font-semibold">
+              <th className="px-4 py-3">ID</th>
+              <th className="px-4 py-3">Nombre</th>
+              <th className="px-4 py-3 text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {fragancias.map(f => (
-              <tr key={f.id} className="border-b border-gray-500 hover:bg-gray-600 transition">
-                <td className="px-4 py-2">{f.id}</td>
-                <td className="px-4 py-2">{f.nombre}</td>
-                <td className="px-4 py-2 space-x-2">
+            {fragancias.map((f) => (
+              <tr
+                key={f.id}
+                className="border-b border-purple-200/30 hover:bg-white/30 transition"
+              >
+                <td className="px-4 py-3">{f.id}</td>
+                <td className="px-4 py-3">{f.nombre}</td>
+
+                <td className="px-4 py-3 flex justify-center gap-2">
                   <button
                     onClick={() => handleEdit(f)}
-                    className="px-2 py-1 bg-yellow-500 rounded hover:bg-yellow-400"
+                    className="
+                      px-3 py-1 rounded-full 
+                      bg-yellow-500 text-white 
+                      hover:bg-yellow-400 
+                      transition-all shadow
+                    "
                   >
                     Editar
                   </button>
+
                   <button
                     onClick={() => handleDelete(f.id)}
-                    className="px-2 py-1 bg-red-500 rounded hover:bg-red-400"
+                    className="
+                      px-3 py-1 rounded-full 
+                      bg-red-500 text-white 
+                      hover:bg-red-400 
+                      transition-all shadow
+                    "
                   >
                     Eliminar
                   </button>
@@ -100,33 +132,37 @@ export default function FraganciasTab() {
             ))}
           </tbody>
         </table>
-
-        <Modal
-          isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-          title={editFragancia ? "Editar Fragancia" : "Agregar Fragancia"}
-        >
-          <div className="flex flex-col space-y-3 text-white">
-            <label>
-              Nombre:
-              <input
-                type="text"
-                placeholder="Ej. Lavanda"
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
-                value={nombre}
-                onChange={e => setNombre(e.target.value)}
-              />
-            </label>
-
-            <button
-              onClick={handleSave}
-              className="mt-4 px-4 py-2 bg-green-600 rounded hover:bg-green-500"
-            >
-              {editFragancia ? "Guardar cambios" : "Guardar Fragancia"}
-            </button>
-          </div>
-        </Modal>
       </div>
-    </main>
+
+      {/* Modal */}
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={editFragancia ? "Editar Fragancia" : "Crear Fragancia"}
+      >
+        <div className="flex flex-col space-y-3">
+          <input
+            type="text"
+            placeholder="Nombre"
+            className="px-3 py-2 rounded bg-white/30 backdrop-blur-lg border border-white/40 text-gray-900"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+          />
+
+          <button
+            onClick={handleSave}
+            className="
+              px-4 py-2 
+              bg-gradient-to-r from-purple-600 to-pink-500 
+              text-white rounded-full 
+              shadow-md hover:shadow-xl 
+              transition-all duration-300
+            "
+          >
+            Guardar
+          </button>
+        </div>
+      </Modal>
+    </div>
   );
 }

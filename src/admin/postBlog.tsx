@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { usePosts } from "../hooks/usePosts"; // 👈 usamos el hook en lugar del service
+import { usePosts } from "../hooks/usePosts";
 import type { Post, CategoriaPost } from "../types/post";
 import Modal from "./Modal";
 import toast from "react-hot-toast";
@@ -8,14 +8,8 @@ import axios from "axios";
 const API_BASE = import.meta.env.VITE_API_URL;
 
 export default function PostBlog() {
-  const {
-    posts,
-    cargando,
-    error,
-    crearPost,
-    actualizarPost,
-    eliminarPost,
-  } = usePosts();
+  const { posts, cargando, error, crearPost, actualizarPost, eliminarPost } =
+    usePosts();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editPost, setEditPost] = useState<Post | null>(null);
@@ -27,13 +21,13 @@ export default function PostBlog() {
   const [imagenUrl, setImagenUrl] = useState("");
   const [categoria, setCategoria] = useState<CategoriaPost | null>(null);
 
-  // --- CARGAR CATEGORÍAS ---
   useEffect(() => {
     async function fetchCategorias() {
       try {
-        const res = await axios.get<CategoriaPost[]>(`${API_BASE}/api/categorias-blog/listarCategoriaBlog`, {
-          withCredentials: true,
-        });
+        const res = await axios.get<CategoriaPost[]>(
+          `${API_BASE}/api/categorias-blog/listarCategoriaBlog`,
+          { withCredentials: true }
+        );
         setCategorias(res.data);
       } catch (err) {
         console.error(err);
@@ -43,7 +37,6 @@ export default function PostBlog() {
     fetchCategorias();
   }, []);
 
-  // --- CREAR NUEVO POST ---
   const handleCreate = () => {
     setEditPost(null);
     setTitulo("");
@@ -54,7 +47,6 @@ export default function PostBlog() {
     setModalOpen(true);
   };
 
-  // --- EDITAR POST ---
   const handleEdit = (p: Post) => {
     setEditPost(p);
     setTitulo(p.titulo ?? "");
@@ -65,11 +57,9 @@ export default function PostBlog() {
     setModalOpen(true);
   };
 
-  // --- GUARDAR (CREAR / ACTUALIZAR) ---
   const handleSave = async () => {
-    if (!titulo.trim() || !descripcion.trim()) {
+    if (!titulo.trim() || !descripcion.trim())
       return toast.error("El título y la descripción son obligatorios ❗");
-    }
 
     const payload = {
       titulo,
@@ -82,25 +72,25 @@ export default function PostBlog() {
     try {
       if (editPost) {
         await actualizarPost(editPost.id, payload);
-        toast.success("Post actualizado ✅");
+        toast.success("Post actualizado");
       } else {
         await crearPost(payload);
-        toast.success("Post creado ✅");
+        toast.success("Post creado");
       }
+
       setModalOpen(false);
       setEditPost(null);
     } catch (err) {
       console.error(err);
-      toast.error("Ocurrió un error al guardar ❌");
+      toast.error("Error al guardar ❌");
     }
   };
 
-  // --- ELIMINAR POST ---
   const handleDelete = async (id: number) => {
     if (!confirm("¿Eliminar este post?")) return;
     try {
       await eliminarPost(id);
-      toast.success("Post eliminado ✅");
+      toast.success("Post eliminado");
     } catch (err) {
       console.error(err);
       toast.error("No se pudo eliminar ❌");
@@ -108,103 +98,139 @@ export default function PostBlog() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] py-20 px-4 flex justify-center items-center">
-      <div className="w-full max-w-6xl p-6 bg-gray-800 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">
-          📝 Administrar Posts del Blog
+    <main className="min-h-screen p-6 flex justify-center bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a]">
+      <div
+        className="
+          w-full max-w-6xl
+          p-6
+          bg-white/20 backdrop-blur-xl
+          rounded-3xl shadow-xl
+          border border-white/30
+        "
+      >
+        <h2 className="text-3xl font-bold text-purple-900 text-center mb-8">
+          📚 Administrar Posts del Blog
         </h2>
 
-        <div className="flex justify-center mb-6">
+        {/* Botón crear */}
+        <div className="flex justify-center mb-8">
           <button
             onClick={handleCreate}
-            className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-400 transition"
+            className="
+              px-5 py-2 
+              bg-gradient-to-r from-purple-600 to-pink-500
+              text-white rounded-full
+              shadow-md hover:shadow-xl
+              transition-all duration-300
+            "
           >
-            Agregar Post
+            ➕ Nuevo Post
           </button>
         </div>
 
         {cargando ? (
-          <p className="text-center text-white">Cargando posts...</p>
+          <p className="text-center text-purple-900 font-semibold">
+            Cargando posts...
+          </p>
         ) : error ? (
-          <p className="text-center text-red-400">{error}</p>
+          <p className="text-center text-red-600">{error}</p>
         ) : (
-          <table className="w-full bg-gray-700 text-white rounded-lg overflow-hidden border border-gray-600 text-center">
-            <thead>
-              <tr className="bg-gray-600 divide-x divide-gray-500">
-                <th className="px-4 py-2 border-b border-gray-500">ID</th>
-                <th className="px-4 py-2 border-b border-gray-500">Título</th>
-                <th className="px-4 py-2 border-b border-gray-500">Descripción</th>
-                <th className="px-4 py-2 border-b border-gray-500">Contenido</th>
-                <th className="px-4 py-2 border-b border-gray-500">Imagen</th>
-                <th className="px-4 py-2 border-b border-gray-500">Categoría</th>
-                <th className="px-4 py-2 border-b border-gray-500">Acciones</th>
-              </tr>
-            </thead>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posts.map((p) => (
+              <div
+                key={p.id}
+                className="
+                  bg-white/30 backdrop-blur-lg
+                  rounded-2xl p-4 shadow-lg 
+                  border border-white/20
+                  hover:shadow-xl transition-all
+                  flex flex-col space-y-3
+                "
+              >
+                <img
+                  src={p.imagenUrl || 'https://via.placeholder.com/300'}
+                  alt={p.titulo}
+                  className="w-full h-40 object-cover rounded-lg"
+                />
 
-            <tbody className="divide-y divide-gray-600">
-              {posts.map((p) => (
-                <tr
-                  key={p.id}
-                  className="divide-x divide-gray-600 hover:bg-gray-600 transition"
-                >
-                  <td className="px-4 py-2">{p.id}</td>
-                  <td className="px-4 py-2">{p.titulo}</td>
-                  <td className="px-4 py-2">{p.descripcion}</td>
-                  <td className="px-4 py-2 text-sm text-gray-300 line-clamp-2">
-                    {p.contenido}
-                  </td>
-                  <td className="px-4 py-2 text-sm truncate max-w-[150px]">
-                    {p.imagenUrl || "—"}
-                  </td>
-                  <td className="px-4 py-2">{p.categoria?.nombre ?? "Sin categoría"}</td>
-                  <td className="px-4 py-2 space-x-2">
-                    <button
-                      onClick={() => handleEdit(p)}
-                      className="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-400 transition"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => handleDelete(p.id)}
-                      className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-400 transition"
-                    >
-                      Eliminar
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                <h3 className="text-xl font-bold text-purple-900">
+                  {p.titulo}
+                </h3>
+
+                <p className="text-gray-800 text-sm line-clamp-2">
+                  {p.descripcion}
+                </p>
+
+                <p className="text-xs text-purple-900">
+                  Categoría:{" "}
+                  <span className="font-semibold">
+                    {p.categoria?.nombre ?? "—"}
+                  </span>
+                </p>
+
+                <div className="flex justify-between mt-3">
+                  <button
+                    onClick={() => handleEdit(p)}
+                    className="
+                      px-3 py-1 rounded-full
+                      bg-yellow-500 text-white 
+                      hover:bg-yellow-400 
+                      transition-all shadow
+                    "
+                  >
+                    Editar
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(p.id)}
+                    className="
+                      px-3 py-1 rounded-full
+                      bg-red-500 text-white 
+                      hover:bg-red-400 
+                      transition-all shadow
+                    "
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
 
-        {/* --- MODAL --- */}
         <Modal
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
           title={editPost ? "Editar Post" : "Nuevo Post"}
         >
-          <div className="flex flex-col space-y-3 text-white">
+          <div className="flex flex-col space-y-3 text-gray-900">
             <label>
-              Título:
+              <span className="font-semibold">Título:</span>
               <input
                 type="text"
-                placeholder="Ej. Cómo elegir tu fragancia ideal"
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
+                className="
+                  w-full px-3 py-2 rounded
+                  bg-white/30 backdrop-blur-lg
+                  border border-white/40
+                "
                 value={titulo}
                 onChange={(e) => setTitulo(e.target.value)}
               />
             </label>
 
             <label>
-              Categoría:
+              <span className="font-semibold">Categoría:</span>
               <select
                 value={categoria?.id ?? ""}
                 onChange={(e) => {
-                  const selectedId = Number(e.target.value);
-                  const selected = categorias.find((c) => c.id === selectedId) ?? null;
-                  setCategoria(selected);
+                  const id = Number(e.target.value);
+                  setCategoria(categorias.find((c) => c.id === id) ?? null);
                 }}
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
+                className="
+                  w-full px-3 py-2 rounded
+                  bg-white/30 backdrop-blur-lg
+                  border border-white/40
+                "
               >
                 <option value="">-- Selecciona una categoría --</option>
                 {categorias.map((c) => (
@@ -216,32 +242,41 @@ export default function PostBlog() {
             </label>
 
             <label>
-              Descripción:
+              <span className="font-semibold">Descripción:</span>
               <input
                 type="text"
-                placeholder="Breve resumen del post"
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
+                className="
+                  w-full px-3 py-2 rounded
+                  bg-white/30 backdrop-blur-lg
+                  border border-white/40
+                "
                 value={descripcion}
                 onChange={(e) => setDescripcion(e.target.value)}
               />
             </label>
 
             <label>
-              Contenido:
+              <span className="font-semibold">Contenido:</span>
               <textarea
-                placeholder="Escribe el contenido completo aquí..."
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1 h-32"
+                className="
+                  w-full px-3 py-2 rounded h-32
+                  bg-white/30 backdrop-blur-lg
+                  border border-white/40
+                "
                 value={contenido}
                 onChange={(e) => setContenido(e.target.value)}
               />
             </label>
 
             <label>
-              URL de Imagen:
+              <span className="font-semibold">URL de imagen:</span>
               <input
                 type="text"
-                placeholder="https://..."
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white mt-1"
+                className="
+                  w-full px-3 py-2 rounded
+                  bg-white/30 backdrop-blur-lg
+                  border border-white/40
+                "
                 value={imagenUrl}
                 onChange={(e) => setImagenUrl(e.target.value)}
               />
@@ -249,7 +284,12 @@ export default function PostBlog() {
 
             <button
               onClick={handleSave}
-              className="mt-4 px-4 py-2 bg-green-600 rounded hover:bg-green-500"
+              className="
+                mt-4 px-4 py-2 rounded-full
+                bg-gradient-to-r from-purple-600 to-pink-500
+                text-white shadow-md hover:shadow-xl
+                transition-all
+              "
             >
               {editPost ? "Guardar cambios" : "Publicar Post"}
             </button>

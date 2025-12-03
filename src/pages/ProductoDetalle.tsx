@@ -9,6 +9,11 @@ import type { Producto } from "../types/producto";
 
 //import type { Producto } from "../types/producto";
 
+
+
+
+
+
 export default function ProductoDetalle() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -22,7 +27,73 @@ export default function ProductoDetalle() {
   const [cantidad, setCantidad] = useState<number>(1);
   const [selectedFragancia, setSelectedFragancia] = useState<string>("");
 
-  if (loading) return <p className="text-center mt-20">Cargando producto...</p>;
+ if (loading)
+  return (
+    <main className="bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] py-20 px-4">
+      <section className="max-w-7xl mx-auto px-5 sm:px-10 md:px-16 py-16">
+
+        {/* Título del loader */}
+        <div className="text-center mb-12">
+          <div className="h-10 w-64 bg-white/40 rounded-xl mx-auto animate-pulse"></div>
+          <div className="h-4 w-80 bg-white/30 rounded-xl mx-auto mt-4 animate-pulse"></div>
+        </div>
+
+        {/* Skeleton principal producto */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+          {/* Imagen grande */}
+          <div className="bg-white/40 rounded-3xl shadow-lg p-4 animate-pulse">
+            <div className="w-full h-[500px] bg-white/30 rounded-xl"></div>
+          </div>
+
+          {/* Info del producto */}
+          <div className="bg-white/40 rounded-3xl shadow-lg p-8 space-y-6 animate-pulse">
+            <div className="h-8 w-3/4 bg-white/50 rounded"></div>
+            <div className="h-4 w-full bg-white/40 rounded"></div>
+            <div className="h-4 w-5/6 bg-white/40 rounded"></div>
+            <div className="h-4 w-2/3 bg-white/40 rounded"></div>
+
+            {/* precio */}
+            <div className="h-10 w-40 bg-white/60 rounded"></div>
+
+            {/* select fragancia */}
+            <div className="h-12 w-full bg-white/40 rounded"></div>
+
+            {/* cantidad */}
+            <div className="h-12 w-48 bg-white/40 rounded"></div>
+
+            {/* total */}
+            <div className="h-6 w-40 bg-white/50 rounded"></div>
+
+            {/* botones */}
+            <div className="flex gap-4">
+              <div className="h-12 w-40 bg-white/50 rounded-lg"></div>
+              <div className="h-12 w-40 bg-white/50 rounded-lg"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* productos relacionados loader */}
+        <h2 className="text-2xl font-bold text-white mt-20 mb-6 animate-pulse">
+          Productos relacionados
+        </h2>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          {[1, ].map((i) => (
+            <div
+              key={i}
+              className="bg-white/40 rounded-xl shadow-md animate-pulse p-4"
+            >
+              <div className="w-full h-40 bg-white/30 rounded-md"></div>
+              <div className="h-4 w-3/4 bg-white/50 rounded mt-4"></div>
+              <div className="h-4 w-1/2 bg-white/40 rounded mt-2"></div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+
   if (error) return <p className="text-center mt-20 text-red-500">{error}</p>;
   if (!producto) return <p className="text-center mt-20">Producto no encontrado</p>;
 

@@ -6,7 +6,36 @@ const BlogSection = () => {
   const { posts, cargando } = usePosts();
   const featured = posts.slice(0, 3);
 
-  if (cargando) return <p className="text-center mt-10">Cargando posts...</p>;
+  //Skeleton loader elegante para el blog
+if (cargando)
+  return (
+    <main className="bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] py-20 px-4">
+      <section className="max-w-7xl mx-auto px-5 sm:px-10 md:px-16 py-16">
+        <div className="text-center mb-12">
+          <div className="h-10 w-56 bg-white/40 rounded-xl mx-auto animate-pulse"></div>
+          <div className="h-4 w-80 bg-white/30 rounded-xl mx-auto mt-4 animate-pulse"></div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg overflow-hidden animate-pulse"
+            >
+              <div className="w-full h-64 bg-white/30" />
+              <div className="p-6 space-y-4">
+                <div className="h-6 w-3/4 bg-white/50 rounded"></div>
+                <div className="h-4 w-full bg-white/40 rounded"></div>
+                <div className="h-4 w-5/6 bg-white/40 rounded"></div>
+                <div className="h-10 w-32 bg-white/60 rounded-full mx-auto"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+
 
   return (
     <main className=" bg-gradient-to-b from-gray-100 bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] to-gray-200 py-20 px-4">
