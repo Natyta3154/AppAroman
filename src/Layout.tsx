@@ -20,7 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <Toaster position="top-right" reverseOrder={false} />
-      <main className="flex-1 w-full max-w-100% mx-auto px-0 sm:px-6 lg:px-0">
+      <main className="flex-1 w-full max-w-100% mx-auto px-0 sm:px- lg:px-0">
         {children}
       </main>
       <Footer />
