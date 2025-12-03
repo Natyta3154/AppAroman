@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingBag, ChevronDown, ChevronUp, Filter, Heart } from "lucide-react"; 
+import { ShoppingBag, ChevronDown, Filter, Heart } from "lucide-react"; 
 
 import { useProductos } from "../hooks/useproductos";
 import type { ProductoResumen, Producto } from "../types/producto";
