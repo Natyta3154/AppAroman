@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminPage from "./admin/AdminPage";
 import { AdminRoute } from "./routes/AdminRoute";
-import ProtectedRoute from "./routes/ProtectedRoute";
+//import ProtectedRoute from "./routes/ProtectedRoute";
 import ShoppingCarts from "./conponents/CarritoUI/CarritoUI.tsx";
 import { CarritoProvider } from "./contex/CarritoContext.tsx";
 import ProductoDetalle from "./pages/ProductoDetalle";
