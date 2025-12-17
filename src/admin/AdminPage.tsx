@@ -35,7 +35,7 @@ export default function AdminPage() {
                           flex lg:flex-col 
                           overflow-x-auto lg:overflow-visible 
                           whitespace-nowrap lg:whitespace-normal
-                          border-b border-gray-700 lg:border-b-0">
+                          border-b border-gray-700 lg:border-b-0 ">
 
           <h1 className="hidden lg:block text-2xl font-bold mb-6">
             Admin Panel
@@ -47,7 +47,7 @@ export default function AdminPage() {
               <button
                 key={tab.name}
                 className={`
-                  px-4 py-2 rounded transition text-sm lg:text-base
+                  px-4 py-2 rounded transition text-sm lg:text-base cursor-pointer
                   ${activeTab === idx ? "bg-indigo-600" : "hover:bg-gray-700"}
                 `}
                 onClick={() => setActiveTab(idx)}

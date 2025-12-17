@@ -59,7 +59,7 @@ export default function Navbar() {
 
         {/* Área de usuario + carrito */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-6 relative">
-          {/* 🔹 Ícono del carrito */}
+          {/* Ícono del carrito */}
           <Link to="/carrito" className="relative">
             <ShoppingCartIcon className="h-6 w-6 font-semibold text-black hover:text-gray-300 transition" />
             {/* Burbuja opcional */}
@@ -73,7 +73,7 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setMenuOpen((s) => !s)}
-                className="font-semibold text-black px-4 py-2 bg-gray-700 rounded-lg"
+                className="font-semibold text-black px-4 py-2 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600 transition"
               >
                 {user.nombre}
               </button>
@@ -81,7 +81,7 @@ export default function Navbar() {
               {menuOpen && (
                 <ul className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-50">
                   <li>
-                    <Link to="/perfil" className="block px-4 py-2 text-white hover:bg-gray-700">
+                    <Link to="/perfil" className="block px-4 py-2 text-white hover:bg-gray-700 cursor-pointer">
                       Editar Perfil
                     </Link>
                   </li>
@@ -89,7 +89,7 @@ export default function Navbar() {
                   {/* 🔹 Solo para admins */}
                   {user.rol === "ADMIN" && (
                     <li>
-                      <Link to="/admin" className="block px-4 py-2 text-white hover:bg-gray-700">
+                      <Link to="/admin" className="block px-4 py-2 text-white hover:bg-gray-700 cursor-pointer">
                         Panel Admin
                       </Link>
                     </li>
@@ -98,7 +98,7 @@ export default function Navbar() {
                   <li>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-white hover:bg-gray-700"
+                      className="w-full text-left px-4 py-2 text-white hover:bg-gray-700 cursor-pointer"
                     >
                       Cerrar Sesión
                     </button>

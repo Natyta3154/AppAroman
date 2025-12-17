@@ -133,7 +133,7 @@ export default function ProductosTab() {
         text-gray-900
       "
     >
-      <h2 className="text-3xl font-bold mb-6 text-purple-800">
+      <h2 className="text-3xl font-bold mb-6 text-purple-800 cursor-pointer">
         Productos
       </h2>
 
@@ -145,6 +145,7 @@ export default function ProductosTab() {
           text-white rounded-full 
           shadow-md hover:shadow-xl 
           transition-all duration-300
+          cursor-pointer
         "
       >
         Crear Producto
@@ -200,6 +201,7 @@ export default function ProductosTab() {
                       bg-yellow-500 text-white 
                       hover:bg-yellow-400 
                       transition-all shadow
+                      cursor-pointer
                     "
                   >
                     Editar
@@ -208,6 +210,7 @@ export default function ProductosTab() {
                   <button
                     onClick={() => handleDelete(p.id)}
                     className="
+                    cursor-pointer
                       px-3 py-1 rounded-full 
                       bg-red-500 text-white 
                       hover:bg-red-400 
@@ -230,7 +233,7 @@ export default function ProductosTab() {
         onClose={() => setModalOpen(false)}
         title={editProducto ? "Editar Producto" : "Crear Producto"}
       >
-        <div className="flex flex-col space-y-3 text-gray-900">
+        <div className="flex flex-col space-y-3 text-white">
 
           <input
             type="text"
@@ -367,6 +370,7 @@ export default function ProductosTab() {
               setAtributos(prev => [...prev, { nombre: "", valor: "" }])
             }
             className="
+            cursor-pointer
               px-3 py-2 
               bg-gradient-to-r from-purple-600 to-pink-500 
               text-white rounded-full 
@@ -380,6 +384,7 @@ export default function ProductosTab() {
           <button
             onClick={handleSave}
             className="
+            cursor-pointer
               mt-3 px-4 py-2 
               bg-gradient-to-r from-purple-600 to-pink-500 
               text-white rounded-full 

@@ -88,7 +88,7 @@ const BlogPage = () => {
       </section>
 
       {/* Suscripción al newsletter */}
-      <section className="bg-purple-50 py-16 mt-16 rounded-3xl text-center">
+      {/*<section className="bg-purple-50 py-16 mt-16 rounded-3xl text-center">
         <h3 className="text-2xl font-semibold mb-4">No te pierdas nada</h3>
         <p className="text-gray-700 mb-6">
           Suscribite para recibir las últimas novedades y consejos aromáticos
@@ -103,7 +103,7 @@ const BlogPage = () => {
             Suscribirse
           </button>
         </div>
-      </section>
+      </section>*/}
     </main>
   );
 };

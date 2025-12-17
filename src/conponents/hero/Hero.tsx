@@ -41,13 +41,13 @@ export default function Hero() {
             to="/productos"
             className="rounded-md bg-yellow-600 px-6 py-3 text-black font-semibold hover:bg-yellow-500 transition"
           >
-            Explorar aromas
+            Explorar nustro catálogo
           </Link>
           <Link
             to="/ofertas"
             className="rounded-md px-6 py-3 border border-white text-black font-semibold hover:bg-yellow-600 hover:text-black transition"
           >
-            Inspirarme
+            Ofertas
           </Link>
         </div>
       </motion.div>

@@ -21,6 +21,9 @@ import ExitoPage from "./pages/ExitoPage.tsx";
 import FalloPage from "./pages/FalloPage.tsx";
 import PendientePage from "./pages/PendientePage.tsx";
 import Perfil from "./pages/Perfil.tsx";
+/*import ForgotPassword from "./pages/OlvidoContraseña.tsx";*/
+import ForgotPasswordPage from "./pages/ForgotPasswordPage.tsx";
+import ResetPasswordPage from "./pages/ResetPasswordPage.tsx";
 
 function App() {
   return (
@@ -68,7 +71,12 @@ function App() {
             {/* Autenticación */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+           {/* <Route path="/forgot-password" element={<ForgotPassword />} />*/}
             <Route path="/perfil" element={<Perfil />} />
+            {/* 2. Solicitud de Restablecimiento (Paso 1) */}
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            {/* 3. Restablecer Contraseña (Paso 2) */}
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
 
             {/* Carrito protegido */}
             {/*<Route
