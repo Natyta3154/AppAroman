@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import type {Post } from "../types/post";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 
 export function usePosts() {
@@ -15,7 +14,7 @@ export function usePosts() {
     try {
       setCargando(true);
       setError(null);
-      const res = await axios.get<Post[]>(`${API_BASE}/api/posts/listarPost`, {
+      const res = await api.get<Post[]>(`/api/posts/listarPost`, {
         //withCredentials: true,
       });
       setPosts(res.data);
@@ -30,7 +29,7 @@ export function usePosts() {
   // --- Crear un nuevo post ---
   const crearPost = useCallback(async (postData: Partial<Post>) => {
     try {
-      const res = await axios.post(`${API_BASE}/api/posts/agregarPost`, postData, {
+      const res = await api.post(`//api/posts/agregarPost`, postData, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       });
@@ -44,7 +43,7 @@ export function usePosts() {
   // --- Actualizar post ---
   const actualizarPost = useCallback(async (id: number, postData: Partial<Post>) => {
     try {
-      const res = await axios.put(`${API_BASE}/api/posts/actualizarPost/${id}`, postData, {
+      const res = await api.put(`//api/posts/actualizarPost/${id}`, postData, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       });
@@ -58,7 +57,7 @@ export function usePosts() {
   // --- Eliminar post ---
   const eliminarPost = useCallback(async (id: number) => {
     try {
-      await axios.delete(`${API_BASE}/api/posts/eliminar/${id}`, {
+      await api.delete(`//api/posts/eliminar/${id}`, {
         withCredentials: true,
       });
       setPosts(prev => prev.filter(p => p.id !== id));

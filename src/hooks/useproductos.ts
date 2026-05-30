@@ -1,9 +1,8 @@
 // src/hooks/useProductos.ts
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import type { Producto } from "../types/producto";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 export function useProductos() {
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -25,7 +24,7 @@ export function useProductos() {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await axios.get(`${API_BASE}/api/productos/resumen?page=${newPage}&size=12`, {
+      const { data } = await api.get(`//api/productos/resumen?page=${newPage}&size=12`, {
        // withCredentials: true,
       });
       const nuevosProductos: Producto[] = data.content || data;
@@ -44,7 +43,7 @@ export function useProductos() {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await axios.get(`${API_BASE}/api/productos/listado`, {
+      const { data } = await api.get(`//api/productos/listado`, {
         //withCredentials: true,
       });
       setProductos(data);
@@ -57,25 +56,25 @@ export function useProductos() {
   };
 
   const getById = async (id: number | string): Promise<Producto> => {
-    const { data } = await axios.get(`${API_BASE}/api/productos/${id}`, 
+    const { data } = await api.get(`//api/productos/${id}`, 
       { withCredentials: true });
     return data;
   };
 
   const createProducto = async (producto: Omit<Producto, "id">): Promise<Producto> => {
-    const { data } = await axios.post(`${API_BASE}/api/productos/agregar`, producto, { withCredentials: true });
+    const { data } = await api.post(`//api/productos/agregar`, producto, { withCredentials: true });
     setProductos(prev => [...prev, data]);
     return data;
   };
 
   const updateProducto = async (id: number, producto: Partial<Producto>): Promise<Producto> => {
-    const { data } = await axios.put(`${API_BASE}/api/productos/editar/${id}`, producto, { withCredentials: true });
+    const { data } = await api.put(`//api/productos/editar/${id}`, producto, { withCredentials: true });
     setProductos(prev => prev.map(p => (p.id === id ? data : p)));
     return data;
   };
 
   const removeProducto = async (id: number) => {
-    await axios.delete(`${API_BASE}/api/productos/eliminar/${id}`, { withCredentials: true });
+    await api.delete(`//api/productos/eliminar/${id}`, { withCredentials: true });
     setProductos(prev => prev.filter(p => p.id !== id));
   };
 
@@ -84,17 +83,17 @@ export function useProductos() {
   // =========================
 
   const fetchCategorias = async () => {
-    const { data } = await axios.get(`${API_BASE}/api/categoria/listadoCat`, { withCredentials: false });
+    const { data } = await api.get(`//api/categoria/listadoCat`, { withCredentials: false });
     setCategorias(data);
   };
 
   const fetchFragancias = async () => {
-    const { data } = await axios.get(`${API_BASE}/api/fragancias/listadoFragancias`, { withCredentials: false });
+    const { data } = await api.get(`//api/fragancias/listadoFragancias`, { withCredentials: false });
     setFragancias(data);
   };
 
   const fetchAtributos = async () => {
-    const { data } = await axios.get(`${API_BASE}/api/atributos/listadoAtributos`, { withCredentials: false });
+    const { data } = await api.get(`//api/atributos/listadoAtributos`, { withCredentials: false });
     setAtributos(data);
   };
 

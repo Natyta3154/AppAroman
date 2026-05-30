@@ -1,6 +1,6 @@
 // src/hooks/useProductoDetalle.ts
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import type { Producto } from "../types/producto";
 
 export function useProductoDetalle(id: string | undefined) {
@@ -8,15 +8,14 @@ export function useProductoDetalle(id: string | undefined) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const API_BASE = import.meta.env.VITE_API_URL;
-
+  
   useEffect(() => {
     if (!id) return;
 
     const fetchProducto = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get<Producto>(`${API_BASE}/api/productos/${id}`, {
+        const { data } = await api.get<Producto>(`/api/productos/${id}`, {
           //withCredentials: true,
         });
 

@@ -3,9 +3,8 @@ import { usePosts } from "../hooks/usePosts";
 import type { Post, CategoriaPost } from "../types/post";
 import Modal from "./Modal";
 import toast from "react-hot-toast";
-import axios from "axios";
+import api from "../utils/api";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 export default function PostBlog() {
   const { posts, cargando, error, crearPost, actualizarPost, eliminarPost } =
@@ -24,8 +23,8 @@ export default function PostBlog() {
   useEffect(() => {
     async function fetchCategorias() {
       try {
-        const res = await axios.get<CategoriaPost[]>(
-          `${API_BASE}/api/categorias-blog/listarCategoriaBlog`,
+        const res = await api.get<CategoriaPost[]>(
+          `/api/categorias-blog/listarCategoriaBlog`,
           { withCredentials: true }
         );
         setCategorias(res.data);

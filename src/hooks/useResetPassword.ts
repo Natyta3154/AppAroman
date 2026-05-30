@@ -1,7 +1,6 @@
 // src/hooks/useResetPassword.ts
 import { useState } from 'react';
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 interface ResetPasswordResult {
     message: string;
@@ -27,7 +26,7 @@ export const useResetPassword = (): ResetPasswordResult => {
         }
 
         try {
-            const url = `${API_BASE}/usuarios/reset-password?token=${token}&email=${email}`;
+            const url = `/usuarios/reset-password?token=${token}&email=${email}`;
             
             const response = await fetch(url, {
                 method: 'POST',

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../utils/api";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 export function usePedido(pedidoId: string | null) {
   const [pedido, setPedido] = useState<any>(null);
@@ -14,7 +13,7 @@ export function usePedido(pedidoId: string | null) {
     const fetchPedido = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get(`${API_BASE}/pedidos/${pedidoId}/estado-pago`, {
+        const { data } = await api.get(`//pedidos/${pedidoId}/estado-pago`, {
           withCredentials: true,
         });
         setPedido(data);

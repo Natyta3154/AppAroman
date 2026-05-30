@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../utils/api";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 export default function Register() {
   const navigate = useNavigate();
@@ -21,8 +20,8 @@ export default function Register() {
     setError(""); // limpiar errores previos
 
     try {
-      await axios.post(
-        `${API_BASE}/usuarios/register`,
+      await api.post(
+        `/usuarios/register`,
         { nombre, email, password },
         { headers: { "Content-Type": "application/json" } }
       );

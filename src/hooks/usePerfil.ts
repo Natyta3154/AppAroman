@@ -1,6 +1,6 @@
 // src/hooks/usePerfil.ts
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import type { Usuario } from "../types/usuario";
 
 export function usePerfil() {
@@ -8,12 +8,11 @@ export function usePerfil() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const API_BASE = import.meta.env.VITE_API_URL;
-
+  
   useEffect(() => {
     const fetchPerfil = async () => {
       try {
-        const { data } = await axios.put(`${API_BASE}/usuarios/perfil`, {
+        const { data } = await api.put(`//usuarios/perfil`, {
           withCredentials: true,
         });
 

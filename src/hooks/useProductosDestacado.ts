@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import type { ProductoDestacadoSimple } from "../types/productoDestacado";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 export const useDestacados = () => {
   const [destacados, setDestacados] = useState<ProductoDestacadoSimple[]>([]);
@@ -17,8 +16,8 @@ export const useDestacados = () => {
 
       //const categoriaId = 5; // ID de la categoría que quieras mostrar
       try {
-        const { data } = await axios.get<ProductoDestacadoSimple[]>(
-          `${API_BASE}/api/productos/top5`
+        const { data } = await api.get<ProductoDestacadoSimple[]>(
+          `/api/productos/top5`
         );
         setDestacados(data);
       } catch (err: any) {

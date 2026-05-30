@@ -1,9 +1,8 @@
 // src/hooks/useProductosRelacionados.ts
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import type { Producto } from "../types/producto";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 export const useProductosRelacionados = (categoriaId?: number, excludeId?: number) => {
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -17,8 +16,8 @@ export const useProductosRelacionados = (categoriaId?: number, excludeId?: numbe
       setLoading(true);
       setError(null);
       try {
-        const { data } = await axios.get<Producto[]>(
-          `${API_BASE}/api/productos/relacionados`,
+        const { data } = await api.get<Producto[]>(
+          `/api/productos/relacionados`,
           {
             params: { categoriaId, excludeId },
             withCredentials: true,

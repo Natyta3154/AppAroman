@@ -6,9 +6,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Outfit', 'sans-serif'],
+      },
       colors: {
         primario: {
-          DEFAULT: '#ffc400',  // amarillo principal (sin alpha)
+          DEFAULT: '#ffc400',
           50: '#fff7e0',
           100: '#fff0c2',
           200: '#ffe28a',
@@ -23,6 +26,11 @@ module.exports = {
           200: '#cfd2d4',
           300: '#b8bbbf',
         },
+        brand: {
+          light: '#E9D8FD',
+          primary: '#775c92',
+          dark: '#a06b9a',
+        }
       },
     },
   },

@@ -1,11 +1,11 @@
-// src/context/AuthContext.tsx
+// src/contextt/AuthContext.tsx
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type { Usuario } from "../types/usuario";
-import axios from "axios";
+import api from "../utils/api";
 
 /**
- * Tipo del contexto de autenticación que expone:
+ * Tipo del contextto de autenticación que expone:
  * - user: usuario autenticado o null si no hay sesión
  * - loading: estado de carga mientras se verifica la sesión
  * - login: función para iniciar sesión (devuelve el usuario)
@@ -21,7 +21,7 @@ type AuthContextType = {
 };
 
 /**
- * Contexto de autenticación. Inicialmente undefined para permitir
+ * contextto de autenticación. Inicialmente undefined para permitir
  * detectar uso fuera del proveedor mediante useAuth().
  */
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,8 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   // URL base de la API tomada de las variables de entorno Vite.
-  const API_BASE = import.meta.env.VITE_API_URL;
-
+  
   /**
    * refreshUser: solicita al backend el perfil del usuario actualmente autenticado.
    * - showLoading: si es true se activa el indicador loading (por ejemplo, para bloqueos UI).
@@ -50,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       if (showLoading) setLoading(true);
 
-      const { data } = await axios.get(`${API_BASE}/usuarios/perfil`, {
+      const { data } = await api.get(`//usuarios/perfil`, {
         withCredentials: true,
       });
 
@@ -81,8 +80,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    */
   const login = async (email: string, password: string) => {
     try {
-      const { data } = await axios.post(
-        `${API_BASE}/usuarios/login`,
+      const { data } = await api.post(
+        `/usuarios/login`,
         { email, password },
         { withCredentials: true }
       );
@@ -104,8 +103,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    */
   const logout = async () => {
     try {
-      await axios.post(
-        `${API_BASE}/usuarios/logout`,
+      await api.post(
+        `/usuarios/logout`,
         {},
         { withCredentials: true }
       );
@@ -118,7 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Proveemos el contexto con estado y funciones disponibles para la app.
+  // Proveemos el contextto con estado y funciones disponibles para la app.
   return (
     <AuthContext.Provider
       value={{ user, loading, login, logout, refreshUser }}
@@ -129,7 +128,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 /**
- * useAuth: hook personalizado para consumir el contexto de autenticación.
+ * useAuth: hook personalizado para consumir el contextto de autenticación.
  * - Lanza un error si se usa fuera de AuthProvider para evitar comportamientos inesperados.
  */
 export function useAuth() {

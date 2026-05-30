@@ -1,9 +1,8 @@
-import { useCarrito } from "../contex/CarritoContext.tsx";
+import { useCarrito } from "../context/CarritoContext.tsx";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../utils/api";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 export function usePagoMercadoPago() {
   const { carrito } = useCarrito();
@@ -18,8 +17,8 @@ export function usePagoMercadoPago() {
     }
 
     try {
-      const { data } = await axios.post(
-        `${API_BASE}/pedidos/realizarPedidoConPago`,
+      const { data } = await api.post(
+        `/pedidos/realizarPedidoConPago`,
         {
           detalles: carrito.map(p => ({
             productoId: p.id,

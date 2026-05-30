@@ -1,7 +1,6 @@
 // src/hooks/useForgotPassword.ts
 import { useState } from 'react';
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 
 interface ForgotPasswordResult {
@@ -22,7 +21,7 @@ export const useForgotPassword = (): ForgotPasswordResult => {
         setError('');
 
         try {
-            const response = await fetch(`${API_BASE}/usuarios/forgot-password`, {
+            const response = await fetch(`/usuarios/forgot-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

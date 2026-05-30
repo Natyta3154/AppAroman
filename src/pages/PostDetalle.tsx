@@ -1,9 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import type { Post } from "../types/post";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 
 const PostDetalle = () => {
@@ -13,7 +12,7 @@ const PostDetalle = () => {
   useEffect(() => {
     if (!id) return;
 
-    axios.get<Post>(`${API_BASE}/api/posts/${id}`)
+    api.get<Post>(`/api/posts/${id}`)
       .then(res => setPost(res.data))
       .catch(err => console.error("Error al cargar el post:", err));
   }, [id]);

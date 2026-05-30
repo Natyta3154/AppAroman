@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import type { AxiosRequestConfig } from "axios"; 
 import type { Usuario } from "../types/usuario";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 export function useUsuarios() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
@@ -13,14 +12,14 @@ export function useUsuarios() {
   // Función para manejar solicitudes con refresh token
   const requestWithRefresh = async (url: string, options: AxiosRequestConfig = {}) => {
     try {
-      return await axios({ url: API_BASE + url, withCredentials: true, ...options });
+      return await api({ url: url, withCredentials: true, ...options });
     } catch (err: any) {
       if (err.response?.status === 401) {
-        const refreshRes = await axios.post(`${API_BASE}/usuarios/refresh`, {}, { withCredentials: true });
+        const refreshRes = await api.post(`/api/usuarios/refresh`, {}, { withCredentials: true });
         if (!refreshRes.status || refreshRes.status !== 200) {
           throw new Error("Sesión expirada, por favor loguearse de nuevo");
         }
-        return axios({ url: API_BASE + url, withCredentials: true, ...options });
+        return api({ url: url, withCredentials: true, ...options });
       }
       throw err;
     }

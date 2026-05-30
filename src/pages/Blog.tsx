@@ -1,5 +1,5 @@
 import { usePosts } from "../hooks/usePosts";
-import BlogCard from "../conponents/blog/BlogCard";
+import BlogCard from "../components/blog/BlogCard";
 import { motion } from "framer-motion";
 import { useState } from "react";
 

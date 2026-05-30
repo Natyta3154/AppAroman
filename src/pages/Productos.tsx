@@ -5,7 +5,7 @@ import { ShoppingBag, ChevronDown, Filter, Heart } from "lucide-react";
 
 import { useProductos } from "../hooks/useproductos";
 import type { ProductoResumen, Producto } from "../types/producto";
-import { useCarrito } from "../contex/CarritoContext.tsx";
+import { useCarrito } from "../context/CarritoContext.tsx";
 
 export default function Productos() {
     const { productos, loading, page, hasMore, fetchProductos } = useProductos();

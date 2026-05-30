@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useCarrito } from "../contex/CarritoContext.tsx";
+import { useCarrito } from "../context/CarritoContext.tsx";
 import { useProductoDetalle } from "../hooks/useProductoDetalle.ts";
 import { useProductosRelacionados } from "../hooks/useProductosRelacionados.ts";
 import type { Producto } from "../types/producto";

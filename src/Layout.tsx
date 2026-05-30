@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "./conponents/Navbar/Navbar";
-import Footer from "./conponents/footer/Footer";
+import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/footer/Footer";
 //import { useAuth } from "./hooks/useAuth";
 import { Toaster } from "react-hot-toast";
 

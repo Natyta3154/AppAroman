@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../utils/api";
 
 export default function Contacto() {
   const [formData, setFormData] = useState({
@@ -12,8 +12,7 @@ export default function Contacto() {
     "idle"
   );
 
-  const API_BASE = import.meta.env.VITE_API_URL;
-
+  
   // Manejar cambios en los campos
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -29,7 +28,7 @@ export default function Contacto() {
 
     try {
       // Ejemplo de envío al backend (ajustá el endpoint)
-      await axios.post(`${API_BASE}/api/contacto/enviar`, formData);
+      await api.post(`//api/contacto/enviar`, formData);
 
       setEstado("exito");
       setFormData({ nombre: "", email: "", mensaje: "" });

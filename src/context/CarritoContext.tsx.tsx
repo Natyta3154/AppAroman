@@ -169,8 +169,8 @@ export const CarritoProvider = ({ children }: { children: ReactNode }) => {
 //  Hook personalizado
 // ===============================
 export const useCarrito = () => {
-  const context = useContext(CarritoContext);
-  if (!context)
+  const contextt = useContext(CarritoContext);
+  if (!contextt)
     throw new Error("useCarrito debe usarse dentro de CarritoProvider");
-  return context;
+  return contextt;
 };

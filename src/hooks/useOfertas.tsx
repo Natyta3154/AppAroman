@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import type { TipoDescuento, Oferta } from "../types/producto";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 
 export function useOfertas(
@@ -56,8 +55,8 @@ export function useOfertas(
   const fetchOfertasCarrusel = useCallback(async () => {
     try {
       setCargando(true);
-      const { data } = await axios.get<any[]>(
-        `${API_BASE}/api/ofertas/carrusel?limite=${limite}`,
+      const { data } = await api.get<any[]>(
+        `/api/ofertas/carrusel?limite=${limite}`,
         //{ withCredentials: true }
       );
       setOfertas(data.map(mapToOferta));
@@ -76,7 +75,7 @@ export function useOfertas(
   const fetchOfertas = useCallback(async () => {
     try {
       setCargando(true);
-      const { data } = await axios.get<any[]>(`${API_BASE}/api/ofertas/listar`, {
+      const { data } = await api.get<any[]>(`/api/ofertas/listar`, {
         //withCredentials: true,
       });
       setOfertas(data.map(mapToOferta));
@@ -95,7 +94,7 @@ export function useOfertas(
   const fetchOfertasConPrecio = useCallback(async () => {
     try {
       setCargando(true);
-      const { data } = await axios.get<any[]>(`${API_BASE}/api/ofertas/con-precio`, {
+      const { data } = await api.get<any[]>(`/api/ofertas/con-precio`, {
         withCredentials: true,
       });
       setOfertas(data.map(mapToOferta));
@@ -113,7 +112,7 @@ export function useOfertas(
   // =========================
   const createOferta = useCallback(
     async (data: Partial<Oferta>) => {
-      await axios.post(`${API_BASE}/api/ofertas/crearOferta`, data, {
+      await api.post(`//api/ofertas/crearOferta`, data, {
         withCredentials: true,
       });
       await fetchOfertas();
@@ -123,7 +122,7 @@ export function useOfertas(
 
   const updateOferta = useCallback(
     async (id: number, data: Partial<Oferta>) => {
-      await axios.put(`${API_BASE}/api/ofertas/editar/${id}`, data, {
+      await api.put(`//api/ofertas/editar/${id}`, data, {
         withCredentials: true,
       });
       await fetchOfertas();
@@ -133,7 +132,7 @@ export function useOfertas(
 
   const deleteOferta = useCallback(
     async (id: number) => {
-      await axios.delete(`${API_BASE}/api/ofertas/eliminar/${id}`, {
+      await api.delete(`//api/ofertas/eliminar/${id}`, {
         withCredentials: true,
       });
       await fetchOfertas();

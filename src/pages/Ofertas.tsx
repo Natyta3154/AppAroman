@@ -1,11 +1,10 @@
 import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
-import axios from "axios";
-import { useCarrito } from "../contex/CarritoContext.tsx";
+import api from "../utils/api";
+import { useCarrito } from "../context/CarritoContext.tsx";
 import type { Oferta, ProductoOferta } from "../types/producto";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 export default function Ofertas() {
   const [ofertas, setOfertas] = useState<ProductoOferta[]>([]);
@@ -17,7 +16,7 @@ export default function Ofertas() {
   const fetchOfertas = useCallback(async () => {
     try {
       setCargando(true);
-      const { data } = await axios.get<Oferta[]>(`${API_BASE}/api/ofertas/listar`, {
+      const { data } = await api.get<Oferta[]>(`/api/ofertas/listar`, {
         withCredentials: true,
       });
 

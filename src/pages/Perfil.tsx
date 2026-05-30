@@ -1,6 +1,6 @@
 // src/pages/Perfil.tsx
 import { useState } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import { useAuth } from "../hooks/useAuth";
 
 export default function Perfil() {
@@ -37,7 +37,7 @@ export default function Perfil() {
     try {
       setEstado("guardando");
 
-      await axios.put(
+      await api.put(
         `${import.meta.env.VITE_API_BASE}/perfil`,
         formData,
         { withCredentials: true }

@@ -1,9 +1,8 @@
 // src/hooks/useCategorias.ts
 import { useEffect, useState } from "react";
 import type { Categorias } from "../types/FraganciaCategoria";
-import axios from "axios";
+import api from "../utils/api";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 export function useCategorias() {
   const [categorias, setCategorias] = useState<Categorias[]>([]);
@@ -13,7 +12,7 @@ export function useCategorias() {
   const fetchCategorias = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`${API_BASE}/api/categoria/listadoCat`, 
+      const { data } = await api.get(`//api/categoria/listadoCat`, 
         /*{ withCredentials: true });*/);
       setCategorias(data);
     } catch (err) {
@@ -26,7 +25,7 @@ export function useCategorias() {
 
   const createCategoria = async (nombre: string) => {
     try {
-      await axios.post(`${API_BASE}/api/categoria/agregar`, { nombre }, { withCredentials: true });
+      await api.post(`//api/categoria/agregar`, { nombre }, { withCredentials: true });
       await fetchCategorias();
     } catch (err) {
       console.error(err);
@@ -36,7 +35,7 @@ export function useCategorias() {
 
   const updateCategoria = async (id: number, nombre: string) => {
     try {
-      await axios.put(`${API_BASE}/api/categoria/editar/${id}`, { nombre }, { withCredentials: true });
+      await api.put(`//api/categoria/editar/${id}`, { nombre }, { withCredentials: true });
       await fetchCategorias();
     } catch (err) {
       console.error(err);
@@ -46,7 +45,7 @@ export function useCategorias() {
 
   const deleteCategoria = async (id: number) => {
     try {
-      await axios.delete(`${API_BASE}/api/categoria/eliminar/${id}`, { withCredentials: true });
+      await api.delete(`//api/categoria/eliminar/${id}`, { withCredentials: true });
       await fetchCategorias();
     } catch (err) {
       console.error(err);

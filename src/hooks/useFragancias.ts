@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import type { Fragancias } from "../types/FraganciaCategoria";
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true,
-  timeout: 10000, // evita que se congele
-});
 
 export function useFragancias() {
   const [fragancias, setFragancias] = useState<Fragancias[]>([]);

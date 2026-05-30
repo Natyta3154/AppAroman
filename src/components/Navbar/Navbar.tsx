@@ -5,7 +5,7 @@ import { Bars3Icon, XMarkIcon, ShoppingCartIcon } from "@heroicons/react/24/outl
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
-import { useCarrito } from "../../contex/CarritoContext.tsx";
+import { useCarrito } from "../../context/CarritoContext.tsx";
 
 const navigation = [
   { name: "Home", href: "/" },

@@ -1,9 +1,8 @@
 // src/hooks/useCategoriasPost.ts
 import { useState, useEffect } from "react";
 import type { CategoriaPost } from "../types/post";
-import axios from "axios";
+import api from "../utils/api";
 
-const API_BASE = import.meta.env.VITE_API_URL;
 
 export function useCategoriasPost() {
   const [categorias, setCategorias] = useState<CategoriaPost[]>([]);
@@ -17,7 +16,7 @@ export function useCategoriasPost() {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await axios.get<CategoriaPost[]>(`${API_BASE}/api/categorias-blog/listarCategoriaBlog`, 
+      const { data } = await api.get<CategoriaPost[]>(`/api/categorias-blog/listarCategoriaBlog`, 
         { withCredentials: true });
       setCategorias(data);
     } catch (err: any) {
@@ -33,8 +32,8 @@ export function useCategoriasPost() {
   // =========================
   const createCategoria = async (data: { nombre: string; descripcion?: string }) => {
     try {
-      const { data: nueva } = await axios.post<CategoriaPost>(
-        `${API_BASE}/api/categorias-blog/agregarCategoriaBlog`,
+      const { data: nueva } = await api.post<CategoriaPost>(
+        `/api/categorias-blog/agregarCategoriaBlog`,
         data,
         { withCredentials: true }
       );
@@ -51,8 +50,8 @@ export function useCategoriasPost() {
   // =========================
   const updateCategoria = async (id: number, data: { nombre: string; descripcion?: string }) => {
     try {
-      const { data: updated } = await axios.put<CategoriaPost>(
-        `${API_BASE}/api/categorias-blog/${id}`,
+      const { data: updated } = await api.put<CategoriaPost>(
+        `/api/categorias-blog/${id}`,
         data,
         { withCredentials: true }
       );
@@ -69,7 +68,7 @@ export function useCategoriasPost() {
   // =========================
   const deleteCategoria = async (id: number) => {
     try {
-      await axios.delete(`${API_BASE}/api/categorias-blog/${id}`, { withCredentials: true });
+      await api.delete(`//api/categorias-blog/${id}`, { withCredentials: true });
       setCategorias(prev => prev.filter(c => c.id !== id));
     } catch (err) {
       console.error(err);
