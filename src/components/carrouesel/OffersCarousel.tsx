@@ -25,14 +25,18 @@ export default function OffersCarousel({ limite = 5 }: OffersCarouselProps) {
 
   const currentOffer: Oferta | undefined = ofertas[current];
 
+  if (!cargando && !error && (!ofertas || ofertas.length === 0)) {
+    return null;
+  }
+
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] py-20 px-4 flex flex-col justify-center items-center transition-all duration-300">
+    <main className="bg-gradient-to-b from-gray-900 to-brand-primary py-20 px-4 flex flex-col justify-center items-center transition-all duration-300">
       {/* Texto introductorio (siempre visible) */}
       <div className="mt-12 px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-3xl font-extrabold text-gray-900 mb-4">
+        <h2 className="text-3xl font-extrabold text-white mb-4 drop-shadow-md">
           Descubre nuestras ofertas exclusivas
         </h2>
-        <p className="text-lg text-gray-700 mb-6 max-w-3xl mx-auto">
+        <p className="text-lg text-white/70 mb-6 max-w-3xl mx-auto">
           Cada semana seleccionamos los productos más destacados para ofrecerte promociones
           únicas y oportunidades imperdibles. ¡No dejes pasar estas ofertas!
         </p>
@@ -41,18 +45,15 @@ export default function OffersCarousel({ limite = 5 }: OffersCarouselProps) {
       {/* Contenido dinámico */}
       {cargando ? (
         // 🔸 Skeleton de carga
-        <div className="relative w-full sm:w-[90%] md:w-[80%] h-[60vh] mx-auto mt-12 rounded-3xl bg-gray-300/40 animate-pulse shadow-inner flex items-center justify-center text-gray-700 font-semibold">
+        <div className="relative w-full sm:w-[90%] md:w-[80%] h-[60vh] mx-auto mt-12 rounded-3xl bg-white/10 backdrop-blur-md animate-pulse shadow-inner flex items-center justify-center text-white/50 font-semibold border border-white/20">
           Cargando ofertas...
         </div>
       ) : error ? (
         // 🔸 Error
-        <p className="text-center mt-8 text-red-500 font-semibold">{error}</p>
-      ) : !ofertas || ofertas.length === 0 ? (
-        // 🔸 Sin datos
-        <p className="text-center mt-8 text-gray-200">No hay ofertas disponibles.</p>
+        <p className="text-center mt-8 text-red-400 font-semibold">{error}</p>
       ) : (
         // 🔸 Carrusel real
-        <div className="relative w-full sm:w-[90%] md:w-[80%] h-[50vh] sm:h-[60vh] md:h-[65vh] mx-auto mt-12 overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-r from-purple-700 via-pink-600 to-yellow-400 border-4 border-white/20">
+        <div className="relative w-full sm:w-[90%] md:w-[80%] h-[50vh] sm:h-[60vh] md:h-[65vh] mx-auto mt-12 overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-r from-purple-700 via-pink-600 to-yellow-400 border border-white/20">
           <AnimatePresence mode="wait">
             <motion.img
               key={currentOffer?.idOferta}
@@ -67,7 +68,7 @@ export default function OffersCarousel({ limite = 5 }: OffersCarouselProps) {
           </AnimatePresence>
 
           {/* Overlay con info */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-6 rounded-3xl">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6 rounded-3xl">
             <motion.div
               key={`${currentOffer?.idOferta}-info`}
               initial={{ opacity: 0, y: 20 }}
@@ -78,10 +79,10 @@ export default function OffersCarousel({ limite = 5 }: OffersCarouselProps) {
                 {currentOffer?.nombreProducto}
               </h2>
               <p className="text-xl mt-2 flex items-center gap-3">
-                <span className="line-through text-red-500">
+                <span className="line-through text-red-400">
                   ${currentOffer?.precio.toFixed(2)}
                 </span>
-                <span className="text-black font-bold text-2xl">
+                <span className="text-white font-bold text-3xl drop-shadow-md">
                   ${currentOffer?.precioConDescuento.toFixed(2)}
                 </span>
               </p>
@@ -91,35 +92,32 @@ export default function OffersCarousel({ limite = 5 }: OffersCarouselProps) {
           {/* Botones de navegación */}
           <button
             onClick={prevSlide}
-            className="absolute top-1/2 left-4 -translate-y-1/2 bg-black/50 backdrop-blur-md text-white p-3 rounded-full hover:bg-black/70 transition"
+            className="absolute top-1/2 left-4 -translate-y-1/2 bg-black/40 backdrop-blur-md text-white p-3 rounded-full hover:bg-black/60 border border-white/20 transition"
           >
             <ArrowLeft className="w-6 h-6" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute top-1/2 right-4 -translate-y-1/2 bg-black/50 backdrop-blur-md text-white p-3 rounded-full hover:bg-black/70 transition"
+            className="absolute top-1/2 right-4 -translate-y-1/2 bg-black/40 backdrop-blur-md text-white p-3 rounded-full hover:bg-black/60 border border-white/20 transition"
           >
             <ArrowRight className="w-6 h-6" />
           </button>
 
           {/* Indicadores inferiores */}
-          <div className="absolute bottom-4 w-full flex justify-center gap-2">
+          <div className="absolute bottom-4 w-full flex justify-center gap-3">
             {ofertas.map((producto, index) => (
               <div
                 key={producto.productoId ?? index}
                 onClick={() => setCurrent(index)}
-                className={`cursor-pointer transition-transform ${
-                  current === index ? "scale-110" : "opacity-60 hover:opacity-100"
-                }`}
+                className={`cursor-pointer transition-all duration-300 ${
+                  current === index ? "scale-110 opacity-100 ring-2 ring-white" : "opacity-50 hover:opacity-100"
+                } rounded-full`}
               >
                 <img
                   src={producto.imagenUrl || "https://via.placeholder.com/100x100?text=Oferta"}
                   alt={producto.nombreProducto || "Sin nombre"}
-                  className="w-16 h-16 object-cover rounded-full border-2 border-white"
+                  className="w-14 h-14 object-cover rounded-full border border-white/50"
                 />
-                <p className="text-white text-xs mt-1 truncate w-16 text-center">
-                  {producto.nombreProducto || "Sin nombre"}
-                </p>
               </div>
             ))}
           </div>
