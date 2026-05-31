@@ -68,7 +68,7 @@ export function useCategoriasPost() {
   // =========================
   const deleteCategoria = async (id: number) => {
     try {
-      await api.delete(`//api/categorias-blog/${id}`, { withCredentials: true });
+      await api.delete(`/api/categorias-blog/${id}`, { withCredentials: true });
       setCategorias(prev => prev.filter(c => c.id !== id));
     } catch (err) {
       console.error(err);

@@ -38,13 +38,13 @@ if (cargando)
 
 
   return (
-    <main className=" bg-gradient-to-b from-gray-100 bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] to-gray-200 py-20 px-4">
+    <main className="bg-gradient-to-b from-brand-dark to-gray-900 py-20 px-4 relative">
       <section className="max-w-7xl mx-auto px-5 sm:px-10 md:px-16 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
+          <h2 className="text-4xl font-extrabold text-white mb-4 drop-shadow-md">
             Inspiración Aromanza
           </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <p className="text-white/70 text-lg max-w-2xl mx-auto">
             Bienestar, energía y armonía. Descubrí notas, rituales y consejos para conectar con la esencia de tu alma.
           </p>
         </div>
@@ -56,26 +56,28 @@ if (cargando)
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
-              className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 group relative"
+              className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl shadow-xl overflow-hidden hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transform hover:-translate-y-2 transition-all duration-500 group relative flex flex-col"
             >
               <img
                 className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-700"
                 src={post.imagenUrl}
                 alt={post.titulo}
               />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors duration-300">
+              <div className="p-6 flex flex-col flex-grow">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors duration-300">
                   {post.titulo}
                 </h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                <p className="text-white/70 text-sm leading-relaxed mb-6 flex-grow">
                   {post.descripcion}
                 </p>
-                <Link
-                  to={`/blog/${post.id}`}
-                  className="bg-purple-600 text-white px-5 py-2 rounded-full hover:bg-purple-700 transition"
-                >
-                  Leer más
-                </Link>
+                <div className="mt-auto">
+                    <Link
+                      to={`/blog/${post.id}`}
+                      className="inline-block bg-white/20 backdrop-blur-md border border-white/30 text-white font-semibold px-6 py-2 rounded-full hover:bg-white/30 transition-all shadow-lg"
+                    >
+                      Leer más
+                    </Link>
+                </div>
               </div>
             </motion.div>
           ))}

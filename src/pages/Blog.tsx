@@ -18,12 +18,12 @@ const BlogPage = () => {
   const categories = Array.from(new Set(posts.map(post => post.categoria?.nombre).filter(Boolean)));
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#E9D8FD] via-[#775c92] to-[#a06b9a] py-16 px-4">
+    <main className="min-h-screen bg-gradient-to-b from-brand-dark via-gray-900 to-black py-16 px-4">
 
       {/* Hero Blog */}
-      <section className="bg-purple-100 mt-16 py-20 text-center rounded-4xl mb-12">
-        <h1 className="text-5xl font-extrabold font-extrabold text-black mb-4">Blog Aromanza</h1>
-        <p className="text-lg font-semibold text-black max-w-2xl mx-auto">
+      <section className="bg-white/5 backdrop-blur-md border border-white/10 mt-16 py-20 text-center rounded-4xl mb-12 shadow-2xl">
+        <h1 className="text-5xl font-extrabold text-white mb-4 drop-shadow-md">Blog Aromanza</h1>
+        <p className="text-lg text-white/70 max-w-2xl mx-auto">
           Inspiración, bienestar y consejos aromáticos para elevar tu energía y armonizar tu día a día.
         </p>
       </section>
@@ -54,7 +54,7 @@ const BlogPage = () => {
       {/* Posts destacados */}
       {filteredPosts.length > 0 && (
         <section className="mb-12 max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold mb-6 text-center">Destacados</h2>
+          <h2 className="text-3xl font-bold mb-6 text-center text-white">Destacados</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {filteredPosts.slice(0, 2).map((post, index) => (
               <motion.div
@@ -72,7 +72,7 @@ const BlogPage = () => {
 
       {/* Listado completo de posts */}
       <section className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold mb-6 text-center">Todos los posts</h2>
+        <h2 className="text-3xl font-bold mb-6 text-center text-white">Todos los posts</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
           {filteredPosts.slice(2).map((post, index) => (
             <motion.div

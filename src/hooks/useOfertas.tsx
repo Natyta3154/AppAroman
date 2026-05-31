@@ -112,7 +112,7 @@ export function useOfertas(
   // =========================
   const createOferta = useCallback(
     async (data: Partial<Oferta>) => {
-      await api.post(`//api/ofertas/crearOferta`, data, {
+      await api.post(`/api/ofertas/crearOferta`, data, {
         withCredentials: true,
       });
       await fetchOfertas();
@@ -122,7 +122,7 @@ export function useOfertas(
 
   const updateOferta = useCallback(
     async (id: number, data: Partial<Oferta>) => {
-      await api.put(`//api/ofertas/editar/${id}`, data, {
+      await api.put(`/api/ofertas/editar/${id}`, data, {
         withCredentials: true,
       });
       await fetchOfertas();
@@ -132,7 +132,7 @@ export function useOfertas(
 
   const deleteOferta = useCallback(
     async (id: number) => {
-      await api.delete(`//api/ofertas/eliminar/${id}`, {
+      await api.delete(`/api/ofertas/eliminar/${id}`, {
         withCredentials: true,
       });
       await fetchOfertas();

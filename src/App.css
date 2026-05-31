@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import "tailwindcss";
+
 /* App.css */
 .navbar-link {
   transition: all 0.2s ease;
@@ -10,12 +11,10 @@
 
 .navbar-link:hover {
   color: #facc15; /* amarillo Tailwind */
- /* background-color: #1e40af; /* azul oscuro Tailwind */
 }
 
 /* Contenedor del hero */
 .hero {
-  border: solid;               /* solo para debug, luego podés quitar */
   width: 100%;                 /* ocupa todo el ancho */
   height: 80vh;                /* altura del hero */
   position: relative;          /* para posicionar la imagen y overlay */
@@ -23,7 +22,6 @@
   display: flex;               /* centra el contenido */
   justify-content: center;
   align-items: center;
-  /*background-color: #000;      /* opcional, mientras carga la imagen */
 }
 
 /* Imagen dentro del hero */

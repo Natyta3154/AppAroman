@@ -12,7 +12,7 @@ export function usePerfil() {
   useEffect(() => {
     const fetchPerfil = async () => {
       try {
-        const { data } = await api.put(`//usuarios/perfil`, {
+        const { data } = await api.put(`/usuarios/perfil`, {
           withCredentials: true,
         });
 

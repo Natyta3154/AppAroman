@@ -19,10 +19,10 @@ export default function Home() {
       </section>
 
       {/* Productos Destacados */}
-      <main className="bg-gradient-to-b from-brand-light via-brand-primary to-brand-dark py-20 px-4 relative overflow-hidden">
+      <main className="bg-gradient-to-b from-brand-primary via-brand-dark to-brand-dark py-20 px-4 relative overflow-hidden">
         {/* Elementos decorativos de fondo */}
-        <div className="absolute top-0 left-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-primary opacity-20 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
+        <div className="absolute top-0 left-0 w-64 h-64 bg-indigo-500 opacity-20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500 opacity-20 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
 
         <section className="max-w-7xl mx-auto px-5 sm:px-10 md:px-0 py-16 relative z-10">
           <motion.div 
@@ -44,7 +44,7 @@ export default function Home() {
               ? [...Array(4)].map((_, i) => (
                 <div
                   key={i}
-                  className="w-full h-80 bg-white/20 backdrop-blur-md rounded-3xl animate-pulse shadow-[0_8px_32px_0_rgba(31,38,135,0.15)]"
+                  className="w-full h-80 bg-white/20 backdrop-blur-md rounded-xl animate-pulse shadow-[0_8px_32px_0_rgba(31,38,135,0.15)] border border-gray-100"
                 />
               ))
               : error
@@ -54,39 +54,50 @@ export default function Home() {
                   : destacados.map((producto, index) => (
                     <motion.div
                       key={producto.id}
-                      initial={{ opacity: 0, y: 40 }}
+                      initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.15, duration: 0.7, type: "spring" }}
-                      viewport={{ once: true, margin: "-50px" }}
-                      className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-[2rem] shadow-[0_8px_32px_0_rgba(31,38,135,0.1)] overflow-hidden hover:bg-white/20 hover:border-white/40 transform hover:-translate-y-3 transition-all duration-500 group relative flex flex-col"
+                      transition={{ delay: index * 0.1, duration: 0.5 }}
+                      whileHover={{ scale: 1.03, boxShadow: "0 10px 15px rgba(0, 0, 0, 0.3)" }}
+                      whileTap={{ scale: 0.99 }}
+                      viewport={{ once: true }}
+                      className="relative bg-white/10 backdrop-blur-lg rounded-xl shadow-xl transition-all duration-300 overflow-hidden group border border-white/20 flex flex-col"
                     >
-                      <div className="overflow-hidden relative h-56">
+                      <div className="relative overflow-hidden h-56">
                         <img
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                           src={producto.imagenUrl}
                           alt={String(producto.nombre)}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        {/* Overlay detalle */}
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                            <Link
+                                to={`/productos/${producto.id}`}
+                                className="bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-4 py-2 shadow-lg hover:bg-white/30 text-white flex items-center gap-2 font-semibold transition-all"
+                            >
+                                <span className="text-xl">👁️</span>
+                                Ver Detalle
+                            </Link>
+                        </div>
+                        {/* Badge de Destacado */}
+                        <span className="absolute top-3 left-3 bg-indigo-500/80 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full shadow-md border border-indigo-400/50">
+                            🌟 Destacado
+                        </span>
                       </div>
                       
-                      <div className="p-6 flex flex-col flex-grow">
-                        <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-primario-300 transition-colors duration-300 drop-shadow-sm">
-                          {producto.nombre}
-                        </h3>
-                        <p className="text-white/80 text-sm leading-relaxed mb-6 flex-grow line-clamp-3">
-                          {producto.descripcion}
-                        </p>
+                      <div className="p-5 flex flex-col flex-grow justify-between min-h-[140px]">
+                        <div>
+                            <h3 className="text-xl font-bold text-white line-clamp-1 hover:text-indigo-300 transition-colors">
+                            <Link to={`/productos/${producto.id}`}>{producto.nombre}</Link>
+                            </h3>
+                            <p className="text-sm text-white/70 mt-1 line-clamp-2">
+                            {producto.descripcion}
+                            </p>
+                        </div>
                         
-                        <div className="flex items-center justify-between mt-auto">
-                          <p className="text-2xl font-black text-primario-300 drop-shadow-sm">
+                        <div className="mt-4 flex items-center justify-between">
+                            <p className="text-2xl font-bold text-indigo-300">
                             ${producto.precio}
-                          </p>
-                          <Link
-                            to={`/productos/${producto.id}`}
-                            className="bg-white/20 hover:bg-white text-white hover:text-brand-primary font-semibold px-6 py-2.5 rounded-full backdrop-blur-md border border-white/30 transition-all duration-300 shadow-lg"
-                          >
-                            Ver más
-                          </Link>
+                            </p>
                         </div>
                       </div>
                     </motion.div>

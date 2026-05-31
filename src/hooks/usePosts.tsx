@@ -29,7 +29,7 @@ export function usePosts() {
   // --- Crear un nuevo post ---
   const crearPost = useCallback(async (postData: Partial<Post>) => {
     try {
-      const res = await api.post(`//api/posts/agregarPost`, postData, {
+      const res = await api.post(`/api/posts/agregarPost`, postData, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       });
@@ -43,7 +43,7 @@ export function usePosts() {
   // --- Actualizar post ---
   const actualizarPost = useCallback(async (id: number, postData: Partial<Post>) => {
     try {
-      const res = await api.put(`//api/posts/actualizarPost/${id}`, postData, {
+      const res = await api.put(`/api/posts/actualizarPost/${id}`, postData, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       });
@@ -57,7 +57,7 @@ export function usePosts() {
   // --- Eliminar post ---
   const eliminarPost = useCallback(async (id: number) => {
     try {
-      await api.delete(`//api/posts/eliminar/${id}`, {
+      await api.delete(`/api/posts/eliminar/${id}`, {
         withCredentials: true,
       });
       setPosts(prev => prev.filter(p => p.id !== id));

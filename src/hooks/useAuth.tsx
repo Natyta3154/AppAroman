@@ -49,7 +49,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       if (showLoading) setLoading(true);
 
-      const { data } = await api.get(`//usuarios/perfil`, {
+      // Si no hay token en localStorage, no hacemos la petición al backend para evitar error 500
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setUser(null);
+        return;
+      }
+
+      const { data } = await api.get(`/usuarios/perfil`, {
         withCredentials: true,
       });
 
@@ -57,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(data.usuario ?? data);
     } catch (err) {
       // Si falla la petición, asumimos que no hay usuario autenticado.
+      localStorage.removeItem("token");
       setUser(null);
     } finally {
       // Siempre desactivamos el estado de carga al terminar.
@@ -86,6 +94,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         { withCredentials: true }
       );
 
+      // Guardar el token si el backend lo devuelve
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      } else if (data.usuario?.token) {
+        localStorage.setItem("token", data.usuario.token);
+      }
+
       const usuario = data.usuario ?? data;
       setUser(usuario);
 
@@ -108,11 +123,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         {},
         { withCredentials: true }
       );
-      setUser(null);
     } catch (err) {
       console.error("Error al cerrar sesión:", err);
       //throw new Error("Error al cerrar sesión");
-    }finally{
+    } finally {
+      localStorage.removeItem("token");
       setUser(null);
     }
   };

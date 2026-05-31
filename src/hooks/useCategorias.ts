@@ -12,7 +12,7 @@ export function useCategorias() {
   const fetchCategorias = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get(`//api/categoria/listadoCat`, 
+      const { data } = await api.get(`/api/categoria/listadoCat`, 
         /*{ withCredentials: true });*/);
       setCategorias(data);
     } catch (err) {
@@ -25,7 +25,7 @@ export function useCategorias() {
 
   const createCategoria = async (nombre: string) => {
     try {
-      await api.post(`//api/categoria/agregar`, { nombre }, { withCredentials: true });
+      await api.post(`/api/categoria/agregar`, { nombre }, { withCredentials: true });
       await fetchCategorias();
     } catch (err) {
       console.error(err);
@@ -35,7 +35,7 @@ export function useCategorias() {
 
   const updateCategoria = async (id: number, nombre: string) => {
     try {
-      await api.put(`//api/categoria/editar/${id}`, { nombre }, { withCredentials: true });
+      await api.put(`/api/categoria/editar/${id}`, { nombre }, { withCredentials: true });
       await fetchCategorias();
     } catch (err) {
       console.error(err);
@@ -45,7 +45,7 @@ export function useCategorias() {
 
   const deleteCategoria = async (id: number) => {
     try {
-      await api.delete(`//api/categoria/eliminar/${id}`, { withCredentials: true });
+      await api.delete(`/api/categoria/eliminar/${id}`, { withCredentials: true });
       await fetchCategorias();
     } catch (err) {
       console.error(err);

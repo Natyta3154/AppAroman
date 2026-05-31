@@ -28,7 +28,7 @@ export default function Contacto() {
 
     try {
       // Ejemplo de envío al backend (ajustá el endpoint)
-      await api.post(`//api/contacto/enviar`, formData);
+      await api.post(`/api/contacto/enviar`, formData);
 
       setEstado("exito");
       setFormData({ nombre: "", email: "", mensaje: "" });
