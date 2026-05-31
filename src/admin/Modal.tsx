@@ -1,5 +1,5 @@
 // src/admin/Modal.tsx
-import { ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 interface ModalProps {
