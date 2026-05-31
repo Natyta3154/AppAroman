@@ -62,8 +62,8 @@ export default function Home() {
                 : destacados.length === 0
                   ? <p className="col-span-full text-center text-white/80 text-lg">No hay productos destacados por el momento.</p>
                   : destacados.map((producto, index) => {
-                      const ofertaActiva = producto.ofertas?.find((oferta: any) => oferta.estado === true);
-                      const precioConDescuento = producto.precioConDescuento;
+                      const ofertaActiva = (producto as any).ofertas?.find((o: any) => o.estado === true);
+                      const precioConDescuento = (producto as any).precioConDescuento;
 
                       return (
                         <motion.div
@@ -99,7 +99,7 @@ export default function Home() {
                                 </button>
 
                                 {/* Badges */}
-                                {producto.destacado && (
+                                {(producto as any).destacado && (
                                     <span className="absolute top-3 left-3 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
                                         🌟 Premium
                                     </span>
